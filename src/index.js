@@ -1,5 +1,2 @@
-import App from "./components/App";
+// import { Navigation } from "react-native-navigation";
 
-// handle code push, redux store initialization, navigation, authenticate w/ firebase
-
-export default App;
