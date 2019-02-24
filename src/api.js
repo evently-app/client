@@ -15,6 +15,16 @@ export const RegisterSwipe = (userId, eventId, swipedRight) => {
 };
 
 export const WatchTimeline = userId => {
-	// watches events that should be in users timeline
+	// watches events that should be in users timeline, returns listenerr
 	// return firestore.collection("users").doc(uid).collection("timeline").onSnapshot(doc => {}, error => {})
+};
+
+export const PullCalendarInfo = (startTime, endTime) => {
+	// pull calendar info from local calendar / gcal auth
+	// returns promise that resolves to array of calendar events within startTime and endTime
+};
+
+export const AddEventToCalendar = eventData => {
+	// adds event to local calendar / pushes to gcal
+	// returns promise
 };
