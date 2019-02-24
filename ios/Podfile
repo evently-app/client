@@ -8,6 +8,10 @@ target 'evently' do
   # Pods for evently
 
   pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Crash'
 
   target 'eventlyTests' do
     inherit! :search_paths

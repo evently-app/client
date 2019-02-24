@@ -1,3 +1,6 @@
+ios/GoogleService-Info.plist
+ios/Pods
+
 # OSX
 #
 .DS_Store
