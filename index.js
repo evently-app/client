@@ -18,18 +18,18 @@ import registerScreens from "./src/screens";
 
 // import App from "./components/App";
 
-// handle code push, redux store initialization, navigation, authenticate w/ firebase
+// handle redux store initialization, navigation, authenticate w/ firebase
 
-persistStore(store, null, () => {
-	registerScreens(Provider, store);
+// persistStore(store, null, () => {
+registerScreens(Provider, store);
 
-	Navigation.events().registerAppLaunchedListener(() => {
-		Navigation.setRoot({
-			root: {
-				component: {
-					name: "evently.App"
-				}
+Navigation.events().registerAppLaunchedListener(() => {
+	Navigation.setRoot({
+		root: {
+			component: {
+				name: "evently.App"
 			}
-		});
+		}
 	});
 });
+// });
