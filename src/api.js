@@ -12,6 +12,7 @@ export const WatchEvent = (eventId, successCallback, errorCallback) => {
 
 export const RegisterSwipe = (userId, eventId, swipedRight) => {
 	// registers a users swipe
+	// returns promise
 };
 
 export const WatchTimeline = userId => {
