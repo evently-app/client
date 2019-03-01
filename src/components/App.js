@@ -1,8 +1,28 @@
 import React, { Component } from "react";
+import { Auth } from "../redux/user";
 import { connect } from "react-redux";
-import { Platform, Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Platform,
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Alert
+} from "react-native";
 
 class App extends Component {
+  componentWillMount() {
+    // log in / sign up anonymously
+    this.props
+      .Auth()
+      .then(() => {
+        Alert.alert("successfully authenticated");
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -40,6 +60,11 @@ const mapStateToProps = state => {
   };
 };
 
-// const mapDispatchToProps = { }
+const mapDispatchToProps = {
+  Auth
+};
 
-export default connect(mapStateToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

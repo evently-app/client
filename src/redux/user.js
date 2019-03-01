@@ -1,5 +1,6 @@
 import { resetQueue } from "./queue";
 import firebase from "react-native-firebase";
+import moment from "moment";
 let firestore = firebase.firestore();
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
@@ -8,9 +9,9 @@ let firestore = firebase.firestore();
 const initialState = {
 	uid: null,
 	entity: null,
-	isCreatingUser: false,
-	successCreatingUser: false,
-	errorCreatingUser: null,
+	isAuthenticating: false,
+	successAuthenticating: false,
+	errorAuthenticating: null,
 	isUpdatingUser: false,
 	successUpdatingUser: false,
 	errorUpdatingUser: null
@@ -19,9 +20,9 @@ const initialState = {
 // define actions against state
 const LOG_IN = "evently/user/LOG_IN";
 const RESET_USER = "evently/user/RESET_USER";
-const CREATE_USER_INIT = "evently/user/CREATE_USER_INIT";
-const CREATE_USER_SUCCESS = "evently/user/CREATE_USER_SUCCESS";
-const CREATE_USER_FAILURE = "evently/user/CREATE_USER_FAILURE";
+const AUTH_INIT = "evently/user/AUTH_INIT";
+const AUTH_SUCCESS = "evently/user/AUTH_SUCCESS";
+const AUTH_FAILURE = "evently/user/AUTH_FAILURE";
 const UPDATE_USER_INIT = "evently/user/UPDATE_USER_INIT";
 const UPDATE_USER_SUCCESS = "evently/user/UPDATE_USER_SUCCESS";
 const UPDATE_USER_FAILURE = "evently/user/UPDATE_USER_FAILURE";
@@ -42,26 +43,26 @@ export default (state = initialState, action) => {
 		case RESET_USER:
 			return initialState;
 
-		case CREATE_USER_INIT:
+		case AUTH_INIT:
 			return {
 				...state,
-				isCreatingUser: true
+				isAuthenticating: true
 			};
 
-		case CREATE_USER_SUCCESS:
+		case AUTH_SUCCESS:
 			return {
 				...state,
-				isCreatingUser: false,
+				isAuthenticating: false,
 				entity: action.data,
 				uid: action.userId,
-				successCreatingUser: true
+				successAuthenticating: true
 			};
 
-		case CREATE_USER_FAILURE:
+		case AUTH_FAILURE:
 			return {
 				...state,
-				isCreatingUser: false,
-				errorCreatingUser: action.error
+				isAuthenticating: false,
+				errorAuthenticating: action.error
 			};
 
 		case UPDATE_USER_INIT:
@@ -94,23 +95,23 @@ export default (state = initialState, action) => {
 
 // functions which return the actions that affects the state
 
-export const createUserInit = () => {
+export const authInit = () => {
 	return {
-		type: CREATE_USER_INIT
+		type: AUTH_INIT
 	};
 };
 
-export const createUserSuccess = (userId, data) => {
+export const authSuccess = (userId, data) => {
 	return {
-		type: CREATE_USER_SUCCESS,
+		type: AUTH_SUCCESS,
 		data,
 		userId
 	};
 };
 
-export const createUserFailure = error => {
+export const authFailure = error => {
 	return {
-		type: CREATE_USER_FAILURE,
+		type: AUTH_FAILURE,
 		error
 	};
 };
@@ -135,14 +136,6 @@ export const updateUserFailure = error => {
 	};
 };
 
-export const logIn = (userId, data) => {
-	return {
-		type: LOG_IN,
-		userId,
-		data
-	};
-};
-
 export const resetUser = () => {
 	return {
 		type: RESET_USER
@@ -151,10 +144,10 @@ export const resetUser = () => {
 
 // complex functions which dispatch multiple action and can be asynchronous
 
-export const CreateUser = data => {
+export const Auth = () => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
-			dispatch(createUserInit());
+			dispatch(authInit());
 
 			// watch firebase auth for authentication
 			firebase.auth().onAuthStateChanged(user => {
@@ -167,29 +160,30 @@ export const CreateUser = data => {
 						.then(userDoc => {
 							if (userDoc.exists) {
 								// user already exists, log them in
-								dispatch(logIn(user.uid, userDoc.data()));
+								dispatch(authSuccess(user.uid, userDoc.data()));
 								resolve();
 							} else {
 								// user doesn't exist, create an account
+
+								const userData = {
+									joinedTime: moment().unix()
+								};
+
 								firestore
 									.collection("users")
 									.doc(user.uid)
 									.set(userData)
 									.then(() => {
 										// user created!
-										dispatch(createUserSuccess(user.uid, userData));
+										dispatch(authSuccess(user.uid, userData));
 										resolve();
 									})
 									.catch(error => {
-										dispatch(createUserFailure(error));
+										dispatch(authFailure(error));
 										reject(error);
 									});
 							}
 						});
-				} else {
-					// user logged out
-					// dispatch logout action
-					// uneccessary with anonymous authentication
 				}
 			});
 
@@ -198,42 +192,37 @@ export const CreateUser = data => {
 				.auth()
 				.signInAnonymously()
 				.catch(error => {
-					dispatch(createUserFailure(error));
+					dispatch(authFailure(error));
 					reject(error);
 				});
 		});
 	};
 };
 
-/*
-log in function, to be used if we want to do phone or email auth instead of anonymous
-
-export const LogIn = (email, password) => {
+export const UpdateUser = data => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
-			// firebase auth
+			dispatch(updateUserInit());
 
-			firebase
-				.auth()
-				.signInWithEmailAndPassword(email, password)
-				.then(data => {
-					const uid = data.uid;
-					firestore
-						.collection("users")
-						.doc(uid)
-						.get()
-						.then(userDoc => {
-							dispatch(logIn(uid, userDoc.data()));
-							resolve();
-						})
-						.catch(error => {
-							reject(error);
-						});
+			const state = getState();
+
+			if (!state.user.uid) {
+				dispatch(updateUserFailure("no authenticated user"));
+				reject("no authenticated user");
+			}
+
+			firestore
+				.collection("users")
+				.doc(state.user.uid)
+				.set(data, { merge: true })
+				.then(() => {
+					dispatch(updateUserSuccess(data));
+					resolve();
 				})
 				.catch(error => {
+					dispatch(updateUserFailure(error));
 					reject(error);
 				});
 		});
 	};
 };
-*/
