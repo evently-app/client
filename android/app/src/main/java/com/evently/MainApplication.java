@@ -3,6 +3,7 @@ package com.evently;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.wix.interactable.Interactable;
 import io.invertase.firebase.RNFirebasePackage;
 import com.mkuczera.RNReactNativeHapticFeedbackPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new Interactable(),
             new RNFirebasePackage(),
             new RNReactNativeHapticFeedbackPackage(),
             new LinearGradientPackage()

@@ -61,6 +61,8 @@ target 'evently' do
   # Mapbox
   pod 'react-native-mapbox-gl', :path => '../node_modules/@mapbox/react-native-mapbox-gl'
   
+  pod 'Interactable', :path => '../node_modules/react-native-interactable'
+
 #  target 'eventlyTests' do
 #    inherit! :search_paths
 #    # Pods for testing

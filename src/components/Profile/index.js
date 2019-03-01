@@ -12,7 +12,6 @@ class Profile extends Component {
 					width: SCREEN_WIDTH,
 					height: SCREEN_HEIGHT,
 					backgroundColor: "rgba(0, 255, 0, 0.2)",
-
 					justifyContent: "center",
 					alignItems: "center"
 				}}
