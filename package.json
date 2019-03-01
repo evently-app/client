@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "setup": "yarn;cd ios && pod install && cd .."
   },
   "dependencies": {
     "@mapbox/react-native-mapbox-gl": "^6.1.3",
