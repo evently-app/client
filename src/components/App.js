@@ -1,19 +1,15 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Platform, Dimensions, StyleSheet, Text, View } from "react-native";
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android: "Double tap R on your keyboard to reload,\n" + "Shake or press menu button for dev menu"
-});
-
-type Props = {};
-class App extends Component<Props> {
+class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Text style={styles.welcome}>Evently app</Text>
+        <Text style={styles.instructions}>
+          Current user id: {this.props.uid}
+        </Text>
       </View>
     );
   }
@@ -38,4 +34,12 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    uid: state.user.uid
+  };
+};
+
+// const mapDispatchToProps = { }
+
+export default connect(mapStateToProps)(App);
