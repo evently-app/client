@@ -11,7 +11,7 @@
 #import <React/RCTRootView.h>
 #import <ReactNativeNavigation/ReactNativeNavigation.h>
 
-@import Firebase;
+#import <Firebase.h>
 
 @implementation AppDelegate
 

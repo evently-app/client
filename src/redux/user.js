@@ -1,12 +1,12 @@
 import { resetQueue } from "./queue";
-import firebase from "../firebase";
+import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
 // define starting state
 const initialState = {
-	userId: null,
+	uid: null,
 	entity: null,
 	isCreatingUser: false,
 	successCreatingUser: false,
@@ -36,7 +36,7 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				entity: action.data,
-				userId: action.userId
+				uid: action.userId
 			};
 
 		case RESET_USER:
@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
 				...state,
 				isCreatingUser: false,
 				entity: action.data,
-				userId: action.userId
+				uid: action.userId,
 				successCreatingUser: true
 			};
 
