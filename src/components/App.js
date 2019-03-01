@@ -1,19 +1,35 @@
 import React, { Component } from "react";
-import { Platform, Dimensions, StyleSheet, Text, View } from "react-native";
+import { Auth } from "../redux/user";
+import { connect } from "react-redux";
+import {
+  Platform,
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Alert
+} from "react-native";
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android: "Double tap R on your keyboard to reload,\n" + "Shake or press menu button for dev menu"
-});
+class App extends Component {
+  componentWillMount() {
+    // log in / sign up anonymously
+    this.props
+      .Auth()
+      .then(() => {
+        Alert.alert("successfully authenticated");
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
-type Props = {};
-class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Text style={styles.welcome}>Evently app</Text>
+        <Text style={styles.instructions}>
+          Current user id: {this.props.uid}
+        </Text>
       </View>
     );
   }
@@ -38,4 +54,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    uid: state.user.uid
+  };
+};
+
+const mapDispatchToProps = {
+  Auth
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
