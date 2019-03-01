@@ -9,22 +9,40 @@ target 'evently' do
   
   # React pods
   pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
-  pod 'React', path: rn_path, subspecs: [
-  'Core',
-  'CxxBridge',
-  'DevSupport',
-  'RCTActionSheet',
-  'RCTAnimation',
-  'RCTGeolocation',
-  'RCTImage',
-  'RCTLinkingIOS',
-  'RCTNetwork',
-  'RCTSettings',
-  'RCTText',
-  'RCTVibration',
-  'RCTWebSocket',
-  ]
+
   
+  pod 'React', path: rn_path, subspecs: [
+    'Core',
+    'DevSupport',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTBlob',
+    'RCTCameraRoll',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTNetwork',
+    'RCTPushNotification',
+    'RCTSettings',
+    'RCTTest',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket',
+    'RCTLinkingIOS'
+#    'Core',
+#    'CxxBridge',
+#    'DevSupport',
+#    'RCTActionSheet',
+#    'RCTAnimation',
+#    'RCTGeolocation',
+#    'RCTImage',
+#    'RCTLinkingIOS',
+#    'RCTNetwork',
+#    'RCTSettings',
+#    'RCTText',
+#    'RCTVibration',
+#    'RCTWebSocket',
+  ]
+
   pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
   pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
@@ -38,8 +56,11 @@ target 'evently' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
-pod 'react-native-haptic-feedback', :path => '../node_modules/react-native-haptic-feedback'
-
+  pod 'react-native-haptic-feedback', :path => '../node_modules/react-native-haptic-feedback'
+  
+  # Mapbox
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@mapbox/react-native-mapbox-gl'
+  
 #  target 'eventlyTests' do
 #    inherit! :search_paths
 #    # Pods for testing
