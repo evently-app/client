@@ -1,36 +1,48 @@
 import React, { Component } from "react";
 import { Auth } from "../redux/user";
 import { connect } from "react-redux";
-import {
-  Platform,
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  Alert
-} from "react-native";
+import { StyleSheet, Animated, Text, View, Alert } from "react-native";
+
+import Profile from "./Profile";
+import Feed from "./Feed";
+import Timeline from "./Timeline";
 
 class App extends Component {
+  xOffset = new Animated.Value(0);
+
   componentWillMount() {
     // log in / sign up anonymously
     this.props
       .Auth()
       .then(() => {
-        Alert.alert("successfully authenticated");
+        // Alert.alert("successfully authenticated");
       })
       .catch(error => {
         console.log(error);
       });
   }
 
+  scrollPosition = Animated.event([{ nativeEvent: { contentOffset: { x: this.xOffset } } }], {
+    useNativeDriver: true
+  });
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Evently app</Text>
-        <Text style={styles.instructions}>
-          Current user id: {this.props.uid}
-        </Text>
-      </View>
+      <Animated.ScrollView
+        horizontal
+        pagingEnabled
+        // ref={hoScrollRef}
+        // scrollEnabled={false}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={this.scrollPosition}
+        style={styles.horizontalScroll}
+      >
+        <Profile />
+        <Feed />
+        <Timeline />
+      </Animated.ScrollView>
     );
   }
 }

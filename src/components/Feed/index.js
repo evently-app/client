@@ -1,1 +1,25 @@
-// tie together card stack, filter, 
+import React, { Component } from "react";
+import { View, Text } from "react-native";
+
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
+
+class Feed extends Component {
+	render() {
+		return (
+			<View
+				style={{
+					flex: 1,
+					width: SCREEN_WIDTH,
+					height: SCREEN_HEIGHT,
+					backgroundColor: "rgba(0, 0, 255, 0.2)",
+					justifyContent: "center",
+					alignItems: "center"
+				}}
+			>
+				<Text>Feed</Text>
+			</View>
+		);
+	}
+}
+
+export default Feed;
