@@ -8,7 +8,7 @@ class EventCard extends Component {
 		return (
 			<View
 				style={{
-					width: SCREEN_WIDTH - 40,
+					width: SCREEN_WIDTH - 20,
 					height: SCREEN_HEIGHT - 100,
 					backgroundColor: this.props.backgroundColor,
 					borderRadius: 20

@@ -31,7 +31,7 @@ class Swipeable extends Component {
 			transform: [
 				{
 					rotate: this.deltaX.interpolate({
-						inputRange: [-200, 0, 200],
+						inputRange: [-300, 0, 300],
 						outputRange: ["-10deg", "0deg", "10deg"]
 					})
 				}
@@ -45,7 +45,7 @@ class Swipeable extends Component {
 				ref={view => (this.interactable = view)}
 				horizontalOnly={true}
 				snapPoints={[left, centered, right]}
-				onSnapStart={this.handleOnSnap}
+				onSnap={this.handleOnSnap}
 				onDrag={this.handleOnDrag}
 				initialPosition={centered}
 				animatedValueX={this.deltaX}
