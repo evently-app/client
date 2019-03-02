@@ -20,11 +20,6 @@ class Feed extends Component {
 				name: "Khalid Concert",
 				id: Math.random(), // obviously temporary
 				backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()} ,0.9)`
-			},
-			{
-				name: "Khalid Concert",
-				id: Math.random(), // obviously temporary
-				backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()} ,0.9)`
 			}
 		]
 	};
@@ -41,14 +36,18 @@ class Feed extends Component {
 	};
 
 	fetchCards = () => {
-		this.setState({ queue: [...this.state.queue, generateCard(), generateCard(), generateCard()] });
+		this.setState({ queue: [...this.state.queue, this.generateCard()] });
 	};
 
+	popCard = () => {};
+
 	onSwipeCardRight = card => {
+		this.fetchCards();
 		console.log(card);
 	};
 
 	onSwipeCardLeft = card => {
+		this.fetchCards();
 		console.log(card);
 	};
 

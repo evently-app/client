@@ -23,9 +23,9 @@ class Swipeable extends Component {
 	};
 
 	render() {
-		const left = { x: -400 };
+		const left = { x: -450 };
 		const centered = { x: 0 };
-		const right = { x: 400 };
+		const right = { x: 450 };
 
 		const animatedRotation = {
 			transform: [
