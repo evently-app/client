@@ -7,13 +7,24 @@ import Swipeable from "../EventCard/Swipeable";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 
 class Feed extends Component {
+	randomColor = () => Math.round(255 * Math.random());
+
 	state = {
 		queue: [
 			{
 				name: "Khalid Concert",
 				id: Math.random(), // obviously temporary
-				backgroundColor: `rgba(${255 * Math.random()}, ${255 * Math.random()}, ${255 *
-					Math.random()}} ,0.9)`
+				backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()} ,0.9)`
+			},
+			{
+				name: "Khalid Concert",
+				id: Math.random(), // obviously temporary
+				backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()} ,0.9)`
+			},
+			{
+				name: "Khalid Concert",
+				id: Math.random(), // obviously temporary
+				backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()} ,0.9)`
 			}
 		]
 	};
@@ -24,8 +35,8 @@ class Feed extends Component {
 		return {
 			name: "Khalid Concert",
 			id: Math.random(), // obviously temporary
-			backgroundColor: `rgba(${255 * Math.random()}, ${255 * Math.random()}, ${255 *
-				Math.random()}} ,0.9)`
+			backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${255 *
+				Math.random()} ,0.9)`
 		};
 	};
 
@@ -49,8 +60,8 @@ class Feed extends Component {
 				{queue.map(card => (
 					<Swipeable
 						id={card.id}
-						onSwipeRight={this.onSwipeCardRight}
-						onSwipeLeft={this.onSwipeCardLeft}
+						onSwipeRight={() => this.onSwipeCardRight(card)}
+						onSwipeLeft={() => this.onSwipeCardLeft(card)}
 					>
 						<Card {...card} />
 					</Swipeable>

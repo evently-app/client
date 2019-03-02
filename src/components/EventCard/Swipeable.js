@@ -2,27 +2,41 @@ import React, { Component } from "react";
 import { StyleSheet, Animated } from "react-native";
 
 import Interactable from "react-native-interactable";
+import Haptics from "react-native-haptic-feedback";
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 
 class Swipeable extends Component {
 	deltaX = new Animated.Value(0);
 
+	handleOnSnap = ({ nativeEvent }) => {
+		Haptics.trigger("impactLight");
+		const { index } = nativeEvent;
+		const { onSwipeRight, onSwipeLeft } = this.props;
+
+		if (index === 0) {
+			onSwipeLeft();
+		} else if (index === 1) {
+		} else if (index === 2) {
+			onSwipeRight();
+		}
+	};
+
 	render() {
-		const left = { x: -200 };
+		const left = { x: -400 };
 		const centered = { x: 0 };
-		const right = { x: 200 };
+		const right = { x: 400 };
 
 		const animatedRotation = {
-			// transform: {
-			// 	rotateZ: this.deltaX.interpolate({
-			// 		inputRange: [-200, 0, 200],
-			// 		outputRange: ["-15deg", "0deg", "15deg"]
-			// 	})
-			// }
+			transform: [
+				{
+					rotate: this.deltaX.interpolate({
+						inputRange: [-200, 0, 200],
+						outputRange: ["-10deg", "0deg", "10deg"]
+					})
+				}
+			]
 		};
-
-		console.log("hi");
 
 		return (
 			<Interactable.View
@@ -31,13 +45,8 @@ class Swipeable extends Component {
 				ref={view => (this.interactable = view)}
 				horizontalOnly={true}
 				snapPoints={[left, centered, right]}
-				onSnap={this.handleOnSnap}
+				onSnapStart={this.handleOnSnap}
 				onDrag={this.handleOnDrag}
-				// boundaries={{
-				//   top: open.y - 10,
-				//   bottom: closed.y + 20,
-				//   haptics: true
-				// }}
 				initialPosition={centered}
 				animatedValueX={this.deltaX}
 			>
@@ -49,10 +58,9 @@ class Swipeable extends Component {
 
 const styles = StyleSheet.create({
 	container: {
+		position: "absolute",
 		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "white",
-		borderRadius: 20
+		alignItems: "center"
 	}
 });
 

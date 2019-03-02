@@ -1,10 +1,19 @@
 import React, { Component } from "react";
 import { View, Text } from "react-native";
 
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
+
 class EventCard extends Component {
 	render() {
 		return (
-			<View style={{ width: 300, height: 300 }}>
+			<View
+				style={{
+					width: SCREEN_WIDTH - 40,
+					height: SCREEN_HEIGHT - 100,
+					backgroundColor: this.props.backgroundColor,
+					borderRadius: 20
+				}}
+			>
 				<Text>{this.props.title}</Text>
 			</View>
 		);
