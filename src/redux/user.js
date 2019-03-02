@@ -10,22 +10,19 @@ const initialState = {
 	uid: null,
 	entity: null,
 	isAuthenticating: false,
-	successAuthenticating: false,
 	errorAuthenticating: null,
-	isUpdatingUser: false,
-	successUpdatingUser: false,
-	errorUpdatingUser: null
+	isWatchingUser: false,
+	errorWatchingUser: null
 };
 
 // define actions against state
-const LOG_IN = "evently/user/LOG_IN";
 const RESET_USER = "evently/user/RESET_USER";
 const AUTH_INIT = "evently/user/AUTH_INIT";
 const AUTH_SUCCESS = "evently/user/AUTH_SUCCESS";
 const AUTH_FAILURE = "evently/user/AUTH_FAILURE";
-const UPDATE_USER_INIT = "evently/user/UPDATE_USER_INIT";
-const UPDATE_USER_SUCCESS = "evently/user/UPDATE_USER_SUCCESS";
-const UPDATE_USER_FAILURE = "evently/user/UPDATE_USER_FAILURE";
+const WATCH_USER_INIT = "evently/user/WATCH_USER_INIT";
+const WATCH_USER_SUCCESS = "evently/user/WATCH_USER_SUCCESS";
+const WATCH_USER_FAILURE = "evently/user/WATCH_USER_FAILURE";
 
 /* 
 function that takes initial state and an action and returns next state
@@ -54,8 +51,7 @@ export default (state = initialState, action) => {
 				...state,
 				isAuthenticating: false,
 				entity: action.data,
-				uid: action.userId,
-				successAuthenticating: true
+				uid: action.userId
 			};
 
 		case AUTH_FAILURE:
@@ -65,27 +61,24 @@ export default (state = initialState, action) => {
 				errorAuthenticating: action.error
 			};
 
-		case UPDATE_USER_INIT:
+		case WATCH_USER_INIT:
 			return {
 				...state,
-				isUpdatingUser: true
+				isWatchingUser: true
 			};
 
-		case UPDATE_USER_SUCCESS:
+		case WATCH_USER_SUCCESS:
 			return {
 				...state,
-				isUpdatingUser: false,
-				entity: {
-					...state.user.entity,
-					...action.data
-				}
+				isWatchingUser: true,
+				entity: action.data
 			};
 
-		case UPDATE_USER_FAILURE:
+		case WATCH_USER_FAILURE:
 			return {
 				...state,
-				isUpdatingUser: false,
-				errorUpdatingUser: action.error
+				isWatchingUser: false,
+				errorWatchingUser: action.error
 			};
 
 		default:
@@ -116,23 +109,22 @@ export const authFailure = error => {
 	};
 };
 
-export const updateUserInit = () => {
+export const watchUserInit = () => {
 	return {
-		type: UPDATE_USER_INIT
+		type: WATCH_USER_INIT
 	};
 };
 
-export const updateUserSuccess = data => {
+export const watchUserSuccess = data => {
 	return {
-		type: UPDATE_USER_SUCCESS,
+		type: WATCH_USER_SUCCESS,
 		data
 	};
 };
 
-export const updateUserFailure = error => {
+export const watchUserFailure = () => {
 	return {
-		type: UPDATE_USER_FAILURE,
-		error
+		type: WATCH_USER_FAILURE
 	};
 };
 
@@ -199,30 +191,27 @@ export const Auth = () => {
 	};
 };
 
-export const UpdateUser = data => {
+export const WatchUser = data => {
 	return (dispatch, getState) => {
-		return new Promise((resolve, reject) => {
-			dispatch(updateUserInit());
+		dispatch(watchUserInit());
 
-			const state = getState();
+		const state = getState();
 
-			if (!state.user.uid) {
-				dispatch(updateUserFailure("no authenticated user"));
-				reject("no authenticated user");
-			}
+		if (!state.user.uid) {
+			dispatch(watchUserFailure("no authenticated user"));
+			return null;
+		}
 
-			firestore
-				.collection("users")
-				.doc(state.user.uid)
-				.set(data, { merge: true })
-				.then(() => {
-					dispatch(updateUserSuccess(data));
-					resolve();
-				})
-				.catch(error => {
-					dispatch(updateUserFailure(error));
-					reject(error);
-				});
-		});
+		return firestore
+			.collection("users")
+			.doc(state.user.uid)
+			.onSnapshot(
+				doc => {
+					dispatch(watchUserSuccess(doc.data()));
+				},
+				error => {
+					dispatch(watchUserFailure(error));
+				}
+			);
 	};
 };
