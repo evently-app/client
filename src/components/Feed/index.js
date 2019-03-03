@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { Animated, View, Text, StyleSheet } from "react-native";
 
+import Filter from "./Filter";
 import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 
 class Feed extends Component {
+	filterDrag = new Animated.Value(0);
 	swipeAmount = new Animated.Value(0);
 
 	randomColor = () => {
@@ -43,7 +45,7 @@ class Feed extends Component {
 		let newCard = this.generateCard();
 
 		let queue = [...this.state.queue.slice(0, 1), newCard].sort((a, b) => b.id - a.id);
-		console.log("queue:", queue);
+		// console.log("queue:", queue);
 		this.setState({
 			count: this.state.count + 1,
 			queue
@@ -69,10 +71,13 @@ class Feed extends Component {
 		const firstCardIndex = queue.length - 1;
 		return (
 			<View style={styles.container}>
+				<Filter filterDrag={this.filterDrag} />
 				{queue.map((card, i) => (
 					<Swipeable
 						key={card.id}
 						firstCard={i == firstCardIndex}
+						secondCard={i == firstCardIndex - 1}
+						filterDrag={this.filterDrag}
 						swipeAmount={this.swipeAmount}
 						onSwipeRight={() => this.onSwipeCardRight(card)}
 						onSwipeLeft={() => this.onSwipeCardLeft(card)}
@@ -91,8 +96,8 @@ const styles = StyleSheet.create({
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
 		backgroundColor: "rgba(0, 0, 255, 0.2)",
-		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
+		justifyContent: "center"
 	}
 });
 

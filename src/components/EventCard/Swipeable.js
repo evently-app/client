@@ -6,8 +6,16 @@ import Haptics from "react-native-haptic-feedback";
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 
-const Swipeable = ({ onSwipeRight, onSwipeLeft, swipeAmount, firstCard, children }) => {
-	deltaX = new Animated.Value(0);
+const Swipeable = ({
+	onSwipeRight,
+	onSwipeLeft,
+	swipeAmount,
+	filterDrag,
+	firstCard,
+	secondCard,
+	children
+}) => {
+	// deltaX = new Animated.Value(0);
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
@@ -27,6 +35,17 @@ const Swipeable = ({ onSwipeRight, onSwipeLeft, swipeAmount, firstCard, children
 	const left = { x: -450 };
 	const centered = { x: 0 };
 	const right = { x: 450 };
+
+	const animatedTranslate = {
+		transform: [
+			{
+				translateY: filterDrag.interpolate({
+					inputRange: [0, 100],
+					outputRange: [0, 100]
+				})
+			}
+		]
+	};
 
 	const animatedScale = {
 		transform: [
@@ -52,10 +71,11 @@ const Swipeable = ({ onSwipeRight, onSwipeLeft, swipeAmount, firstCard, children
 	};
 
 	const animated = firstCard ? animatedRotation : animatedScale;
-	return (
+
+	const swipeable = (
 		<Interactable.View
 			animatedNativeDriver
-			style={[animated, styles.container]}
+			style={[animated, animatedTranslate, styles.container]}
 			horizontalOnly={true}
 			snapPoints={[left, centered, right]}
 			onSnapStart={handleOnSnap}
@@ -66,6 +86,8 @@ const Swipeable = ({ onSwipeRight, onSwipeLeft, swipeAmount, firstCard, children
 			{children}
 		</Interactable.View>
 	);
+
+	return firstCard || secondCard ? swipeable : null;
 };
 
 const styles = StyleSheet.create({

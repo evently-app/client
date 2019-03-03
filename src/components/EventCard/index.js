@@ -33,6 +33,7 @@ class EventCard extends Component {
 				<Animated.ScrollView
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={16}
+					bounces={false}
 					onScroll={this.onScroll}
 				>
 					<View style={[styles.coloredBackground, { backgroundColor: this.props.backgroundColor }]}>
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		width: SCREEN_WIDTH - 20,
 		height: SCREEN_HEIGHT - 200,
-		backgroundColor: "white",
+		backgroundColor: "lightgray",
 		borderRadius: 20
 	},
 	coloredBackground: {
