@@ -26,7 +26,7 @@ class Filter extends Component {
 		const open_point = { y: 150 };
 		const boundaries = {
 			top: -1,
-			bottom: 200,
+			bottom: 225,
 			haptics: true
 		};
 
