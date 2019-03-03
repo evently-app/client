@@ -59,7 +59,7 @@ class App extends Component {
           pagingEnabled
           bounces={false}
           ref={ScrollView => (this.ScrollView = ScrollView)}
-          // scrollEnabled={false}
+          // scrollEnabled={page2 ? false : true}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}

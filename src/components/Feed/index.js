@@ -73,7 +73,6 @@ class Feed extends Component {
 	};
 
 	onDrag = event => {
-		console.log(event);
 		this.setState({ dragging: !this.state.dragging });
 	};
 
