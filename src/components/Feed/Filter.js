@@ -3,132 +3,104 @@ import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native
 
 import Interactable from "react-native-interactable";
 
+import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { SB_HEIGHT } from "../../lib/constants";
 
-class Filter extends Component {
-	state = {
-		open: false
+const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
+	const closed_point = { y: 0 };
+	const open_point = { y: 150 };
+	const boundaries = {
+		top: -1,
+		bottom: 225,
+		haptics: true
 	};
 
-	snapOpen = () => {
-		this.setState({ open: true }, () => this.Interactable.snapTo({ index: 1 }));
+	const inputRange = [0, 50, 150];
+
+	const animatedLocation = {
+		transform: [
+			{
+				translateY: filterDrag.interpolate({
+					inputRange,
+					outputRange: [0, -35, -105]
+				})
+			}
+		]
 	};
 
-	snapClosed = () => {
-		this.setState({ open: false }, () => this.Interactable.snapTo({ index: 0 }));
+	const animatedTime = {
+		transform: [
+			{
+				translateY: filterDrag.interpolate({
+					inputRange,
+					outputRange: [-10, -30, -90]
+				})
+			}
+		]
 	};
 
-	render() {
-		const { filterDrag } = this.props;
-		const { open } = this.state;
+	const animatedType = {
+		transform: [
+			{
+				translateY: filterDrag.interpolate({
+					inputRange,
+					outputRange: [0, -25, -75]
+				})
+			}
+		]
+	};
 
-		const closed_point = { y: 0 };
-		const open_point = { y: 150 };
-		const boundaries = {
-			top: -1,
-			bottom: 225,
-			haptics: true
-		};
+	const animatedOpacity = {
+		opacity: filterDrag.interpolate({
+			inputRange,
+			outputRange: [0, 0.25, 0.5],
+			extrapolate: "clamp"
+		})
+	};
 
-		const inputRange = [0, 50];
+	const animatedOpacity2 = {
+		opacity: filterDrag.interpolate({
+			inputRange,
+			outputRange: [0, 0.5, 1],
+			extrapolate: "clamp"
+		})
+	};
 
-		const translateX = {
-			translateX: filterDrag.interpolate({
-				inputRange,
-				outputRange: [0, -45]
-			})
-		};
-
-		const animatedLocation = {
-			transform: [
-				{
-					translateY: filterDrag.interpolate({
-						inputRange,
-						outputRange: [0, -35]
-					})
-				}
-				// translateX
-			]
-		};
-
-		const animatedTime = {
-			transform: [
-				{
-					translateY: filterDrag.interpolate({
-						inputRange,
-						outputRange: [0, -30]
-					})
-				}
-				// translateX
-			]
-		};
-
-		const animatedType = {
-			transform: [
-				{
-					translateY: filterDrag.interpolate({
-						inputRange,
-						outputRange: [0, -25]
-					})
-				}
-				// translateX
-			]
-		};
-
-		const animatedOpacity = {
-			// position: "absolute",
-			// top: -10,
-			opacity: filterDrag.interpolate({
-				inputRange: [0, open_point.y],
-				outputRange: [0, 0.5],
-				extrapolate: "clamp"
-			})
-		};
-
-		const animatedOpacity2 = {
-			// position: "absolute",
-			// top: -10,
-			opacity: filterDrag.interpolate({
-				inputRange: [0, open_point.y],
-				outputRange: [0, 1],
-				extrapolate: "clamp"
-			})
-		};
-
-		let white = { color: "white" };
-
-		return (
-			<TouchableOpacity
-				activeOpacity={1}
-				style={styles.container}
-				onPress={open ? this.snapClosed : this.snapOpen}
+	return (
+		<TouchableOpacity activeOpacity={1} style={styles.container} onPress={onPress}>
+			<Interactable.View
+				animatedNativeDriver
+				verticalOnly
+				snapPoints={[closed_point, open_point]}
+				ref={interactableRef}
+				onDrag={onDrag}
+				boundaries={boundaries}
+				initialPosition={closed_point}
+				style={styles.interactable}
+				animatedValueY={filterDrag}
 			>
-				<Interactable.View
-					animatedNativeDriver
-					verticalOnly={true}
-					snapPoints={[closed_point, open_point]}
-					ref={Interactable => (this.Interactable = Interactable)}
-					// onSnapStart={handleOnSnap}
-					boundaries={boundaries}
-					initialPosition={closed_point}
-					style={styles.interactable}
-					animatedValueY={filterDrag}
-				>
-					<Animated.Text style={[animatedOpacity, animatedLocation, white]}>
-						I want events in
-					</Animated.Text>
-					<Animated.Text style={[styles.location, animatedLocation, white]}>New York</Animated.Text>
-					<Animated.Text style={[animatedOpacity, animatedTime, white]}>for</Animated.Text>
-					<Animated.Text style={[styles.time, animatedTime, white]}>Tonight</Animated.Text>
-					<Animated.Text style={[animatedOpacity, animatedType, white]}>
-						I'm in the mood for
-					</Animated.Text>
-					<Animated.Text style={[animatedOpacity2, animatedType, white]}>anything</Animated.Text>
-				</Interactable.View>
-			</TouchableOpacity>
-		);
-	}
-}
+				<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
+					I want events in
+				</Paragraph>
+				<Header animated style={animatedLocation}>
+					New York
+				</Header>
+				<Paragraph animated style={{ ...animatedTime, ...animatedOpacity }}>
+					for
+				</Paragraph>
+				<SubHeader animated style={animatedTime}>
+					tonight
+				</SubHeader>
+				<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
+					I'm in the mood for
+				</Paragraph>
+				<SubHeader animated style={{ ...animatedType, ...animatedOpacity2 }}>
+					anything
+				</SubHeader>
+			</Interactable.View>
+		</TouchableOpacity>
+	);
+};
 
 const styles = StyleSheet.create({
 	container: {
@@ -145,12 +117,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center"
 		// justifyContent: "space-around"
-	},
-	location: {
-		marginTop: 0
-	},
-	time: {
-		marginBottom: 5
 	}
 });
 

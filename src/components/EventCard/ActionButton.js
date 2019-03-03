@@ -79,9 +79,9 @@ const ActionButton = ({ title, url, yOffset }) => {
 			<Animated.View style={[styles.container, animatedStyle]}>
 				<BlurView blurType="xlight" style={styles.fill} />
 			</Animated.View>
-			<Animated.Text allowFontScaling={false} style={[animatedTextStyle, styles.text]}>
-				Buy Tickets
-			</Animated.Text>
+			<View style={styles.text}>
+				<Animated.Text style={[animatedTextStyle]}>Buy Tickets</Animated.Text>
+			</View>
 		</View>
 	);
 };
@@ -104,8 +104,12 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		position: "absolute",
-		right: 22,
-		bottom: 15
+		right: 10,
+		bottom: 10,
+		height: 30,
+		width: 100,
+		justifyContent: "center",
+		alignItems: "center"
 	}
 });
 

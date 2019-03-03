@@ -32,9 +32,9 @@ const Swipeable = ({
 		}
 	};
 
-	const left = { x: -450 };
-	const centered = { x: 0 };
-	const right = { x: 450 };
+	const left = { x: -410 };
+	const centered = { x: 0, damping: 0.7, tension: 200 };
+	const right = { x: 410 };
 
 	const animatedScale = {
 		scale: swipeAmount.interpolate({
@@ -46,7 +46,7 @@ const Swipeable = ({
 
 	const animatedRotation = {
 		rotate: swipeAmount.interpolate({
-			inputRange: [-300, 0, 300],
+			inputRange: [-400, 0, 400],
 			outputRange: ["-10deg", "0deg", "10deg"]
 		})
 	};
@@ -67,8 +67,8 @@ const Swipeable = ({
 	const swipeable = (
 		<Interactable.View
 			animatedNativeDriver
+			horizontalOnly
 			style={[animated, styles.container]}
-			horizontalOnly={true}
 			snapPoints={[left, centered, right]}
 			onSnapStart={handleOnSnap}
 			initialPosition={centered}

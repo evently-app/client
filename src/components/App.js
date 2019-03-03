@@ -52,20 +52,18 @@ class App extends Component {
 
   render() {
     return (
-      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["#030112", "#150218"]}>
+      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>
         <StatusBar barStyle="light-content" />
         <Animated.ScrollView
           horizontal
           pagingEnabled
           bounces={false}
           ref={ScrollView => (this.ScrollView = ScrollView)}
-          // scrollEnabled={false}
-          // centerContent={true}
+          // scrollEnabled={page2 ? false : true}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
           onScroll={scrollPosition}
-          // style={{ width: SCREEN_WIDTH, marginLeft: -SCREEN_WIDTH }}
         >
           <Profile />
           <Feed />
