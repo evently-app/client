@@ -122,6 +122,8 @@ PODS:
   - Protobuf (3.6.1)
   - React (0.58.5):
     - React/Core (= 0.58.5)
+  - react-native-blur (0.8.0):
+    - React
   - react-native-haptic-feedback (1.5.0):
     - React
   - react-native-mapbox-gl (6.1.3):
@@ -184,6 +186,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - react-native-blur (from `../node_modules/react-native-blur`)
   - react-native-haptic-feedback (from `../node_modules/react-native-haptic-feedback`)
   - "react-native-mapbox-gl (from `../node_modules/@mapbox/react-native-mapbox-gl`)"
   - React/Core (from `../node_modules/react-native`)
@@ -234,6 +237,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
+  react-native-blur:
+    :path: "../node_modules/react-native-blur"
   react-native-haptic-feedback:
     :path: "../node_modules/react-native-haptic-feedback"
   react-native-mapbox-gl:
@@ -266,10 +271,11 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   React: 16c4fb7ce3fc30c041bce809ceae33bf57e7c142
+  react-native-blur: c35c1f6c2c76db7108bde7ed343bd2b01d64e0c0
   react-native-haptic-feedback: f675486e3889e3229272158943c1e9e075247e5a
   react-native-mapbox-gl: b42480060cdcc515dfa3d8e403fb4dd32466a1b9
   yoga: 0885622311729a02c2bc02dca97167787a51488b
 
-PODFILE CHECKSUM: 3c649549b7d4becf92cab5ca8198a9ea6f4df2ad
+PODFILE CHECKSUM: 2d55e8d341336cba4125d1d96b816c44676a2e03
 
 COCOAPODS: 1.5.3

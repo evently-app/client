@@ -1,6 +1,8 @@
 import React from "react";
 import { Animated, StyleSheet, View } from "react-native";
 
+import { BlurView } from "react-native-blur";
+
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
@@ -10,6 +12,7 @@ const ActionButton = ({ title, url, yOffset }) => {
 	const inputRange = [0, 50, 110, 150];
 
 	const animatedStyle = {
+		overflow: "hidden",
 		borderRadius: yOffset.interpolate({
 			inputRange,
 			outputRange: [10, 10, 10, 0],
@@ -73,7 +76,9 @@ const ActionButton = ({ title, url, yOffset }) => {
 
 	return (
 		<View>
-			<Animated.View style={[animatedStyle, styles.container]} />
+			<Animated.View style={[styles.container, animatedStyle]}>
+				<BlurView blurType="xlight" style={styles.fill} />
+			</Animated.View>
 			<Animated.Text allowFontScaling={false} style={[animatedTextStyle, styles.text]}>
 				Buy Tickets
 			</Animated.Text>
@@ -83,13 +88,19 @@ const ActionButton = ({ title, url, yOffset }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: colors.lightgray,
 		right: 10,
 		bottom: 10,
 		width: 100,
 		height: 30,
 		position: "absolute"
 		// borderRadius: 10
+	},
+	fill: {
+		position: "absolute",
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0
 	},
 	text: {
 		position: "absolute",
