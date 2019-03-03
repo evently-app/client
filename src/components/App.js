@@ -50,6 +50,7 @@ class App extends Component {
         <Animated.ScrollView
           horizontal
           pagingEnabled
+          bounces={false}
           ref={ScrollView => (this.ScrollView = ScrollView)}
           // scrollEnabled={false}
           // centerContent={true}
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     margin: 10,
-    backgroundColor: "rgba(120,120,0,0.9)"
+    backgroundColor: "rgba(0,120,120,0.9)"
   }
 });
 

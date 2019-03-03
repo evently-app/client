@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Animated, View, Text, StyleSheet } from "react-native";
 
 import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
@@ -7,6 +7,8 @@ import Swipeable from "../EventCard/Swipeable";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 
 class Feed extends Component {
+	swipeAmount = new Animated.Value(0);
+
 	randomColor = () => {
 		let r = Math.round(255 * Math.random());
 		let g = Math.round(255 * Math.random());
@@ -64,11 +66,14 @@ class Feed extends Component {
 		const { queue } = this.state;
 		console.log(queue);
 
+		const firstCardIndex = queue.length - 1;
 		return (
 			<View style={styles.container}>
-				{queue.map(card => (
+				{queue.map((card, i) => (
 					<Swipeable
 						key={card.id}
+						firstCard={i == firstCardIndex}
+						swipeAmount={this.swipeAmount}
 						onSwipeRight={() => this.onSwipeCardRight(card)}
 						onSwipeLeft={() => this.onSwipeCardLeft(card)}
 					>

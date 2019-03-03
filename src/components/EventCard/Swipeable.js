@@ -28,10 +28,22 @@ class Swipeable extends Component {
 		const centered = { x: 0 };
 		const right = { x: 450 };
 
+		const animatedScale = {
+			transform: [
+				{
+					scale: this.props.swipeAmount.interpolate({
+						inputRange: [-200, 0, 200],
+						outputRange: [1, 0.8, 1],
+						extrapolate: "clamp"
+					})
+				}
+			]
+		};
+
 		const animatedRotation = {
 			transform: [
 				{
-					rotate: this.deltaX.interpolate({
+					rotate: this.props.swipeAmount.interpolate({
 						inputRange: [-300, 0, 300],
 						outputRange: ["-10deg", "0deg", "10deg"]
 					})
@@ -39,17 +51,19 @@ class Swipeable extends Component {
 			]
 		};
 
+		const animated = this.props.firstCard ? animatedRotation : animatedScale;
 		return (
 			<Interactable.View
 				animatedNativeDriver
-				style={[animatedRotation, styles.container]}
+				style={[animated, styles.container]}
 				ref={view => (this.interactable = view)}
 				horizontalOnly={true}
 				snapPoints={[left, centered, right]}
 				onSnapStart={this.handleOnSnap}
 				onDrag={this.handleOnDrag}
 				initialPosition={centered}
-				animatedValueX={this.deltaX}
+				// animatedValueX={this.deltaX}
+				animatedValueX={this.props.swipeAmount}
 			>
 				{this.props.children}
 			</Interactable.View>
