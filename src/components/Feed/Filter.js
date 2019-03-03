@@ -23,14 +23,25 @@ class Filter extends Component {
 		const { open } = this.state;
 
 		const closed_point = { y: 0 };
-		const open_point = { y: 100 };
+		const open_point = { y: 150 };
 
-		const animatedTranslate = {
+		const animatedLocation = {
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: [0, 50],
-						outputRange: [0, -25]
+						outputRange: [0, -35]
+					})
+				}
+			]
+		};
+
+		const animatedTime = {
+			transform: [
+				{
+					translateY: filterDrag.interpolate({
+						inputRange: [0, 50],
+						outputRange: [0, -15]
 					})
 				}
 			]
@@ -48,12 +59,17 @@ class Filter extends Component {
 					snapPoints={[closed_point, open_point]}
 					ref={Interactable => (this.Interactable = Interactable)}
 					// onSnapStart={handleOnSnap}
+					boundaries={{
+						top: 0,
+						bottom: 200,
+						haptics: true
+					}}
 					initialPosition={closed_point}
 					style={styles.interactable}
 					animatedValueY={filterDrag}
 				>
-					<Animated.Text style={animatedTranslate}>Location</Animated.Text>
-					<Animated.Text style={animatedTranslate}>Time</Animated.Text>
+					<Animated.Text style={animatedLocation}>Location</Animated.Text>
+					<Animated.Text style={animatedTime}>Time</Animated.Text>
 				</Interactable.View>
 			</TouchableOpacity>
 		);
