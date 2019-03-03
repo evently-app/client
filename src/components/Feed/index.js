@@ -64,12 +64,11 @@ class Feed extends Component {
 	};
 
 	openFilter = () => {
-		this.setState({ filterOpen: true }, () => this.Interactable.snapTo({ index: 1 }));
+		this.setState({ filterOpen: true }, () => this.Filter.snapTo({ index: 1 }));
 	};
 
 	closeFilter = () => {
-		console.log("closing");
-		this.setState({ filterOpen: false }, () => this.Interactable.snapTo({ index: 0 }));
+		this.setState({ filterOpen: false }, () => this.Filter.snapTo({ index: 0 }));
 	};
 
 	render() {
@@ -79,7 +78,7 @@ class Feed extends Component {
 		return (
 			<View style={styles.container}>
 				<Filter
-					interactableRef={Interactable => (this.Interactable = Interactable)}
+					interactableRef={Filter => (this.Filter = Filter)}
 					onPress={filterOpen ? this.closeFilter : this.openFilter}
 					filterDrag={this.filterDrag}
 				/>
