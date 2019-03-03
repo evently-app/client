@@ -83,7 +83,12 @@ class Feed extends Component {
 					onPress={filterOpen ? this.closeFilter : this.openFilter}
 					filterDrag={this.filterDrag}
 				/>
-				<TouchableOpacity activeOpacity={1} style={styles.center} onPressIn={this.closeFilter}>
+				<TouchableOpacity
+					activeOpacity={1}
+					pointerEvents={filterOpen ? "auto" : "box-none"}
+					style={styles.center}
+					onPressIn={this.closeFilter}
+				>
 					{queue.map((card, i) => (
 						<Swipeable
 							key={card.id}
