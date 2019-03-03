@@ -3,6 +3,8 @@ import { Auth } from "../redux/user";
 import { connect } from "react-redux";
 import { StyleSheet, Animated, Text, TouchableOpacity, View, Alert } from "react-native";
 
+import Haptics from "react-native-haptic-feedback";
+
 import Profile from "./Profile";
 import Feed from "./Feed";
 import Timeline from "./Timeline";
@@ -33,14 +35,17 @@ class App extends Component {
   }
 
   seeProfile = () => {
+    Haptics.trigger("impactLight");
     this.ScrollView.getNode().scrollTo({ x: 0, y: 0, animated: true });
   };
 
   seeFeed = () => {
+    Haptics.trigger("impactLight");
     this.ScrollView.getNode().scrollTo({ x: SCREEN_WIDTH, y: 0, animated: true });
   };
 
   seeTimeline = () => {
+    Haptics.trigger("impactLight");
     this.ScrollView.getNode().scrollTo({ x: 2 * SCREEN_WIDTH, y: 0, animated: true });
   };
 
