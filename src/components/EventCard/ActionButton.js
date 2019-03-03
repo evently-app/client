@@ -7,40 +7,45 @@ import { colors } from "../../lib/styles";
 const INITIAL_WIDTH = 100;
 
 const ActionButton = ({ title, url, yOffset }) => {
-	const inputRange = [0, 150];
+	const inputRange = [0, 50, 110, 150];
 
 	const animatedStyle = {
 		borderRadius: yOffset.interpolate({
-			inputRange: [0, 100],
-			outputRange: [10, 0],
+			inputRange,
+			outputRange: [10, 10, 10, 0],
 			extrapolate: "clamp"
 		}),
 		transform: [
 			{
 				translateX: yOffset.interpolate({
 					inputRange,
-					outputRange: [0, -110],
+					outputRange: [0, -25, -55, -110],
 					extrapolate: "clamp"
 				})
 			},
 			{
 				translateY: yOffset.interpolate({
 					inputRange,
-					outputRange: [0, -5],
+					outputRange: [0, -1.25, -2.5, -5],
 					extrapolate: "clamp"
 				})
 			},
 			{
 				scaleX: yOffset.interpolate({
 					inputRange,
-					outputRange: [1, SCREEN_WIDTH / INITIAL_WIDTH],
+					outputRange: [
+						1,
+						SCREEN_WIDTH / (4 * INITIAL_WIDTH),
+						SCREEN_WIDTH / (2 * INITIAL_WIDTH),
+						SCREEN_WIDTH / INITIAL_WIDTH
+					],
 					extrapolate: "clamp"
 				})
 			},
 			{
 				scaleY: yOffset.interpolate({
 					inputRange,
-					outputRange: [1, 2],
+					outputRange: [1, 1, 1.5, 2],
 					extrapolate: "clamp"
 				})
 			}
@@ -52,14 +57,14 @@ const ActionButton = ({ title, url, yOffset }) => {
 			{
 				translateX: yOffset.interpolate({
 					inputRange,
-					outputRange: [0, -120],
+					outputRange: [0, -23.5, -60, -120],
 					extrapolate: "clamp"
 				})
 			},
 			{
 				translateY: yOffset.interpolate({
 					inputRange,
-					outputRange: [0, -5],
+					outputRange: [0, -1.25, -2.5, -5],
 					extrapolate: "clamp"
 				})
 			}
@@ -69,7 +74,9 @@ const ActionButton = ({ title, url, yOffset }) => {
 	return (
 		<View>
 			<Animated.View style={[animatedStyle, styles.container]} />
-			<Animated.Text style={[animatedTextStyle, styles.text]}>Buy Tickets</Animated.Text>
+			<Animated.Text allowFontScaling={false} style={[animatedTextStyle, styles.text]}>
+				Buy Tickets
+			</Animated.Text>
 		</View>
 	);
 };
