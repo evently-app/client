@@ -7,19 +7,23 @@ import Swipeable from "../EventCard/Swipeable";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 
 class Feed extends Component {
-	randomColor = () => Math.round(255 * Math.random());
+	randomColor = () => {
+		let r = Math.round(255 * Math.random());
+		let g = Math.round(255 * Math.random());
+		let b = Math.round(255 * Math.random());
+		return `rgba(${r}, ${g}, ${b}, 0.9)`;
+	};
 
 	state = {
+		count: 1,
 		queue: [
 			{
-				name: "Khalid Concert",
-				id: Math.random(), // obviously temporary
-				backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()} ,0.9)`
+				id: 1,
+				backgroundColor: this.randomColor()
 			},
 			{
-				name: "Khalid Concert",
-				id: Math.random(), // obviously temporary
-				backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()} ,0.9)`
+				id: 0,
+				backgroundColor: this.randomColor()
 			}
 		]
 	};
@@ -28,37 +32,47 @@ class Feed extends Component {
 
 	generateCard = () => {
 		return {
-			name: "Khalid Concert",
-			id: Math.random(), // obviously temporary
-			backgroundColor: `rgba(${this.randomColor()}, ${this.randomColor()}, ${255 *
-				Math.random()} ,0.9)`
+			id: this.state.count + 1,
+			backgroundColor: this.randomColor()
 		};
 	};
 
 	fetchCards = () => {
-		this.setState({ queue: [...this.state.queue, this.generateCard()] });
+		let newCard = this.generateCard();
+
+		let queue = [...this.state.queue.slice(0, 1), newCard].sort((a, b) => b.id - a.id);
+		console.log("queue:", queue);
+		this.setState({
+			count: this.state.count + 1,
+			queue
+		});
 	};
 
-	popCard = () => {};
+	// popCard = card => {
+	// 	this.setState({ queue: [...this.state.queue.slice(2)] });
+	// };
 
 	onSwipeCardRight = card => {
+		// this.popCard(card);
 		this.fetchCards();
 		console.log(card);
 	};
 
 	onSwipeCardLeft = card => {
+		// this.popCard(card);
 		this.fetchCards();
 		console.log(card);
 	};
 
 	render() {
 		const { queue } = this.state;
+		console.log(queue);
 
 		return (
 			<View style={styles.container}>
 				{queue.map(card => (
 					<Swipeable
-						id={card.id}
+						key={card.id}
 						onSwipeRight={() => this.onSwipeCardRight(card)}
 						onSwipeLeft={() => this.onSwipeCardLeft(card)}
 					>

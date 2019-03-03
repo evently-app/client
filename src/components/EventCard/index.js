@@ -8,7 +8,7 @@ import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
 class EventCard extends Component {
 	yOffset = new Animated.Value(0);
 
-	_onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
+	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
 		useNativeDriver: true
 	});
 
@@ -18,7 +18,8 @@ class EventCard extends Component {
 				{
 					translateY: this.yOffset.interpolate({
 						inputRange: [0, SCREEN_HEIGHT],
-						outputRange: [0, 100]
+						outputRange: [0, 100],
+						extrapolate: "clamp"
 					})
 				}
 			]
@@ -29,11 +30,11 @@ class EventCard extends Component {
 				<Animated.ScrollView
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={16}
-					onScroll={this._onScroll}
+					onScroll={this.onScroll}
 				>
-					<View
-						style={[styles.coloredBackground, { backgroundColor: this.props.backgroundColor }]}
-					/>
+					<View style={[styles.coloredBackground, { backgroundColor: this.props.backgroundColor }]}>
+						<Text>{this.props.id}</Text>
+					</View>
 					<Text>{this.props.title}</Text>
 					<View style={{ height: SCREEN_HEIGHT }} />
 				</Animated.ScrollView>
@@ -58,6 +59,8 @@ const styles = StyleSheet.create({
 		borderRadius: 20
 	},
 	coloredBackground: {
+		alignItems: "center",
+		justifyContent: "center",
 		width: SCREEN_WIDTH - 20,
 		height: SCREEN_HEIGHT - 200
 	},
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
 		top: 0,
 		width: 7,
 		height: 20,
-		backgroundColor: "white",
+		backgroundColor: "lightgray",
 		borderRadius: 10
 	}
 });

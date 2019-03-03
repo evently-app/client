@@ -39,7 +39,8 @@ const ActionButton = ({ title, url, yOffset }) => {
 	const animatedStyle = {
 		borderRadius: yOffset.interpolate({
 			inputRange: [0, 100],
-			outputRange: [10, 0]
+			outputRange: [10, 0],
+			extrapolate: "clamp"
 		}),
 		transform: [
 			{
