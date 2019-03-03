@@ -17,13 +17,6 @@ const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 
 	const inputRange = [0, 50, 150];
 
-	const translateX = {
-		translateX: filterDrag.interpolate({
-			inputRange,
-			outputRange: [0, -45, -135]
-		})
-	};
-
 	const animatedLocation = {
 		transform: [
 			{
@@ -32,7 +25,6 @@ const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 					outputRange: [0, -35, -105]
 				})
 			}
-			// translateX
 		]
 	};
 
@@ -44,7 +36,6 @@ const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 					outputRange: [-10, -30, -90]
 				})
 			}
-			// translateX
 		]
 	};
 
@@ -56,13 +47,10 @@ const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 					outputRange: [0, -25, -75]
 				})
 			}
-			// translateX
 		]
 	};
 
 	const animatedOpacity = {
-		// position: "absolute",
-		// top: -10,
 		opacity: filterDrag.interpolate({
 			inputRange,
 			outputRange: [0, 0.25, 0.5],
@@ -71,8 +59,6 @@ const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 	};
 
 	const animatedOpacity2 = {
-		// position: "absolute",
-		// top: -10,
 		opacity: filterDrag.interpolate({
 			inputRange,
 			outputRange: [0, 0.5, 1],
@@ -87,7 +73,6 @@ const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 				verticalOnly
 				snapPoints={[closed_point, open_point]}
 				ref={interactableRef}
-				// onSnapStart={handleOnSnap}
 				onDrag={onDrag}
 				boundaries={boundaries}
 				initialPosition={closed_point}
@@ -132,12 +117,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center"
 		// justifyContent: "space-around"
-	},
-	location: {
-		marginTop: 0
-	},
-	time: {
-		marginBottom: 5
 	}
 });
 
