@@ -48,10 +48,6 @@ class Feed extends Component {
 		});
 	};
 
-	// popCard = card => {
-	// 	this.setState({ queue: [...this.state.queue.slice(2)] });
-	// };
-
 	onSwipeCardRight = card => {
 		// this.popCard(card);
 		this.fetchCards();

@@ -5,6 +5,9 @@ import ActionButton from "./ActionButton";
 
 import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
 
+const SCROLL_BAR_HEIGHT = 100;
+const SCROLL_INDICATOR_HEIGHT = 20;
+
 class EventCard extends Component {
 	yOffset = new Animated.Value(0);
 
@@ -18,7 +21,7 @@ class EventCard extends Component {
 				{
 					translateY: this.yOffset.interpolate({
 						inputRange: [0, SCREEN_HEIGHT],
-						outputRange: [0, 100],
+						outputRange: [0, SCROLL_BAR_HEIGHT - SCROLL_INDICATOR_HEIGHT],
 						extrapolate: "clamp"
 					})
 				}
@@ -52,9 +55,6 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		width: SCREEN_WIDTH - 20,
 		height: SCREEN_HEIGHT - 200,
-		// alignItems: "center",
-		// justifyContent: "center",
-		// marginBottom: 100,
 		backgroundColor: "white",
 		borderRadius: 20
 	},
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 		right: 10,
 		top: 10,
 		width: 7,
-		height: 120,
+		height: SCROLL_BAR_HEIGHT,
 		backgroundColor: "gray",
 		borderRadius: 10
 	},
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 		right: 0,
 		top: 0,
 		width: 7,
-		height: 20,
+		height: SCROLL_INDICATOR_HEIGHT,
 		backgroundColor: "lightgray",
 		borderRadius: 10
 	}
