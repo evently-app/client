@@ -24,15 +24,30 @@ class Filter extends Component {
 
 		const closed_point = { y: 0 };
 		const open_point = { y: 150 };
+		const boundaries = {
+			top: -1,
+			bottom: 200,
+			haptics: true
+		};
+
+		const inputRange = [0, 50];
+
+		const translateX = {
+			translateX: filterDrag.interpolate({
+				inputRange,
+				outputRange: [0, -45]
+			})
+		};
 
 		const animatedLocation = {
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
-						inputRange: [0, 50],
+						inputRange,
 						outputRange: [0, -35]
 					})
 				}
+				// translateX
 			]
 		};
 
@@ -40,11 +55,44 @@ class Filter extends Component {
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
-						inputRange: [0, 50],
-						outputRange: [0, -15]
+						inputRange,
+						outputRange: [0, -30]
 					})
 				}
+				// translateX
 			]
+		};
+
+		const animatedType = {
+			transform: [
+				{
+					translateY: filterDrag.interpolate({
+						inputRange,
+						outputRange: [0, -25]
+					})
+				}
+				// translateX
+			]
+		};
+
+		const animatedOpacity = {
+			// position: "absolute",
+			// top: -10,
+			opacity: filterDrag.interpolate({
+				inputRange: [0, open_point.y],
+				outputRange: [0, 0.5],
+				extrapolate: "clamp"
+			})
+		};
+
+		const animatedOpacity2 = {
+			// position: "absolute",
+			// top: -10,
+			opacity: filterDrag.interpolate({
+				inputRange: [0, open_point.y],
+				outputRange: [0, 1],
+				extrapolate: "clamp"
+			})
 		};
 
 		return (
@@ -59,17 +107,19 @@ class Filter extends Component {
 					snapPoints={[closed_point, open_point]}
 					ref={Interactable => (this.Interactable = Interactable)}
 					// onSnapStart={handleOnSnap}
-					boundaries={{
-						top: 0,
-						bottom: 200,
-						haptics: true
-					}}
+					boundaries={boundaries}
 					initialPosition={closed_point}
 					style={styles.interactable}
 					animatedValueY={filterDrag}
 				>
-					<Animated.Text style={animatedLocation}>Location</Animated.Text>
-					<Animated.Text style={animatedTime}>Time</Animated.Text>
+					<Animated.Text style={[animatedOpacity, animatedLocation]}>
+						I want events in
+					</Animated.Text>
+					<Animated.Text style={[styles.location, animatedLocation]}>Location</Animated.Text>
+					<Animated.Text style={[animatedOpacity, animatedTime]}>for</Animated.Text>
+					<Animated.Text style={[styles.time, animatedTime]}>Time</Animated.Text>
+					<Animated.Text style={[animatedOpacity, animatedType]}>I'm in the mood for</Animated.Text>
+					<Animated.Text style={[animatedOpacity2, animatedType]}>anything</Animated.Text>
 				</Interactable.View>
 			</TouchableOpacity>
 		);
@@ -85,9 +135,18 @@ const styles = StyleSheet.create({
 		height: 150
 	},
 	interactable: {
-		height: 60,
+		height: 75,
+		// backgroundColor: "red",
+		padding: 5,
 		alignItems: "center",
 		justifyContent: "center"
+		// justifyContent: "space-around"
+	},
+	location: {
+		marginTop: 0
+	},
+	time: {
+		marginBottom: 5
 	}
 });
 

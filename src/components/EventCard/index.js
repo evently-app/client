@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 		width: 7,
 		height: SCROLL_BAR_HEIGHT,
 		backgroundColor: "gray",
-		borderRadius: 10
+		borderRadius: 3.5
 	},
 	scrollIndicator: {
 		position: "absolute",
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 		width: 7,
 		height: SCROLL_INDICATOR_HEIGHT,
 		backgroundColor: "lightgray",
-		borderRadius: 10
+		borderRadius: 3.5
 	}
 });
 

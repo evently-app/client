@@ -7,37 +7,37 @@ import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 
+const randomColor = () => {
+	let r = Math.round(255 * Math.random());
+	let g = Math.round(255 * Math.random());
+	let b = Math.round(255 * Math.random());
+	return `rgba(${r}, ${g}, ${b}, 0.9)`;
+};
+
 class Feed extends Component {
-	filterDrag = new Animated.Value(0);
-	swipeAmount = new Animated.Value(0);
-
-	randomColor = () => {
-		let r = Math.round(255 * Math.random());
-		let g = Math.round(255 * Math.random());
-		let b = Math.round(255 * Math.random());
-		return `rgba(${r}, ${g}, ${b}, 0.9)`;
-	};
-
 	state = {
 		count: 1,
 		queue: [
 			{
 				id: 1,
-				backgroundColor: this.randomColor()
+				backgroundColor: randomColor()
 			},
 			{
 				id: 0,
-				backgroundColor: this.randomColor()
+				backgroundColor: randomColor()
 			}
 		]
 	};
+
+	filterDrag = new Animated.Value(0);
+	swipeAmount = new Animated.Value(0);
 
 	componentDidMount() {}
 
 	generateCard = () => {
 		return {
 			id: this.state.count + 1,
-			backgroundColor: this.randomColor()
+			backgroundColor: randomColor()
 		};
 	};
 

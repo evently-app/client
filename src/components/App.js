@@ -95,15 +95,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 100,
-    padding: 10,
+    padding: 25,
     backgroundColor: "transparent",
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   tabBarButton: {
-    flex: 1,
+    width: 60,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
-    margin: 10,
     backgroundColor: "rgba(0,120,120,0.9)"
   }
 });
