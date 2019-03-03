@@ -3,6 +3,7 @@ import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native
 
 import Interactable from "react-native-interactable";
 
+import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { SB_HEIGHT } from "../../lib/constants";
 
 const Filter = ({ filterDrag, onPress, interactableRef }) => {
@@ -14,12 +15,12 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 		haptics: true
 	};
 
-	const inputRange = [0, 50];
+	const inputRange = [0, 50, 150];
 
 	const translateX = {
 		translateX: filterDrag.interpolate({
 			inputRange,
-			outputRange: [0, -45]
+			outputRange: [0, -45, -135]
 		})
 	};
 
@@ -28,7 +29,7 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 			{
 				translateY: filterDrag.interpolate({
 					inputRange,
-					outputRange: [0, -35]
+					outputRange: [0, -35, -105]
 				})
 			}
 			// translateX
@@ -40,7 +41,7 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 			{
 				translateY: filterDrag.interpolate({
 					inputRange,
-					outputRange: [0, -30]
+					outputRange: [-10, -30, -90]
 				})
 			}
 			// translateX
@@ -52,7 +53,7 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 			{
 				translateY: filterDrag.interpolate({
 					inputRange,
-					outputRange: [0, -25]
+					outputRange: [0, -25, -75]
 				})
 			}
 			// translateX
@@ -79,8 +80,6 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 		})
 	};
 
-	let white = { color: "white" };
-
 	return (
 		<TouchableOpacity activeOpacity={1} style={styles.container} onPress={onPress}>
 			<Interactable.View
@@ -94,16 +93,24 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 				style={styles.interactable}
 				animatedValueY={filterDrag}
 			>
-				<Animated.Text style={[animatedOpacity, animatedLocation, white]}>
+				<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
 					I want events in
-				</Animated.Text>
-				<Animated.Text style={[styles.location, animatedLocation, white]}>New York</Animated.Text>
-				<Animated.Text style={[animatedOpacity, animatedTime, white]}>for</Animated.Text>
-				<Animated.Text style={[styles.time, animatedTime, white]}>Tonight</Animated.Text>
-				<Animated.Text style={[animatedOpacity, animatedType, white]}>
+				</Paragraph>
+				<Header animated style={animatedLocation}>
+					New York
+				</Header>
+				<Paragraph animated style={{ ...animatedTime, ...animatedOpacity }}>
+					for
+				</Paragraph>
+				<SubHeader animated style={animatedTime}>
+					tonight
+				</SubHeader>
+				<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
 					I'm in the mood for
-				</Animated.Text>
-				<Animated.Text style={[animatedOpacity2, animatedType, white]}>anything</Animated.Text>
+				</Paragraph>
+				<SubHeader animated style={{ ...animatedType, ...animatedOpacity2 }}>
+					anything
+				</SubHeader>
 			</Interactable.View>
 		</TouchableOpacity>
 	);

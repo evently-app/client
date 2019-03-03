@@ -60,12 +60,10 @@ class App extends Component {
           bounces={false}
           ref={ScrollView => (this.ScrollView = ScrollView)}
           // scrollEnabled={false}
-          // centerContent={true}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
           onScroll={scrollPosition}
-          // style={{ width: SCREEN_WIDTH, marginLeft: -SCREEN_WIDTH }}
         >
           <Profile />
           <Feed />
