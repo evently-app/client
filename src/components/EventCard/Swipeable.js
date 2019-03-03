@@ -36,46 +36,38 @@ const Swipeable = ({
 	const centered = { x: 0 };
 	const right = { x: 450 };
 
-	const animatedTranslate = {
+	const animatedScale = {
+		scale: swipeAmount.interpolate({
+			inputRange: [-200, 0, 200],
+			outputRange: [1, 0.95, 1],
+			extrapolate: "clamp"
+		})
+	};
+
+	const animatedRotation = {
+		rotate: swipeAmount.interpolate({
+			inputRange: [-300, 0, 300],
+			outputRange: ["-10deg", "0deg", "10deg"]
+		})
+	};
+
+	const animated = {
 		transform: [
 			{
 				translateY: filterDrag.interpolate({
 					inputRange: [0, 100],
 					outputRange: [0, 100]
 				})
-			}
+			},
+
+			firstCard ? animatedRotation : animatedScale
 		]
 	};
-
-	const animatedScale = {
-		transform: [
-			{
-				scale: swipeAmount.interpolate({
-					inputRange: [-200, 0, 200],
-					outputRange: [1, 0.95, 1],
-					extrapolate: "clamp"
-				})
-			}
-		]
-	};
-
-	const animatedRotation = {
-		transform: [
-			{
-				rotate: swipeAmount.interpolate({
-					inputRange: [-300, 0, 300],
-					outputRange: ["-10deg", "0deg", "10deg"]
-				})
-			}
-		]
-	};
-
-	const animated = firstCard ? animatedRotation : animatedScale;
 
 	const swipeable = (
 		<Interactable.View
 			animatedNativeDriver
-			style={[animated, animatedTranslate, styles.container]}
+			style={[animated, styles.container]}
 			horizontalOnly={true}
 			snapPoints={[left, centered, right]}
 			onSnapStart={handleOnSnap}

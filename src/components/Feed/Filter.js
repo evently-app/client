@@ -1,29 +1,61 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 import Interactable from "react-native-interactable";
 
+import { SB_HEIGHT } from "../../lib/constants";
+
 class Filter extends Component {
-	state = {};
+	state = {
+		open: false
+	};
+
+	snapOpen = () => {
+		this.setState({ open: true }, () => this.Interactable.snapTo({ index: 1 }));
+	};
+
+	snapClosed = () => {
+		this.setState({ open: false }, () => this.Interactable.snapTo({ index: 0 }));
+	};
 
 	render() {
 		const { filterDrag } = this.props;
+		const { open } = this.state;
 
-		const closed = { y: 0 };
-		const open = { y: 100 };
+		const closed_point = { y: 0 };
+		const open_point = { y: 100 };
+
+		const animatedTranslate = {
+			transform: [
+				{
+					translateY: filterDrag.interpolate({
+						inputRange: [0, 50],
+						outputRange: [0, -25]
+					})
+				}
+			]
+		};
 
 		return (
-			<Interactable.View
-				animatedNativeDriver
-				snapPoints={[closed, open]}
-				// onSnapStart={handleOnSnap}
-				initialPosition={closed}
+			<TouchableOpacity
+				activeOpacity={1}
 				style={styles.container}
-				animatedValueY={filterDrag}
+				onPress={open ? this.snapClosed : this.snapOpen}
 			>
-				<Text>Location</Text>
-				<Text>Time</Text>
-			</Interactable.View>
+				<Interactable.View
+					animatedNativeDriver
+					verticalOnly={true}
+					snapPoints={[closed_point, open_point]}
+					ref={Interactable => (this.Interactable = Interactable)}
+					// onSnapStart={handleOnSnap}
+					initialPosition={closed_point}
+					style={styles.interactable}
+					animatedValueY={filterDrag}
+				>
+					<Animated.Text style={animatedTranslate}>Location</Animated.Text>
+					<Animated.Text style={animatedTranslate}>Time</Animated.Text>
+				</Interactable.View>
+			</TouchableOpacity>
 		);
 	}
 }
@@ -31,10 +63,15 @@ class Filter extends Component {
 const styles = StyleSheet.create({
 	container: {
 		position: "absolute",
-		top: 0,
+		top: SB_HEIGHT,
 		left: 0,
 		right: 0,
-		height: 100
+		height: 150
+	},
+	interactable: {
+		height: 60,
+		alignItems: "center",
+		justifyContent: "center"
 	}
 });
 
