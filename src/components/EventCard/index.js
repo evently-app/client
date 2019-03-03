@@ -7,6 +7,7 @@ import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
 const SCROLL_BAR_HEIGHT = 100;
+const SCROLL_BAR_WIDTH = 5;
 const SCROLL_INDICATOR_HEIGHT = 20;
 
 class EventCard extends Component {
@@ -70,19 +71,19 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 10,
 		top: 10,
-		width: 7,
+		width: SCROLL_BAR_WIDTH,
 		height: SCROLL_BAR_HEIGHT,
 		backgroundColor: "gray",
-		borderRadius: 3.5
+		borderRadius: SCROLL_BAR_WIDTH / 2
 	},
 	scrollIndicator: {
 		position: "absolute",
 		right: 0,
 		top: 0,
-		width: 7,
+		width: SCROLL_BAR_WIDTH,
 		height: SCROLL_INDICATOR_HEIGHT,
 		backgroundColor: "lightgray",
-		borderRadius: 3.5
+		borderRadius: SCROLL_BAR_WIDTH / 2
 	}
 });
 

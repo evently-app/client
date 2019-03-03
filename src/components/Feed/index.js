@@ -55,18 +55,15 @@ class Feed extends Component {
 	onSwipeCardRight = card => {
 		// this.popCard(card);
 		this.fetchCards();
-		console.log(card);
 	};
 
 	onSwipeCardLeft = card => {
 		// this.popCard(card);
 		this.fetchCards();
-		console.log(card);
 	};
 
 	render() {
 		const { queue } = this.state;
-		console.log(queue);
 
 		const firstCardIndex = queue.length - 1;
 		return (
