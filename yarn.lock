@@ -3989,9 +3989,10 @@ react-native-haptic-feedback@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-native-haptic-feedback/-/react-native-haptic-feedback-1.5.0.tgz#79d427f4d8c8ba3871b26f459f60ec7a7b38ce4d"
 
-react-native-interactable@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/react-native-interactable/-/react-native-interactable-0.1.10.tgz#65b9a68f6a84ba1c0e2ad5478b1f22ffb29c0526"
+react-native-interactable@1.0.0-alpha.1:
+  version "1.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/react-native-interactable/-/react-native-interactable-1.0.0-alpha.1.tgz#6459bcc29b392a9671e644d03f1728f3bf3051b5"
+  integrity sha512-n4bxPRFbgJFWwBvO/gqKi1TrizD3IskOsiixZQAG28BSaKYHSIOX82yHh1Ngd0DDNWEcucXTJyHmrgUDHI10cQ==
 
 react-native-linear-gradient@^2.5.3:
   version "2.5.3"
