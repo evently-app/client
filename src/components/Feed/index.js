@@ -76,6 +76,16 @@ class Feed extends Component {
 		this.setState({ dragging: !this.state.dragging });
 	};
 
+	handleOnSnap = ({ nativeEvent }) => {
+		const { index } = nativeEvent;
+
+		if (index == 0) {
+			this.setState({ filterOpen: false });
+		} else {
+			this.setState({ filterOpen: true });
+		}
+	};
+
 	render() {
 		const { queue, filterOpen } = this.state;
 
@@ -85,6 +95,7 @@ class Feed extends Component {
 				<Filter
 					interactableRef={Filter => (this.Filter = Filter)}
 					onDrag={this.onDrag}
+					onSnap={this.handleOnSnap}
 					onPress={filterOpen ? this.closeFilter : this.openFilter}
 					filterDrag={this.filterDrag}
 				/>

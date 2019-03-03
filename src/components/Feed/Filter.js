@@ -6,7 +6,7 @@ import Interactable from "react-native-interactable";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { SB_HEIGHT } from "../../lib/constants";
 
-const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
+const Filter = ({ filterDrag, onPress, onDrag, onSnap, interactableRef }) => {
 	const closed_point = { y: 0 };
 	const open_point = { y: 150 };
 	const boundaries = {
@@ -74,6 +74,7 @@ const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 				snapPoints={[closed_point, open_point]}
 				ref={interactableRef}
 				onDrag={onDrag}
+				onSnapStart={onSnap}
 				boundaries={boundaries}
 				initialPosition={closed_point}
 				style={styles.interactable}
