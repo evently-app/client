@@ -6,7 +6,7 @@ import Interactable from "react-native-interactable";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { SB_HEIGHT } from "../../lib/constants";
 
-const Filter = ({ filterDrag, onPress, interactableRef }) => {
+const Filter = ({ filterDrag, onPress, onDrag, interactableRef }) => {
 	const closed_point = { y: 0 };
 	const open_point = { y: 150 };
 	const boundaries = {
@@ -64,8 +64,8 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 		// position: "absolute",
 		// top: -10,
 		opacity: filterDrag.interpolate({
-			inputRange: [0, open_point.y],
-			outputRange: [0, 0.5],
+			inputRange,
+			outputRange: [0, 0.25, 0.5],
 			extrapolate: "clamp"
 		})
 	};
@@ -74,8 +74,8 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 		// position: "absolute",
 		// top: -10,
 		opacity: filterDrag.interpolate({
-			inputRange: [0, open_point.y],
-			outputRange: [0, 1],
+			inputRange,
+			outputRange: [0, 0.5, 1],
 			extrapolate: "clamp"
 		})
 	};
@@ -84,10 +84,11 @@ const Filter = ({ filterDrag, onPress, interactableRef }) => {
 		<TouchableOpacity activeOpacity={1} style={styles.container} onPress={onPress}>
 			<Interactable.View
 				animatedNativeDriver
-				verticalOnly={true}
+				verticalOnly
 				snapPoints={[closed_point, open_point]}
 				ref={interactableRef}
 				// onSnapStart={handleOnSnap}
+				onDrag={onDrag}
 				boundaries={boundaries}
 				initialPosition={closed_point}
 				style={styles.interactable}
