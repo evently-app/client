@@ -13,34 +13,18 @@ target 'evently' do
   
   pod 'React', path: rn_path, subspecs: [
     'Core',
+    'CxxBridge',
     'DevSupport',
     'RCTActionSheet',
     'RCTAnimation',
-    'RCTBlob',
-    'RCTCameraRoll',
     'RCTGeolocation',
     'RCTImage',
+    'RCTLinkingIOS',
     'RCTNetwork',
-    'RCTPushNotification',
     'RCTSettings',
-    'RCTTest',
     'RCTText',
     'RCTVibration',
     'RCTWebSocket',
-    'RCTLinkingIOS'
-#    'Core',
-#    'CxxBridge',
-#    'DevSupport',
-#    'RCTActionSheet',
-#    'RCTAnimation',
-#    'RCTGeolocation',
-#    'RCTImage',
-#    'RCTLinkingIOS',
-#    'RCTNetwork',
-#    'RCTSettings',
-#    'RCTText',
-#    'RCTVibration',
-#    'RCTWebSocket',
   ]
 
   pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"

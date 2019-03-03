@@ -130,19 +130,32 @@ PODS:
     - React
   - React/Core (0.58.5):
     - yoga (= 0.58.5.React)
+  - React/CxxBridge (0.58.5):
+    - Folly (= 2018.10.22.00)
+    - React/Core
+    - React/cxxreact
+    - React/jsiexecutor
+  - React/cxxreact (0.58.5):
+    - boost-for-react-native (= 1.63.0)
+    - Folly (= 2018.10.22.00)
+    - React/jsinspector
   - React/DevSupport (0.58.5):
     - React/Core
     - React/RCTWebSocket
   - React/fishhook (0.58.5)
+  - React/jsi (0.58.5):
+    - Folly (= 2018.10.22.00)
+  - React/jsiexecutor (0.58.5):
+    - Folly (= 2018.10.22.00)
+    - React/cxxreact
+    - React/jsi
+  - React/jsinspector (0.58.5)
   - React/RCTActionSheet (0.58.5):
     - React/Core
   - React/RCTAnimation (0.58.5):
     - React/Core
   - React/RCTBlob (0.58.5):
     - React/Core
-  - React/RCTCameraRoll (0.58.5):
-    - React/Core
-    - React/RCTImage
   - React/RCTGeolocation (0.58.5):
     - React/Core
   - React/RCTImage (0.58.5):
@@ -152,11 +165,7 @@ PODS:
     - React/Core
   - React/RCTNetwork (0.58.5):
     - React/Core
-  - React/RCTPushNotification (0.58.5):
-    - React/Core
   - React/RCTSettings (0.58.5):
-    - React/Core
-  - React/RCTTest (0.58.5):
     - React/Core
   - React/RCTText (0.58.5):
     - React/Core
@@ -181,18 +190,15 @@ DEPENDENCIES:
   - react-native-haptic-feedback (from `../node_modules/react-native-haptic-feedback`)
   - "react-native-mapbox-gl (from `../node_modules/@mapbox/react-native-mapbox-gl`)"
   - React/Core (from `../node_modules/react-native`)
+  - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
   - React/RCTActionSheet (from `../node_modules/react-native`)
   - React/RCTAnimation (from `../node_modules/react-native`)
-  - React/RCTBlob (from `../node_modules/react-native`)
-  - React/RCTCameraRoll (from `../node_modules/react-native`)
   - React/RCTGeolocation (from `../node_modules/react-native`)
   - React/RCTImage (from `../node_modules/react-native`)
   - React/RCTLinkingIOS (from `../node_modules/react-native`)
   - React/RCTNetwork (from `../node_modules/react-native`)
-  - React/RCTPushNotification (from `../node_modules/react-native`)
   - React/RCTSettings (from `../node_modules/react-native`)
-  - React/RCTTest (from `../node_modules/react-native`)
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
@@ -270,6 +276,6 @@ SPEC CHECKSUMS:
   react-native-mapbox-gl: b42480060cdcc515dfa3d8e403fb4dd32466a1b9
   yoga: 0885622311729a02c2bc02dca97167787a51488b
 
-PODFILE CHECKSUM: 4ef5a44d8e6834a80ce492ef5fad1d1d596ca3ef
+PODFILE CHECKSUM: 48a817f8cdad66fa43bd0aedce7493b34b70b917
 
 COCOAPODS: 1.5.3
