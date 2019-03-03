@@ -4,6 +4,7 @@ import { Animated, View, Text, StyleSheet } from "react-native";
 import ActionButton from "./ActionButton";
 
 import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
+import { colors } from "../../lib/styles";
 
 const SCROLL_BAR_HEIGHT = 100;
 const SCROLL_INDICATOR_HEIGHT = 20;
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		width: SCREEN_WIDTH - 20,
 		height: SCREEN_HEIGHT - 200,
-		backgroundColor: "lightgray",
+		backgroundColor: colors.purple,
 		borderRadius: 20
 	},
 	coloredBackground: {

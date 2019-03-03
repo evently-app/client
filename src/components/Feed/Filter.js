@@ -95,6 +95,8 @@ class Filter extends Component {
 			})
 		};
 
+		let white = { color: "white" };
+
 		return (
 			<TouchableOpacity
 				activeOpacity={1}
@@ -112,14 +114,16 @@ class Filter extends Component {
 					style={styles.interactable}
 					animatedValueY={filterDrag}
 				>
-					<Animated.Text style={[animatedOpacity, animatedLocation]}>
+					<Animated.Text style={[animatedOpacity, animatedLocation, white]}>
 						I want events in
 					</Animated.Text>
-					<Animated.Text style={[styles.location, animatedLocation]}>Location</Animated.Text>
-					<Animated.Text style={[animatedOpacity, animatedTime]}>for</Animated.Text>
-					<Animated.Text style={[styles.time, animatedTime]}>Time</Animated.Text>
-					<Animated.Text style={[animatedOpacity, animatedType]}>I'm in the mood for</Animated.Text>
-					<Animated.Text style={[animatedOpacity2, animatedType]}>anything</Animated.Text>
+					<Animated.Text style={[styles.location, animatedLocation, white]}>New York</Animated.Text>
+					<Animated.Text style={[animatedOpacity, animatedTime, white]}>for</Animated.Text>
+					<Animated.Text style={[styles.time, animatedTime, white]}>Tonight</Animated.Text>
+					<Animated.Text style={[animatedOpacity, animatedType, white]}>
+						I'm in the mood for
+					</Animated.Text>
+					<Animated.Text style={[animatedOpacity2, animatedType, white]}>anything</Animated.Text>
 				</Interactable.View>
 			</TouchableOpacity>
 		);

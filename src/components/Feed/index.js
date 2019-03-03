@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
-		backgroundColor: "rgba(0, 0, 255, 0.2)",
+		// backgroundColor: "rgba(0, 0, 255, 0.2)",
 		alignItems: "center",
 		justifyContent: "center"
 	}

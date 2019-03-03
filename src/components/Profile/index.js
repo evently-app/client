@@ -11,7 +11,7 @@ class Profile extends Component {
 					flex: 1,
 					width: SCREEN_WIDTH,
 					height: SCREEN_HEIGHT,
-					backgroundColor: "rgba(0, 255, 0, 0.2)",
+					// backgroundColor: "rgba(0, 255, 0, 0.2)",
 					justifyContent: "center",
 					alignItems: "center"
 				}}

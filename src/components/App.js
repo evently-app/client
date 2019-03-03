@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Auth } from "../redux/user";
 import { connect } from "react-redux";
-import { StyleSheet, Animated, Text, TouchableOpacity, View, Alert } from "react-native";
+import { StyleSheet, StatusBar, Animated, Text, TouchableOpacity, View, Alert } from "react-native";
 
+import LinearGradient from "react-native-linear-gradient";
 import Haptics from "react-native-haptic-feedback";
 
 import Profile from "./Profile";
@@ -51,7 +52,8 @@ class App extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["#030112", "#150218"]}>
+        <StatusBar barStyle="light-content" />
         <Animated.ScrollView
           horizontal
           pagingEnabled
@@ -80,7 +82,7 @@ class App extends Component {
             <Text>Timeline</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
     );
   }
 }
