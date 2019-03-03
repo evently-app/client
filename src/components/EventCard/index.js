@@ -14,19 +14,20 @@ class EventCard extends Component {
 
 	render() {
 		return (
-			<View style={{ overflow: "hidden" }}>
+			<View
+				style={{
+					overflow: "hidden",
+					width: SCREEN_WIDTH - 20,
+					height: SCREEN_HEIGHT - 200,
+					// alignItems: "center",
+					// justifyContent: "center",
+					// marginBottom: 100,
+					backgroundColor: "white",
+					borderRadius: 20
+				}}
+			>
 				<Animated.ScrollView
-					// onScroll={this._onScroll}
-					// scrollEventThrottle={16}
-					style={{
-						width: SCREEN_WIDTH - 20,
-						height: SCREEN_HEIGHT - 200,
-						// alignItems: "center",
-						// justifyContent: "center",
-						// marginBottom: 100,
-						backgroundColor: "white",
-						borderRadius: 20
-					}}
+					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={16}
 					onScroll={this._onScroll}
 				>

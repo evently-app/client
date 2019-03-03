@@ -37,11 +37,15 @@ const ActionButton = ({ title, url, yOffset }) => {
 	// };
 	const inputRange = [0, 100];
 	const animatedStyle = {
+		borderRadius: yOffset.interpolate({
+			inputRange: [0, 100],
+			outputRange: [10, 0]
+		}),
 		transform: [
 			{
 				translateX: yOffset.interpolate({
 					inputRange,
-					outputRange: [0, -100],
+					outputRange: [0, -120],
 					extrapolate: "clamp"
 				})
 			},
@@ -51,6 +55,13 @@ const ActionButton = ({ title, url, yOffset }) => {
 					outputRange: [1, SCREEN_WIDTH / INITIAL_WIDTH],
 					extrapolate: "clamp"
 				})
+			},
+			{
+				scaleY: yOffset.interpolate({
+					inputRange,
+					outputRange: [1, 1.4],
+					extrapolate: "clamp"
+				})
 			}
 		]
 	};
@@ -58,7 +69,7 @@ const ActionButton = ({ title, url, yOffset }) => {
 	return (
 		<View>
 			<Animated.View style={[animatedStyle, styles.container]} />
-			{/*<Animated.Text>Buy Tickets</Animated.Text>*/}
+			<Animated.Text>Buy Tickets</Animated.Text>
 		</View>
 	);
 };
