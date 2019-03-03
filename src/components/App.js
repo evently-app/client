@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Auth } from "../redux/user";
 import { connect } from "react-redux";
-import { StyleSheet, Animated, Text, View, Alert } from "react-native";
+import { StyleSheet, Animated, Text, TouchableOpacity, View, Alert } from "react-native";
 
 import Profile from "./Profile";
 import Feed from "./Feed";
@@ -32,6 +32,18 @@ class App extends Component {
     this.ScrollView.getNode().scrollTo({ x: SCREEN_WIDTH, y: 0, animated: false });
   }
 
+  seeProfile = () => {
+    this.ScrollView.getNode().scrollTo({ x: 0, y: 0, animated: true });
+  };
+
+  seeFeed = () => {
+    this.ScrollView.getNode().scrollTo({ x: SCREEN_WIDTH, y: 0, animated: true });
+  };
+
+  seeTimeline = () => {
+    this.ScrollView.getNode().scrollTo({ x: 2 * SCREEN_WIDTH, y: 0, animated: true });
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -51,6 +63,17 @@ class App extends Component {
           <Feed />
           <Timeline />
         </Animated.ScrollView>
+        <View style={styles.tabBarContainer}>
+          <TouchableOpacity style={styles.tabBarButton} onPress={this.seeProfile}>
+            <Text>Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tabBarButton} onPress={this.seeFeed}>
+            <Text>Feed</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tabBarButton} onPress={this.seeTimeline}>
+            <Text>Timeline</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -60,15 +83,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
+  tabBarContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 100,
+    padding: 10,
+    backgroundColor: "transparent",
+    flexDirection: "row"
   },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
+  tabBarButton: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
+    backgroundColor: "rgba(120,120,0,0.9)"
   }
 });
 
