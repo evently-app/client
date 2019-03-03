@@ -13,6 +13,8 @@ class Swipeable extends Component {
 		const { index } = nativeEvent;
 		const { onSwipeRight, onSwipeLeft } = this.props;
 
+		this.props.swipeAmount.setValue(0);
+
 		if (index === 0) {
 			Haptics.trigger("impactLight");
 			onSwipeLeft();
@@ -33,7 +35,7 @@ class Swipeable extends Component {
 				{
 					scale: this.props.swipeAmount.interpolate({
 						inputRange: [-200, 0, 200],
-						outputRange: [1, 0.8, 1],
+						outputRange: [1, 0.9, 1],
 						extrapolate: "clamp"
 					})
 				}
