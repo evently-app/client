@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Animated, View, Text, StyleSheet } from "react-native";
+import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 import Filter from "./Filter";
 import EventCard from "../EventCard";
@@ -17,6 +17,7 @@ const randomColor = () => {
 class Feed extends Component {
 	state = {
 		count: 1,
+		filterOpen: false,
 		queue: [
 			{
 				id: 1,
@@ -62,26 +63,41 @@ class Feed extends Component {
 		this.fetchCards();
 	};
 
+	openFilter = () => {
+		this.setState({ filterOpen: true }, () => this.Interactable.snapTo({ index: 1 }));
+	};
+
+	closeFilter = () => {
+		console.log("closing");
+		this.setState({ filterOpen: false }, () => this.Interactable.snapTo({ index: 0 }));
+	};
+
 	render() {
-		const { queue } = this.state;
+		const { queue, filterOpen } = this.state;
 
 		const firstCardIndex = queue.length - 1;
 		return (
 			<View style={styles.container}>
-				<Filter filterDrag={this.filterDrag} />
-				{queue.map((card, i) => (
-					<Swipeable
-						key={card.id}
-						firstCard={i == firstCardIndex}
-						secondCard={i == firstCardIndex - 1}
-						filterDrag={this.filterDrag}
-						swipeAmount={this.swipeAmount}
-						onSwipeRight={() => this.onSwipeCardRight(card)}
-						onSwipeLeft={() => this.onSwipeCardLeft(card)}
-					>
-						<EventCard {...card} />
-					</Swipeable>
-				))}
+				<Filter
+					interactableRef={Interactable => (this.Interactable = Interactable)}
+					onPress={filterOpen ? this.closeFilter : this.openFilter}
+					filterDrag={this.filterDrag}
+				/>
+				<TouchableOpacity activeOpacity={1} style={styles.center} onPressIn={this.closeFilter}>
+					{queue.map((card, i) => (
+						<Swipeable
+							key={card.id}
+							firstCard={i == firstCardIndex}
+							secondCard={i == firstCardIndex - 1}
+							filterDrag={this.filterDrag}
+							swipeAmount={this.swipeAmount}
+							onSwipeRight={() => this.onSwipeCardRight(card)}
+							onSwipeLeft={() => this.onSwipeCardLeft(card)}
+						>
+							<EventCard {...card} />
+						</Swipeable>
+					))}
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -93,6 +109,10 @@ const styles = StyleSheet.create({
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
 		// backgroundColor: "rgba(0, 0, 255, 0.2)",
+		// alignItems: "center"
+		justifyContent: "center"
+	},
+	center: {
 		alignItems: "center",
 		justifyContent: "center"
 	}

@@ -52,7 +52,7 @@ class App extends Component {
 
   render() {
     return (
-      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["#030112", "#150218"]}>
+      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>
         <StatusBar barStyle="light-content" />
         <Animated.ScrollView
           horizontal
