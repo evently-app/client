@@ -1,6 +1,6 @@
 // colors object
 export const colors = {
-	lightgray: "#DBCCCE"
+	lightgray: "#D3D6DA"
 };
 
 // default styles

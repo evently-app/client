@@ -7,7 +7,7 @@ import { colors } from "../../lib/styles";
 const INITIAL_WIDTH = 100;
 
 const ActionButton = ({ title, url, yOffset }) => {
-	const inputRange = [0, 100];
+	const inputRange = [0, 150];
 
 	const animatedStyle = {
 		borderRadius: yOffset.interpolate({
@@ -47,9 +47,29 @@ const ActionButton = ({ title, url, yOffset }) => {
 		]
 	};
 
+	const animatedTextStyle = {
+		transform: [
+			{
+				translateX: yOffset.interpolate({
+					inputRange,
+					outputRange: [0, -120],
+					extrapolate: "clamp"
+				})
+			},
+			{
+				translateY: yOffset.interpolate({
+					inputRange,
+					outputRange: [0, -5],
+					extrapolate: "clamp"
+				})
+			}
+		]
+	};
+
 	return (
 		<View>
 			<Animated.View style={[animatedStyle, styles.container]} />
+			<Animated.Text style={[animatedTextStyle, styles.text]}>Buy Tickets</Animated.Text>
 		</View>
 	);
 };
@@ -63,6 +83,11 @@ const styles = StyleSheet.create({
 		height: 30,
 		position: "absolute"
 		// borderRadius: 10
+	},
+	text: {
+		position: "absolute",
+		right: 22,
+		bottom: 15
 	}
 });
 
