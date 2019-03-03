@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import Card from "../EventCard";
+import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
@@ -62,7 +62,7 @@ class Feed extends Component {
 						onSwipeRight={() => this.onSwipeCardRight(card)}
 						onSwipeLeft={() => this.onSwipeCardLeft(card)}
 					>
-						<Card {...card} />
+						<EventCard {...card} />
 					</Swipeable>
 				))}
 			</View>

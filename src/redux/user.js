@@ -30,12 +30,12 @@ must be deterministic
 */
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case LOG_IN:
-			return {
-				...state,
-				entity: action.data,
-				uid: action.userId
-			};
+		// case LOG_IN:
+		// 	return {
+		// 		...state,
+		// 		entity: action.data,
+		// 		uid: action.userId
+		// 	};
 
 		case RESET_USER:
 			return initialState;
