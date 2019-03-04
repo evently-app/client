@@ -129,30 +129,30 @@ class Feed extends Component {
 					onPress={filterOpen ? this.closeFilter : this.openFilter}
 					filterDrag={this.filterDrag}
 				/>
-				<TouchableOpacity
-					activeOpacity={1}
-					pointerEvents={filterOpen ? "auto" : "box-none"}
-					style={styles.center}
-					onPressIn={this.closeFilter}
-				>
-					{queue.map((card, i) => (
-						<Swipeable
-							key={card.id}
-							id={card.id}
-							// firstCard={i == firstCardIndex}
-							// secondCard={i == firstCardIndex - 1}
-							filterDrag={this.filterDrag}
-							// swipeAmount={this.swipeAmount}
-							swipeAmount={animatedValues[card.id]}
-							scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
-							onStartSwipe={this.handleOnStartSwipe}
-							onSwipeRight={() => this.onSwipeCardRight(card)}
-							onSwipeLeft={() => this.onSwipeCardLeft(card)}
-						>
-							<EventCard {...card} />
-						</Swipeable>
-					))}
-				</TouchableOpacity>
+				{queue.map((card, i) => (
+					<Swipeable
+						key={card.id}
+						id={card.id}
+						// firstCard={i == firstCardIndex}
+						// secondCard={i == firstCardIndex - 1}
+						filterDrag={this.filterDrag}
+						// swipeAmount={this.swipeAmount}
+						swipeAmount={animatedValues[card.id]}
+						scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
+						onStartSwipe={this.handleOnStartSwipe}
+						onSwipeRight={() => this.onSwipeCardRight(card)}
+						onSwipeLeft={() => this.onSwipeCardLeft(card)}
+					>
+						<EventCard {...card} />
+					</Swipeable>
+				))}
+				{filterOpen && (
+					<TouchableOpacity
+						activeOpacity={1}
+						style={styles.closeFilterButton}
+						onPressIn={this.closeFilter}
+					/>
+				)}
 			</View>
 		);
 	}
@@ -164,11 +164,15 @@ const styles = StyleSheet.create({
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
 		overflow: "hidden",
-		justifyContent: "center"
-	},
-	center: {
 		alignItems: "center",
 		justifyContent: "center"
+	},
+	closeFilterButton: {
+		position: "absolute",
+		top: 200,
+		bottom: 0,
+		left: 0,
+		right: 0
 	}
 });
 

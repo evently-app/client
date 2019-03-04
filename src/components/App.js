@@ -73,17 +73,17 @@ class App extends Component {
 
   /* navigation functions */
   seeProfile = () => {
-    Haptics.trigger("impactLight");
+    Haptics.trigger("impactMedium");
     this.ScrollView.getNode().scrollTo({ x: 0, y: 0, animated: true });
   };
 
   seeFeed = () => {
-    Haptics.trigger("impactLight");
+    Haptics.trigger("impactMedium");
     this.ScrollView.getNode().scrollTo({ x: SCREEN_WIDTH, y: 0, animated: true });
   };
 
   seeTimeline = () => {
-    Haptics.trigger("impactLight");
+    Haptics.trigger("impactMedium");
     this.ScrollView.getNode().scrollTo({ x: 2 * SCREEN_WIDTH, y: 0, animated: true });
   };
 
