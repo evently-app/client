@@ -22,6 +22,8 @@
     "react-native-interactable": "1.0.0-alpha.1",
     "react-native-linear-gradient": "^2.5.3",
     "react-native-navigation": "^2.12.0",
+    "react-native-svg": "^9.2.4",
+    "react-native-svg-transformer": "^0.12.1",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",

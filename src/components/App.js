@@ -9,6 +9,11 @@ import Haptics from "react-native-haptic-feedback";
 import Profile from "./Profile";
 import Feed from "./Feed";
 import Timeline from "./Timeline";
+import TouchableScale from "./universal/TouchableScale";
+
+import ProfileLogo from "../assets/profile.svg";
+import FeedLogo from "../assets/logo.svg";
+import TimelineLogo from "../assets/timeline.svg";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../lib/constants";
 
@@ -16,6 +21,39 @@ const xOffset = new Animated.Value(SCREEN_WIDTH);
 const scrollPosition = Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
   useNativeDriver: true
 });
+
+const opacityStyle = index => {
+  const inputRange = [0, SCREEN_WIDTH, 2 * SCREEN_WIDTH];
+  switch (index) {
+    case 0:
+      return {
+        opacity: xOffset.interpolate({
+          inputRange,
+          outputRange: [1, 0.5, 0.5]
+        })
+      };
+    case 1:
+      return {
+        opacity: xOffset.interpolate({
+          inputRange,
+          outputRange: [0.5, 1, 0.5]
+        })
+      };
+    case 2:
+      return {
+        opacity: xOffset.interpolate({
+          inputRange,
+          outputRange: [0.5, 0.5, 1]
+        })
+      };
+  }
+};
+
+const TabBarButton = ({ children, index, onPress }) => (
+  <TouchableScale style={styles.tabBarButton} animatedStyle={opacityStyle(index)} onPress={onPress}>
+    {children}
+  </TouchableScale>
+);
 
 class App extends Component {
   state = {
@@ -84,15 +122,15 @@ class App extends Component {
           <Timeline />
         </Animated.ScrollView>
         <View style={styles.tabBarContainer}>
-          <TouchableOpacity style={styles.tabBarButton} onPress={this.seeProfile}>
-            <Text>Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabBarButton} onPress={this.seeFeed}>
-            <Text>Feed</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabBarButton} onPress={this.seeTimeline}>
-            <Text>Timeline</Text>
-          </TouchableOpacity>
+          <TabBarButton index={0} onPress={this.seeProfile}>
+            <ProfileLogo />
+          </TabBarButton>
+          <TabBarButton index={1} onPress={this.seeFeed}>
+            <FeedLogo />
+          </TabBarButton>
+          <TabBarButton index={2} onPress={this.seeTimeline}>
+            <TimelineLogo />
+          </TabBarButton>
         </View>
       </LinearGradient>
     );
@@ -119,8 +157,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(0,120,120,0.9)"
+    justifyContent: "center"
   }
 });
 
