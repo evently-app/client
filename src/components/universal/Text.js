@@ -17,13 +17,13 @@ props {
 
 const headerStyle = {
 	fontSize: 20,
-	fontWeight: "bold",
+	fontWeight: "800",
 	color: "white"
 };
 
 const subHeaderStyle = {
 	fontSize: 16,
-	fontWeight: "bold",
+	fontWeight: "600",
 	color: "white"
 };
 
@@ -34,19 +34,31 @@ const paragraphStyle = {
 
 const Header = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...headerStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...headerStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...headerStyle, ...style }}>{children}</Text>;
 };
 
 const SubHeader = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...subHeaderStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...subHeaderStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...subHeaderStyle, ...style }}>{children}</Text>;
 };
 
 const Paragraph = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...paragraphStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...paragraphStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...paragraphStyle, ...style }}>{children}</Text>;
 };
 
