@@ -49,12 +49,6 @@ const opacityStyle = index => {
   }
 };
 
-const TabBarButton = ({ children, index, onPress }) => (
-  <TouchableScale style={styles.tabBarButton} animatedStyle={opacityStyle(index)} onPress={onPress}>
-    {children}
-  </TouchableScale>
-);
-
 class App extends Component {
   state = {
     currentPage: 1
@@ -122,15 +116,27 @@ class App extends Component {
           <Timeline />
         </Animated.ScrollView>
         <View style={styles.tabBarContainer}>
-          <TabBarButton index={0} onPress={this.seeProfile}>
+          <TouchableScale
+            style={styles.tabBarButton}
+            animatedStyle={opacityStyle(0)}
+            onPress={this.seeProfile}
+          >
             <ProfileLogo />
-          </TabBarButton>
-          <TabBarButton index={1} onPress={this.seeFeed}>
+          </TouchableScale>
+          <TouchableScale
+            style={styles.tabBarButton}
+            animatedStyle={opacityStyle(1)}
+            onPress={this.seeFeed}
+          >
             <FeedLogo />
-          </TabBarButton>
-          <TabBarButton index={2} onPress={this.seeTimeline}>
+          </TouchableScale>
+          <TouchableScale
+            style={styles.tabBarButton}
+            animatedStyle={opacityStyle(2)}
+            onPress={this.seeTimeline}
+          >
             <TimelineLogo />
-          </TabBarButton>
+          </TouchableScale>
         </View>
       </LinearGradient>
     );

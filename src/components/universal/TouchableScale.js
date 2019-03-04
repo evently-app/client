@@ -1,13 +1,14 @@
 import React from "react";
-import { Animated, TouchableOpacity } from "react-native";
+import { Animated, Easing, TouchableOpacity } from "react-native";
 
 const TouchableScale = ({ animatedStyle = {}, style = {}, disabled, onPress, children }) => {
   const animated = new Animated.Value(1);
 
   handlePressIn = () => {
     Animated.timing(animated, {
-      toValue: 1.2,
+      toValue: 1.4,
       duration: 150,
+      easing: Easing.ease,
       useNativeDriver: true
     }).start();
   };
