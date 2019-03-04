@@ -7,7 +7,7 @@ const TouchableScale = ({ animatedStyle = {}, style = {}, disabled, onPress, chi
   handlePressIn = () => {
     Animated.timing(animated, {
       toValue: 1.4,
-      duration: 150,
+      duration: 100,
       easing: Easing.ease,
       useNativeDriver: true
     }).start();

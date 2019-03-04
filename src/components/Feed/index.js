@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import _ from "lodash";
 
 import Filter from "./Filter";
 import EventCard from "../EventCard";
@@ -28,11 +29,23 @@ class Feed extends Component {
 				id: 0,
 				backgroundColor: randomColor()
 			}
-		]
+		],
+		animatedValues: {
+			0: new Animated.Value(0),
+			1: new Animated.Value(0)
+		}
 	};
 
+	// swipeAmounts = [
+	// 	new Animated.Value(0),
+	// 	new Animated.Value(0),
+	// 	new Animated.Value(0),
+	// 	new Animated.Value(0),
+	// 	new Animated.Value(0)
+	// ];
+
 	filterDrag = new Animated.Value(0);
-	swipeAmount = new Animated.Value(0);
+	// swipeAmount = new Animated.Value(0);
 
 	componentDidMount() {}
 
@@ -44,24 +57,36 @@ class Feed extends Component {
 	};
 
 	fetchCards = () => {
+		const { count, queue, animatedValues } = this.state;
+
 		let newCard = this.generateCard();
 
-		let queue = [...this.state.queue.slice(0, 1), newCard].sort((a, b) => b.id - a.id);
+		// let queue = ;
 		// console.log("queue:", queue);
 		this.setState({
-			count: this.state.count + 1,
-			queue
+			count: count + 1,
+			queue: [...queue, newCard].sort((a, b) => b.id - a.id),
+			animatedValues: { ...animatedValues, [newCard.id]: new Animated.Value(0) }
+		});
+	};
+
+	popCard = ({ id }) => {
+		const { queue, animatedValues } = this.state;
+		let index = queue.findIndex(c => c.id === id);
+		this.setState({
+			queue: [...queue.slice(0, index), ...queue.slice(index + 1)],
+			animatedValues: _.omit(animatedValues, id)
 		});
 	};
 
 	onSwipeCardRight = card => {
-		// this.popCard(card);
-		this.fetchCards();
+		this.popCard(card);
+		// this.fetchCards();
 	};
 
 	onSwipeCardLeft = card => {
-		// this.popCard(card);
-		this.fetchCards();
+		this.popCard(card);
+		// this.fetchCards();
 	};
 
 	openFilter = () => {
@@ -86,10 +111,15 @@ class Feed extends Component {
 		}
 	};
 
-	render() {
-		const { queue, filterOpen } = this.state;
+	handleOnStartSwipe = () => {
+		this.fetchCards();
+	};
 
-		const firstCardIndex = queue.length - 1;
+	render() {
+		const { queue, animatedValues, filterOpen } = this.state;
+		// console.log(queue);
+
+		const first = queue.length - 1;
 		return (
 			<View style={styles.container}>
 				<Filter
@@ -108,10 +138,14 @@ class Feed extends Component {
 					{queue.map((card, i) => (
 						<Swipeable
 							key={card.id}
-							firstCard={i == firstCardIndex}
-							secondCard={i == firstCardIndex - 1}
+							id={card.id}
+							// firstCard={i == firstCardIndex}
+							// secondCard={i == firstCardIndex - 1}
 							filterDrag={this.filterDrag}
-							swipeAmount={this.swipeAmount}
+							// swipeAmount={this.swipeAmount}
+							swipeAmount={animatedValues[card.id]}
+							scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
+							onStartSwipe={this.handleOnStartSwipe}
 							onSwipeRight={() => this.onSwipeCardRight(card)}
 							onSwipeLeft={() => this.onSwipeCardLeft(card)}
 						>
@@ -129,6 +163,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
+		overflow: "hidden",
 		justifyContent: "center"
 	},
 	center: {

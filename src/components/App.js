@@ -71,6 +71,7 @@ class App extends Component {
     this.ScrollView.getNode().scrollTo({ x: SCREEN_WIDTH, y: 0, animated: false });
   }
 
+  /* navigation functions */
   seeProfile = () => {
     Haptics.trigger("impactLight");
     this.ScrollView.getNode().scrollTo({ x: 0, y: 0, animated: true });
