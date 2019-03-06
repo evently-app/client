@@ -116,6 +116,7 @@ class Feed extends Component {
 	};
 
 	render() {
+		// console.log("render");
 		const { queue, animatedValues, filterOpen } = this.state;
 		// console.log(queue);
 

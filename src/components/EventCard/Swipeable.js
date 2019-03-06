@@ -7,13 +7,13 @@ import Haptics from "react-native-haptic-feedback";
 class Swipeable extends Component {
 	startSwipe = () => {
 		const { onStartSwipe } = this.props;
-		console.log("startSwipe: ", this.props.id);
+		// console.log("startSwipe: ", this.props.id);
 		onStartSwipe();
 		Haptics.trigger("impactLight");
 	};
 
 	handleOnDrag = ({ nativeEvent }) => {
-		console.log("handle on drag");
+		// console.log("handle on drag");
 		const { state, x } = nativeEvent;
 		// const { onStartSwipe } = this.props;
 
@@ -34,13 +34,13 @@ class Swipeable extends Component {
 	};
 
 	handleOnSnapStart = ({ nativeEvent }) => {
-		console.log("handle on snap start");
+		// console.log("handle on snap start");
 		const { onStartSwipe } = this.props;
 
 		const { index } = nativeEvent;
 		if (index === 0 || index === 2) {
 			// this.startSwipe();
-			console.log("startSwipe: ", this.props.id);
+			// console.log("startSwipe: ", this.props.id);
 			Haptics.trigger("impactLight");
 			onStartSwipe();
 			// swipeAmount.setValue(0);
@@ -57,18 +57,10 @@ class Swipeable extends Component {
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const { onSwipeRight, onSwipeLeft, swipeAmount } = this.props;
+		const { onSwipeRight, onSwipeLeft } = this.props;
 
-		if (index === 0) {
-			// Haptics.trigger("impactLight");
-			// swipeAmount.setValue(0);
-			onSwipeLeft();
-		} else if (index === 1) {
-		} else if (index === 2) {
-			// Haptics.trigger("impactLight");
-			// swipeAmount.setValue(0);
-			onSwipeRight();
-		}
+		if (index === 0) onSwipeLeft();
+		else if (index === 2) onSwipeRight();
 	};
 
 	render() {
