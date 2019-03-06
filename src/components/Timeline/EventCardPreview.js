@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
 		right: 10
 	},
 	action: {
-		paddingHorizontal: 10,
-		paddingVertical: 5,
+		paddingHorizontal: 12,
+		paddingVertical: 8,
 		borderRadius: 10
 	},
 	actionText: {

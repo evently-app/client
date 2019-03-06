@@ -32,11 +32,10 @@ target 'evently' do
   pod 'Folly', :podspec => "#{rn_path}/third-party-podspecs/Folly.podspec"
 
   # Pods for evently
-  pod 'Firebase/Core'
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Messaging'
-  pod 'Firebase/Auth'
-#  pod 'Firebase/Crash'
+  pod 'Firebase/Core', '~> 5.15.0'
+  pod 'Firebase/Firestore', '~> 5.15.0'
+  pod 'Firebase/Messaging', '~> 5.15.0'
+  pod 'Firebase/Auth', '~> 5.15.0'
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
