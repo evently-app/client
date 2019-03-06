@@ -18,6 +18,10 @@ const scrollPosition = Animated.event([{ nativeEvent: { contentOffset: { x: xOff
 });
 
 class App extends Component {
+  state = {
+    currentPage: 1
+  };
+
   componentWillMount() {
     // log in / sign up anonymously
     this.props
@@ -50,7 +54,16 @@ class App extends Component {
     this.ScrollView.getNode().scrollTo({ x: 2 * SCREEN_WIDTH, y: 0, animated: true });
   };
 
+  handleScrollEnd = ({ nativeEvent }) => {
+    const { x } = nativeEvent.contentOffset;
+    if (x === 0) this.setState({ currentPage: 0 });
+    else if (x === SCREEN_WIDTH) this.setState({ currentPage: 1 });
+    else this.setState({ currentPage: 2 });
+  };
+
   render() {
+    const { currentPage } = this.state;
+
     return (
       <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>
         <StatusBar barStyle="light-content" />
@@ -59,7 +72,8 @@ class App extends Component {
           pagingEnabled
           bounces={false}
           ref={ScrollView => (this.ScrollView = ScrollView)}
-          // scrollEnabled={page2 ? false : true}
+          scrollEnabled={currentPage === 1 ? false : true}
+          onMomentumScrollEnd={this.handleScrollEnd}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
