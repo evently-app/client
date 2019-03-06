@@ -1,86 +1,147 @@
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, Animated } from "react-native";
 
 import Interactable from "react-native-interactable";
 import Haptics from "react-native-haptic-feedback";
 
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
+class Swipeable extends Component {
+	startSwipe = () => {
+		const { onStartSwipe } = this.props;
+		console.log("startSwipe: ", this.props.id);
+		onStartSwipe();
+		Haptics.trigger("impactLight");
+	};
 
-const Swipeable = ({
-	onSwipeRight,
-	onSwipeLeft,
-	swipeAmount,
-	filterDrag,
-	firstCard,
-	secondCard,
-	children
-}) => {
-	// deltaX = new Animated.Value(0);
+	handleOnDrag = ({ nativeEvent }) => {
+		console.log("handle on drag");
+		const { state, x } = nativeEvent;
+		// const { onStartSwipe } = this.props;
+
+		if (state === "end") {
+			if (x < -150) {
+				// console.log("drag sending left");
+				this.Interactable.snapTo({ index: 0 });
+				this.startSwipe();
+				// onStartSwipe();
+				// Haptics.trigger("impactLight");
+			} else if (x > 150) {
+				this.Interactable.snapTo({ index: 2 });
+				this.startSwipe();
+				// onStartSwipe();
+				// Haptics.trigger("impactLight");
+			}
+		}
+	};
+
+	handleOnSnapStart = ({ nativeEvent }) => {
+		console.log("handle on snap start");
+		const { onStartSwipe } = this.props;
+
+		const { index } = nativeEvent;
+		if (index === 0 || index === 2) {
+			// this.startSwipe();
+			console.log("startSwipe: ", this.props.id);
+			Haptics.trigger("impactLight");
+			onStartSwipe();
+			// swipeAmount.setValue(0);
+			// onSwipeLeft();
+		}
+
+		// else if (index === 1) {
+		// } else if (index === 2) {
+		// 	Haptics.trigger("impactLight");
+		// 	// swipeAmount.setValue(0);
+		// 	// onSwipeRight();
+		// }
+	};
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
+		const { onSwipeRight, onSwipeLeft, swipeAmount } = this.props;
 
 		if (index === 0) {
-			Haptics.trigger("impactLight");
-			swipeAmount.setValue(0);
+			// Haptics.trigger("impactLight");
+			// swipeAmount.setValue(0);
 			onSwipeLeft();
 		} else if (index === 1) {
 		} else if (index === 2) {
-			Haptics.trigger("impactLight");
-			swipeAmount.setValue(0);
+			// Haptics.trigger("impactLight");
+			// swipeAmount.setValue(0);
 			onSwipeRight();
 		}
 	};
 
-	const left = { x: -410 };
-	const centered = { x: 0, damping: 0.7, tension: 200 };
-	const right = { x: 410 };
+	render() {
+		const { swipeAmount, scaleAmount, filterDrag, firstCard, secondCard, children } = this.props;
 
-	const animatedScale = {
-		scale: swipeAmount.interpolate({
-			inputRange: [-200, 0, 200],
-			outputRange: [1, 0.95, 1],
-			extrapolate: "clamp"
-		})
-	};
+		const left = { x: -410, damping: 0.7, tension: 300 };
+		const centered = { x: 0, damping: 0.7, tension: 200 };
+		const right = { x: 410, damping: 0.7, tension: 300 };
 
-	const animatedRotation = {
-		rotate: swipeAmount.interpolate({
-			inputRange: [-400, 0, 400],
-			outputRange: ["-10deg", "0deg", "10deg"]
-		})
-	};
+		// const animatedScale = {
+		// 	scale: scaleAmount.interpolate({
+		// 		inputRange: [-150, 0, 150],
+		// 		outputRange: [1, 0.95, 1],
+		// 		extrapolate: "clamp"
+		// 	})
+		// };
 
-	const animated = {
-		transform: [
-			{
-				translateY: filterDrag.interpolate({
-					inputRange: [0, 100],
-					outputRange: [0, 100]
-				})
-			},
+		// const animatedRotation = {
+		// 	rotate: swipeAmount.interpolate({
+		// 		inputRange: [-450, 0, 450],
+		// 		outputRange: ["-10deg", "0deg", "10deg"]
+		// 	})
+		// };
 
-			firstCard ? animatedRotation : animatedScale
-		]
-	};
+		const animated = {
+			transform: [
+				{
+					translateY: filterDrag.interpolate({
+						inputRange: [0, 100],
+						outputRange: [0, 100]
+					})
+				},
+				{
+					rotate: swipeAmount.interpolate({
+						inputRange: [-450, 0, 450],
+						outputRange: ["-10deg", "0deg", "10deg"]
+					})
+				},
+				scaleAmount
+					? {
+							scale: scaleAmount.interpolate({
+								inputRange: [-150, 0, 150],
+								outputRange: [1, 0.95, 1],
+								extrapolate: "clamp"
+							})
+					  }
+					: { scale: 1 }
 
-	const swipeable = (
-		<Interactable.View
-			animatedNativeDriver
-			horizontalOnly
-			style={[animated, styles.container]}
-			snapPoints={[left, centered, right]}
-			onSnapStart={handleOnSnap}
-			initialPosition={centered}
-			// animatedValueX={deltaX}
-			animatedValueX={swipeAmount}
-		>
-			{children}
-		</Interactable.View>
-	);
+				// firstCard ? animatedRotation : animatedScale
+			]
+		};
 
-	return firstCard || secondCard ? swipeable : null;
-};
+		const swipeable = (
+			<Interactable.View
+				animatedNativeDriver
+				horizontalOnly
+				ref={Interactable => (this.Interactable = Interactable)}
+				style={[animated, styles.container]}
+				snapPoints={[left, centered, right]}
+				// onDrag={this.handleOnDrag}
+				onSnapStart={this.handleOnSnapStart}
+				onSnap={this.handleOnSnap}
+				initialPosition={centered}
+				animatedValueX={swipeAmount}
+			>
+				{children}
+			</Interactable.View>
+		);
+
+		// return firstCard || secondCard ? swipeable : null;
+		return swipeable;
+	}
+}
 
 const styles = StyleSheet.create({
 	container: {

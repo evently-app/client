@@ -75,14 +75,14 @@ const ActionButton = ({ title, url, yOffset }) => {
 	};
 
 	return (
-		<View>
+		<>
 			<Animated.View style={[styles.container, animatedStyle]}>
 				<BlurView blurType="xlight" style={styles.fill} />
 			</Animated.View>
 			<View style={styles.text}>
 				<Animated.Text style={[animatedTextStyle]}>Buy Tickets</Animated.Text>
 			</View>
-		</View>
+		</>
 	);
 };
 
