@@ -105,7 +105,7 @@ class App extends Component {
           pagingEnabled
           bounces={false}
           ref={ScrollView => (this.ScrollView = ScrollView)}
-          scrollEnabled={currentPage === 1 ? false : true}
+          scrollEnabled={currentPage !== 1}
           onMomentumScrollEnd={this.handleScrollEnd}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}

@@ -1,6 +1,6 @@
 // colors object
 export const colors = {
-	purple: "#150218",
+	purple: "rgba(21,2,24,0.95)",
 	lightgray: "#D3D6DA"
 };
 

@@ -15,6 +15,36 @@ const randomColor = () => {
 	return `rgba(${r}, ${g}, ${b}, 0.9)`;
 };
 
+const DUMMY_DATA = [
+	{
+		id: "event1",
+		eventName: "Khalid Summer Tour",
+		startTime: "8:00pm",
+		action: "Tickets from $20",
+		startTime: "2019-03-03T22:00:00",
+		endTime: "2019-03-4T05:00:00",
+		imageUrl:
+			"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280%2Cc_limit/Khalid_Shot_01-edit.jpg"
+	},
+	{
+		id: "event2",
+		eventName: "Yale Art Exhibit",
+		startTime: "2019-03-04T22:00:00",
+		endTime: "2019-03-5T05:00:00",
+		action: "Add to Calendar",
+		imageUrl: "http://assets.saatchiart.com/saatchi/882784/art/3164475/2234366-ECTUFHAI-8.jpg"
+	},
+	{
+		id: "event3",
+		eventName: "Branford College Tea",
+		startTime: "2019-03-08T22:00:00",
+		endTime: "2019-03-9T05:00:00",
+		action: "Add to Calendar",
+		imageUrl:
+			"https://news.yale.edu/sites/default/files/styles/featured_media/public/2010_05_10_19_03_37_central_campus_1.jpg?itok=dFqc-hAD&c=07307e7d6a991172b9f808eb83b18804"
+	}
+];
+
 class Feed extends Component {
 	state = {
 		count: 1,
@@ -22,16 +52,27 @@ class Feed extends Component {
 		dragging: false,
 		queue: [
 			{
-				id: 1,
-				backgroundColor: randomColor()
-			},
-			{
-				id: 0,
-				backgroundColor: randomColor()
+				id: "event1",
+				eventName: "Khalid Summer Tour",
+				tags: ["concert", "pop", "hip/hop"],
+				startTime: "8:00pm",
+				action: "Tickets from $20",
+				startTime: "2019-03-03T22:00:00",
+				endTime: "2019-03-4T05:00:00",
+				imageUrl:
+					"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280%2Cc_limit/Khalid_Shot_01-edit.jpg"
 			}
+			// 		{
+			// 			id: 1,
+			// 			backgroundColor: randomColor()
+			// 		},
+			// 		{
+			// 			id: 0,
+			// 			backgroundColor: randomColor()
+			// }
 		],
 		animatedValues: {
-			0: new Animated.Value(0),
+			event1: new Animated.Value(0),
 			1: new Animated.Value(0)
 		}
 	};
@@ -48,6 +89,10 @@ class Feed extends Component {
 	// swipeAmount = new Animated.Value(0);
 
 	componentDidMount() {}
+
+	// shouldComponentUpdate() {
+	// 	return false;
+	// }
 
 	generateCard = () => {
 		return {
@@ -98,7 +143,7 @@ class Feed extends Component {
 	};
 
 	onDrag = event => {
-		this.setState({ dragging: !this.state.dragging });
+		// this.setState({ dragging: !this.state.dragging });
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
