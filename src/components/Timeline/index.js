@@ -172,6 +172,7 @@ class Timeline extends Component {
 		return (
 			<View style={styles.wrapper}>
 				<AnimatedSectionList
+					initialNumToRender={4}
 					style={styles.sectionList}
 					onLayout={event => {
 						var { x, y, width, height } = event.nativeEvent.layout;
