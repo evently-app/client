@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
 		height: CARD_HEIGHT,
 		backgroundColor: "rgba(255, 255, 255, 0.3)",
 		overflow: "hidden",
-		marginVertical: 10
+		marginBottom: 20,
+		marginHorizontal: 20
 	},
 	image: {
 		width: SCREEN_WIDTH - 40,
