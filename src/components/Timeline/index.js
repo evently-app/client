@@ -5,6 +5,7 @@ import {
 	StyleSheet,
 	SectionList,
 	Text,
+	Animated,
 	Alert
 } from "react-native";
 import { Header, SubHeader } from "../universal/Text";
@@ -13,6 +14,10 @@ import { BlurView } from "react-native-blur";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../../lib/constants";
 import moment from "moment";
+
+const SCROLL_BAR_HEIGHT = 400;
+const SCROLL_BAR_WIDTH = 5;
+const SCROLL_INDICATOR_HEIGHT = 50;
 
 // function that takes date object and returns readable time
 function formatAMPM(date) {
@@ -95,7 +100,28 @@ const DUMMY_DATA = [
 ];
 
 class Timeline extends Component {
+	yOffset = new Animated.Value(0);
+
+	onScroll = Animated.event(
+		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+		{
+			useNativeDriver: true
+		}
+	);
+
 	render() {
+		const animatedScrollIndicator = {
+			transform: [
+				{
+					translateY: this.yOffset.interpolate({
+						inputRange: [0, SCREEN_HEIGHT - 200],
+						outputRange: [0, SCROLL_BAR_HEIGHT - SCROLL_INDICATOR_HEIGHT],
+						extrapolate: "clamp"
+					})
+				}
+			]
+		};
+
 		let Past = [];
 		let Today = [];
 		let Tomorrow = [];
@@ -136,10 +162,17 @@ class Timeline extends Component {
 			sections.push({ title: "Later", data: Later });
 		}
 
+		const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+
 		return (
 			<View style={styles.wrapper}>
-				<SectionList
+				<AnimatedSectionList
 					style={styles.sectionList}
+					onLayout={event => {
+						var { x, y, width, height } = event.nativeEvent.layout;
+						this.height = height;
+					}}
+					onScroll={this.onScroll}
 					renderItem={({ item, index, section }) => {
 						let startDate = new Date(item.startTime);
 						let endDate = new Date(item.endTime);
@@ -173,6 +206,11 @@ class Timeline extends Component {
 					keyExtractor={(item, index) => item + index}
 					ListFooterComponent={<View style={{ height: IS_X ? 90 : 70 }} />}
 				/>
+				<View style={styles.scrollContainer}>
+					<Animated.View
+						style={[styles.scrollIndicator, animatedScrollIndicator]}
+					/>
+				</View>
 				<View style={styles.bottomCover} />
 			</View>
 		);
@@ -180,6 +218,24 @@ class Timeline extends Component {
 }
 
 const styles = StyleSheet.create({
+	scrollContainer: {
+		position: "absolute",
+		right: 10,
+		top: IS_X ? 120 : 100,
+		width: SCROLL_BAR_WIDTH,
+		height: SCROLL_BAR_HEIGHT,
+		backgroundColor: "rgba(255, 255, 255, 0.12)",
+		borderRadius: SCROLL_BAR_WIDTH / 2
+	},
+	scrollIndicator: {
+		position: "absolute",
+		right: 0,
+		top: 0,
+		width: SCROLL_BAR_WIDTH,
+		height: SCROLL_INDICATOR_HEIGHT,
+		backgroundColor: "lightgray",
+		borderRadius: SCROLL_BAR_WIDTH / 2
+	},
 	bottomCover: {
 		position: "absolute",
 		bottom: 0,

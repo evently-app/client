@@ -99,7 +99,7 @@ class EventCardPreview extends Component {
 
 const styles = StyleSheet.create({
 	wrapper: {
-		width: SCREEN_WIDTH - 40,
+		width: SCREEN_WIDTH - 50,
 		padding: 10,
 		borderRadius: 10,
 		height: CARD_HEIGHT,
