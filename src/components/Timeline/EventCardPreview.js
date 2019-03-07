@@ -61,6 +61,7 @@ class EventCardPreview extends Component {
 						{this.props.startTime}
 						{!!this.props.endTime && ` - ${this.props.endTime}`}
 					</SubHeader>
+					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
 					<TouchableWithoutFeedback
 						onPressIn={() => {
 							Animated.timing(this.actionScale, {

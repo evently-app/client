@@ -15,7 +15,7 @@ import { BlurView } from "react-native-blur";
 import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../../lib/constants";
 import moment from "moment";
 
-const SCROLL_BAR_HEIGHT = 400;
+const SCROLL_BAR_HEIGHT = SCREEN_HEIGHT - (IS_X ? 180 : 140);
 const SCROLL_BAR_WIDTH = 5;
 const SCROLL_INDICATOR_HEIGHT = 50;
 
@@ -28,6 +28,11 @@ function formatAMPM(date) {
 	hours = hours ? hours : 12;
 	minutes = !!minutes ? (minutes < 10 ? `0${minutes}` : minutes) : "00";
 	return hours + ":" + minutes + " " + ampm;
+}
+
+// takes date object returns readable day
+function formatDay(date) {
+	return moment(date).format("ddd MMMM Do");
 }
 
 const DUMMY_DATA = [
@@ -183,6 +188,11 @@ class Timeline extends Component {
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}
+								date={
+									["Past", "Later"].includes(section.title)
+										? formatDay(startDate)
+										: null
+								}
 								action={section.title != "Past" ? item.action : null}
 								onAction={() => {
 									Alert.alert(`action for ${item.id}`);
@@ -221,7 +231,7 @@ const styles = StyleSheet.create({
 	scrollContainer: {
 		position: "absolute",
 		right: 10,
-		top: IS_X ? 120 : 100,
+		top: IS_X ? 80 : 60,
 		width: SCROLL_BAR_WIDTH,
 		height: SCROLL_BAR_HEIGHT,
 		backgroundColor: "rgba(255, 255, 255, 0.12)",
