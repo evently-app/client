@@ -150,7 +150,7 @@ class Timeline extends Component {
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}
-								action={item.action}
+								action={section.title != "Past" ? item.action : null}
 								onAction={() => {
 									Alert.alert(`action for ${item.id}`);
 								}}
@@ -171,18 +171,26 @@ class Timeline extends Component {
 					)}
 					sections={sections}
 					keyExtractor={(item, index) => item + index}
+					ListFooterComponent={<View style={{ height: IS_X ? 90 : 70 }} />}
 				/>
-				<BlurView style={styles.topBlur} blurType={"extraDark"} />
+				<View style={styles.bottomCover} />
 			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
+	bottomCover: {
+		position: "absolute",
+		bottom: 0,
+		left: 0,
+		right: 0,
+		height: IS_X ? 90 : 70,
+		backgroundColor: "rgba(0,0,0,0.9)"
+	},
 	sectionList: {
 		overflow: "hidden",
-		marginTop: IS_X ? 40 : 20,
-		marginBottom: IS_X ? 90 : 70
+		marginTop: IS_X ? 30 : 10
 	},
 	sectionHeader: {
 		width: SCREEN_WIDTH,

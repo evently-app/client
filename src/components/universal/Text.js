@@ -17,19 +17,22 @@ props {
 
 const headerStyle = {
 	fontSize: 20,
-	fontWeight: "800",
-	color: "white"
+	fontWeight: "700",
+	color: "white",
+	fontFamily: "Avenir Next"
 };
 
 const subHeaderStyle = {
 	fontSize: 16,
 	fontWeight: "600",
-	color: "white"
+	color: "white",
+	fontFamily: "Avenir Next"
 };
 
 const paragraphStyle = {
 	fontSize: 12,
-	color: "white"
+	color: "white",
+	fontFamily: "Avenir Next"
 };
 
 const Header = ({ animated, style, children }) => {

@@ -84,9 +84,11 @@ class EventCardPreview extends Component {
 								}
 							]}
 						>
-							<VibrancyView style={styles.action} blurType="xlight">
-								<Header style={styles.actionText}>{this.props.action}</Header>
-							</VibrancyView>
+							{!!this.props.action && (
+								<VibrancyView style={styles.action} blurType="xlight">
+									<Header style={styles.actionText}>{this.props.action}</Header>
+								</VibrancyView>
+							)}
 						</Animated.View>
 					</TouchableWithoutFeedback>
 				</Animated.View>
