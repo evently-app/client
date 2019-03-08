@@ -4,6 +4,7 @@ import {
 	ScrollView,
 	StyleSheet,
 	SectionList,
+	PanResponder,
 	Text,
 	Animated,
 	Alert
@@ -18,6 +19,9 @@ import moment from "moment";
 const SCROLL_BAR_HEIGHT = SCREEN_HEIGHT - (IS_X ? 180 : 140);
 const SCROLL_BAR_WIDTH = 5;
 const SCROLL_INDICATOR_HEIGHT = 50;
+
+const CARD_HEIGHT = 170;
+const SECTION_HEADER_HEIGHT = 70;
 
 // function that takes date object and returns readable time
 function formatAMPM(date) {
@@ -104,6 +108,49 @@ const DUMMY_DATA = [
 	}
 ];
 
+let Past = [];
+let Today = [];
+let Tomorrow = [];
+let Later = [];
+for (let i = 0; i < DUMMY_DATA.length; i++) {
+	const item = DUMMY_DATA[i];
+
+	let now = new Date();
+	let tomorrow = new Date();
+	tomorrow.setDate(tomorrow.getDate() + 1);
+	let startDate = new Date(item.startTime);
+	let endDate = new Date(item.endTime);
+
+	if (startDate.setHours(0, 0, 0, 0) < now.setHours(0, 0, 0, 0)) {
+		Past.push(item);
+	} else if (startDate.setHours(0, 0, 0, 0) == now.setHours(0, 0, 0, 0)) {
+		Today.push(item);
+	} else if (startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)) {
+		Tomorrow.push(item);
+	} else {
+		Later.push(item);
+	}
+}
+
+let sections = [];
+if (Past.length > 0) {
+	sections.push({ title: "Past", data: Past });
+}
+if (Today.length > 0) {
+	sections.push({ title: "Today", data: Today });
+}
+if (Tomorrow.length > 0) {
+	sections.push({ title: "Tomorrow", data: Tomorrow });
+}
+if (Later.length > 0) {
+	sections.push({ title: "Later", data: Later });
+}
+
+const SECTION_LIST_HEIGHT =
+	sections.length * SECTION_HEADER_HEIGHT +
+	DUMMY_DATA.length * CARD_HEIGHT -
+	(SCREEN_HEIGHT - (IS_X ? 120 : 80));
+
 class Timeline extends Component {
 	yOffset = new Animated.Value(0);
 
@@ -114,12 +161,44 @@ class Timeline extends Component {
 		}
 	);
 
+	shouldComponentUpdate(nextProps, nextState) {
+		return false;
+	}
+
+	componentWillMount() {
+		this._panResponder = PanResponder.create({
+			onMoveShouldSetResponderCapture: () => true,
+			onMoveShouldSetPanResponderCapture: () => true,
+
+			onPanResponderGrant: (e, gestureState) => {},
+
+			onPanResponderMove: (e, { y0, dy }) => {
+				const scrollTopDifference = IS_X ? 80 : 60;
+				const scrollPosition = y0 - scrollTopDifference + dy;
+				let scrollPercentage = scrollPosition / SCROLL_BAR_HEIGHT;
+				scrollPercentage =
+					scrollPercentage > 0
+						? scrollPercentage < 1
+							? scrollPercentage
+							: 1
+						: 0;
+				this.yOffset.setValue(scrollPercentage * SECTION_LIST_HEIGHT);
+				// this.Timeline.getNode().scrollTo({
+				// 	y: scrollPercentage * SECTION_LIST_HEIGHT,
+				// 	animated: false
+				// });
+			},
+
+			onPanResponderRelease: (e, { vx, vy }) => {}
+		});
+	}
+
 	render() {
 		const animatedScrollIndicator = {
 			transform: [
 				{
 					translateY: this.yOffset.interpolate({
-						inputRange: [0, SCREEN_HEIGHT - 200],
+						inputRange: [0, SECTION_LIST_HEIGHT],
 						outputRange: [0, SCROLL_BAR_HEIGHT - SCROLL_INDICATOR_HEIGHT],
 						extrapolate: "clamp"
 					})
@@ -127,57 +206,84 @@ class Timeline extends Component {
 			]
 		};
 
-		let Past = [];
-		let Today = [];
-		let Tomorrow = [];
-		let Later = [];
-		for (let i = 0; i < DUMMY_DATA.length; i++) {
-			const item = DUMMY_DATA[i];
+		// const itemToCard = (item, section) => {
+		// 	let startDate = new Date(item.startTime);
+		// 	let endDate = new Date(item.endTime);
+		// 	return (
+		// 		<EventCardPreview
+		// 			key={item.id}
+		// 			title={item.eventName}
+		// 			imageUrl={item.imageUrl}
+		// 			startTime={formatAMPM(startDate)}
+		// 			endTime={formatAMPM(endDate)}
+		// 			date={
+		// 				["Past", "Later"].includes(section) ? formatDay(startDate) : null
+		// 			}
+		// 			action={section != "Past" ? item.action : null}
+		// 			onAction={() => {
+		// 				Alert.alert(`action for ${item.id}`);
+		// 			}}
+		// 			onPress={() => {
+		// 				Alert.alert(`view ${item.id}`);
+		// 			}}
+		// 		/>
+		// 	);
+		// };
 
-			let now = new Date();
-			let tomorrow = new Date();
-			tomorrow.setDate(tomorrow.getDate() + 1);
-			let startDate = new Date(item.startTime);
-			let endDate = new Date(item.endTime);
+		// const PastCards = Past.map(item => {
+		// 	return itemToCard(item, "Past");
+		// });
+		// const TodayCards = Today.map(item => {
+		// 	return itemToCard(item, "Today");
+		// });
+		// const TomorrowCards = Tomorrow.map(item => {
+		// 	return itemToCard(item, "Tomorrow");
+		// });
+		// const LaterCards = Later.map(item => {
+		// 	return itemToCard(item, "Later");
+		// });
 
-			if (startDate.setHours(0, 0, 0, 0) < now.setHours(0, 0, 0, 0)) {
-				Past.push(item);
-			} else if (startDate.setHours(0, 0, 0, 0) == now.setHours(0, 0, 0, 0)) {
-				Today.push(item);
-			} else if (
-				startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)
-			) {
-				Tomorrow.push(item);
-			} else {
-				Later.push(item);
-			}
-		}
+		// const titleToHeader = title => {
+		// 	return (
+		// 		<View style={styles.sectionHeader}>
+		// 			<Header>{title}</Header>
+		// 		</View>
+		// 	);
+		// };
 
-		let sections = [];
-		if (Past.length > 0) {
-			sections.push({ title: "Past", data: Past });
-		}
-		if (Today.length > 0) {
-			sections.push({ title: "Today", data: Today });
-		}
-		if (Tomorrow.length > 0) {
-			sections.push({ title: "Tomorrow", data: Tomorrow });
-		}
-		if (Later.length > 0) {
-			sections.push({ title: "Later", data: Later });
-		}
+		// return (
+		// 	<View style={styles.wrapper}>
+		// 		<Animated.ScrollView
+		// 			ref={Timeline => (this.Timeline = Timeline)}
+		// 			style={styles.sectionList}
+		// 			onScroll={this.onScroll}
+		// 			scrollEventThrottle={16}
+		// 		>
+		// 			{Past.length > 0 && titleToHeader("Past")}
+		// 			{Past.length > 0 && PastCards}
+		// 			{Today.length > 0 && titleToHeader("Today")}
+		// 			{Today.length > 0 && TodayCards}
+		// 			{Tomorrow.length > 0 && titleToHeader("Tomorrow")}
+		// 			{Tomorrow.length > 0 && TomorrowCards}
+		// 			{Later.length > 0 && titleToHeader("Later")}
+		// 			{Later.length > 0 && LaterCards}
+		// 		</Animated.ScrollView>
+		// 		<View style={styles.scrollContainer}>
+		// 			<Animated.View
+		// 				{...this._panResponder.panHandlers}
+		// 				style={[styles.scrollIndicator, animatedScrollIndicator]}
+		// 			/>
+		// 		</View>
+		// 	</View>
+		// );
 
 		const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
-
 		return (
 			<View style={styles.wrapper}>
 				<AnimatedSectionList
+					ref={Timeline => (this.Timeline = Timeline)}
 					initialNumToRender={4}
 					style={styles.sectionList}
-					onLayout={event => {
-						var { x, y, width, height } = event.nativeEvent.layout;
-						this.height = height;
-					}}
 					onScroll={this.onScroll}
 					renderItem={({ item, index, section }) => {
 						let startDate = new Date(item.startTime);
@@ -206,23 +312,18 @@ class Timeline extends Component {
 					}}
 					renderSectionHeader={({ section: { title } }) => (
 						<View style={styles.sectionHeader}>
-							{/*<BlurView
-															style={styles.sectionHeaderBlur}
-															blurType={"extraDark"}
-														/>*/}
 							<Header>{title}</Header>
 						</View>
 					)}
 					sections={sections}
 					keyExtractor={(item, index) => item + index}
-					ListFooterComponent={<View style={{ height: IS_X ? 90 : 70 }} />}
 				/>
 				<View style={styles.scrollContainer}>
 					<Animated.View
+						{...this._panResponder.panHandlers}
 						style={[styles.scrollIndicator, animatedScrollIndicator]}
 					/>
 				</View>
-				<View style={styles.bottomCover} />
 			</View>
 		);
 	}
@@ -247,17 +348,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "lightgray",
 		borderRadius: SCROLL_BAR_WIDTH / 2
 	},
-	bottomCover: {
-		position: "absolute",
-		bottom: 0,
-		left: 0,
-		right: 0,
-		height: IS_X ? 90 : 70,
-		backgroundColor: "rgba(0,0,0,0.9)"
-	},
 	sectionList: {
 		overflow: "hidden",
-		marginTop: IS_X ? 30 : 10
+		marginTop: IS_X ? 30 : 10,
+		marginBottom: IS_X ? 90 : 70
 	},
 	sectionHeader: {
 		width: SCREEN_WIDTH,
@@ -266,13 +360,6 @@ const styles = StyleSheet.create({
 		position: "relative",
 		marginBottom: 10,
 		backgroundColor: "rgba(0,0,0,0.9)"
-	},
-	sectionHeaderBlur: {
-		position: "absolute",
-		top: 0,
-		right: 0,
-		left: 0,
-		bottom: 0
 	},
 	wrapper: {
 		flex: 1,

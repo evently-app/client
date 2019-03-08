@@ -18,12 +18,23 @@ const SCROLL_INDICATOR_HEIGHT = 20;
 class EventCard extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
-		useNativeDriver: true
-	});
+	onScroll = Animated.event(
+		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+		{
+			useNativeDriver: true
+		}
+	);
 
 	render() {
-		const { eventName, tags, startTime, endTime, action, imageUrl, backgroundColor } = this.props;
+		const {
+			eventName,
+			tags,
+			startTime,
+			endTime,
+			action,
+			imageUrl,
+			backgroundColor
+		} = this.props;
 
 		const animatedScrollIndicator = {
 			transform: [
@@ -46,7 +57,10 @@ class EventCard extends Component {
 					onScroll={this.onScroll}
 				>
 					<Image
-						style={[styles.coloredBackground, { backgroundColor: backgroundColor }]}
+						style={[
+							styles.coloredBackground,
+							{ backgroundColor: backgroundColor }
+						]}
 						source={{ uri: imageUrl }}
 					/>
 					<LinearGradient
@@ -54,19 +68,25 @@ class EventCard extends Component {
 						locations={[0, 0.7]}
 						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0)"]}
 					/>
-					<Header style={{ position: "absolute", top: 10, left: 10 }}>{eventName}</Header>
-					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>{startTime}</SubHeader>
-					<LinearGradient
-						locations={[0, 1]}
-						colors={["rgba(255,255,255,0.1)", "rgba(255,255,255,0.14)"]}
-						style={styles.tags}
-					>
-						{tags.map((tag, i) => (
-							<Paragraph bold key={tag} style={styles.tag}>
-								{tag}
-							</Paragraph>
-						))}
-					</LinearGradient>
+					<Header style={{ position: "absolute", top: 10, left: 10 }}>
+						{eventName}
+					</Header>
+					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>
+						{startTime}
+					</SubHeader>
+					{!!tags && (
+						<LinearGradient
+							locations={[0, 1]}
+							colors={["rgba(255,255,255,0.1)", "rgba(255,255,255,0.14)"]}
+							style={styles.tags}
+						>
+							{tags.map((tag, i) => (
+								<Paragraph bold key={tag} style={styles.tag}>
+									{tag}
+								</Paragraph>
+							))}
+						</LinearGradient>
+					)}
 					<MapboxGL.MapView
 						logoEnabled={false}
 						style={{ height: 200, backgroundColor: "white" }}
@@ -79,7 +99,9 @@ class EventCard extends Component {
 				</Animated.ScrollView>
 				<ActionButton yOffset={this.yOffset} title={action} />
 				<View style={styles.scrollContainer}>
-					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
+					<Animated.View
+						style={[styles.scrollIndicator, animatedScrollIndicator]}
+					/>
 				</View>
 			</View>
 		);
