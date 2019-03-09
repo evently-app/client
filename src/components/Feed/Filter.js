@@ -91,22 +91,22 @@ const Filter = ({ filterDrag, onPress, onDrag, onSnap, interactableRef }) => {
 				animatedValueY={filterDrag}
 			>
 				<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
-					I want events in
+					Location
 				</Paragraph>
 				<Header animated style={animatedLocation}>
-					New York
+					Nearby
 				</Header>
 				<Paragraph animated style={{ ...animatedTime, ...animatedOpacity }}>
-					for
+					Time
 				</Paragraph>
 				<SubHeader animated style={animatedTime}>
-					tonight
+					Upcoming
 				</SubHeader>
 				<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
-					I'm in the mood for
+					Type
 				</Paragraph>
 				<SubHeader animated style={{ ...animatedType, ...animatedOpacity2 }}>
-					anything
+					Anything
 				</SubHeader>
 			</Interactable.View>
 		</TouchableOpacity>

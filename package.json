@@ -18,6 +18,7 @@
     "react": "16.6.3",
     "react-native": "0.58.5",
     "react-native-blur": "^3.2.2",
+    "react-native-circular-progress": "^1.1.0",
     "react-native-firebase": "^5.2.2",
     "react-native-haptic-feedback": "^1.5.0",
     "react-native-interactable": "1.0.0-alpha.1",

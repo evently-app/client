@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { Auth } from "../redux/user";
 import { connect } from "react-redux";
-import { StyleSheet, StatusBar, Animated, Text, TouchableOpacity, View, Alert } from "react-native";
+import {
+  StyleSheet,
+  StatusBar,
+  Animated,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert
+} from "react-native";
 
 import LinearGradient from "react-native-linear-gradient";
 import Haptics from "react-native-haptic-feedback";
@@ -18,9 +26,12 @@ import TimelineLogo from "../assets/timeline.svg";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../lib/constants";
 
 const xOffset = new Animated.Value(SCREEN_WIDTH);
-const scrollPosition = Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
-  useNativeDriver: true
-});
+const scrollPosition = Animated.event(
+  [{ nativeEvent: { contentOffset: { x: xOffset } } }],
+  {
+    useNativeDriver: true
+  }
+);
 
 const opacityStyle = index => {
   const inputRange = [0, SCREEN_WIDTH, 2 * SCREEN_WIDTH];
@@ -68,7 +79,11 @@ class App extends Component {
 
   componentDidMount() {
     xOffset.setValue(SCREEN_WIDTH);
-    this.ScrollView.getNode().scrollTo({ x: SCREEN_WIDTH, y: 0, animated: false });
+    this.ScrollView.getNode().scrollTo({
+      x: SCREEN_WIDTH,
+      y: 0,
+      animated: false
+    });
   }
 
   /* navigation functions */
@@ -79,12 +94,20 @@ class App extends Component {
 
   seeFeed = () => {
     Haptics.trigger("impactMedium");
-    this.ScrollView.getNode().scrollTo({ x: SCREEN_WIDTH, y: 0, animated: true });
+    this.ScrollView.getNode().scrollTo({
+      x: SCREEN_WIDTH,
+      y: 0,
+      animated: true
+    });
   };
 
   seeTimeline = () => {
     Haptics.trigger("impactMedium");
-    this.ScrollView.getNode().scrollTo({ x: 2 * SCREEN_WIDTH, y: 0, animated: true });
+    this.ScrollView.getNode().scrollTo({
+      x: 2 * SCREEN_WIDTH,
+      y: 0,
+      animated: true
+    });
   };
 
   handleScrollEnd = ({ nativeEvent }) => {
@@ -98,14 +121,19 @@ class App extends Component {
     const { currentPage } = this.state;
 
     return (
-      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>
+      <LinearGradient
+        style={styles.container}
+        locations={[0, 0.9]}
+        colors={["black", "#150218"]}
+      >
         <StatusBar barStyle="light-content" />
         <Animated.ScrollView
           horizontal
           pagingEnabled
           bounces={false}
           ref={ScrollView => (this.ScrollView = ScrollView)}
-          scrollEnabled={currentPage !== 1}
+          // scrollEnabled={currentPage !== 1}
+          scrollEnabled={false}
           onMomentumScrollEnd={this.handleScrollEnd}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
