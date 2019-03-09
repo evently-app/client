@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Animated } from "react-native";
+import { SCREEN_WIDTH } from "../../lib/constants";
 
 import Interactable from "react-native-interactable";
 import Haptics from "react-native-haptic-feedback";
@@ -15,7 +16,7 @@ class Swipeable extends Component {
 	handleOnDrag = ({ nativeEvent }) => {
 		// console.log("handle on drag");
 		const { state, x } = nativeEvent;
-		// const { onStartSwipe } = this.props;
+		const { onStartSwipe } = this.props;
 
 		if (state === "end") {
 			if (x < -150) {
@@ -23,12 +24,12 @@ class Swipeable extends Component {
 				this.Interactable.snapTo({ index: 0 });
 				this.startSwipe();
 				// onStartSwipe();
-				// Haptics.trigger("impactLight");
+				Haptics.trigger("impactLight");
 			} else if (x > 150) {
 				this.Interactable.snapTo({ index: 2 });
 				this.startSwipe();
 				// onStartSwipe();
-				// Haptics.trigger("impactLight");
+				Haptics.trigger("impactLight");
 			}
 		}
 	};
@@ -64,26 +65,18 @@ class Swipeable extends Component {
 	};
 
 	render() {
-		const { swipeAmount, scaleAmount, filterDrag, firstCard, secondCard, children } = this.props;
+		const {
+			swipeAmount,
+			scaleAmount,
+			filterDrag,
+			firstCard,
+			secondCard,
+			children
+		} = this.props;
 
-		const left = { x: -410, damping: 0.7, tension: 300 };
+		const left = { x: -1.2 * SCREEN_WIDTH, damping: 0.7, tension: 300 };
 		const centered = { x: 0, damping: 0.7, tension: 200 };
-		const right = { x: 410, damping: 0.7, tension: 300 };
-
-		// const animatedScale = {
-		// 	scale: scaleAmount.interpolate({
-		// 		inputRange: [-150, 0, 150],
-		// 		outputRange: [1, 0.95, 1],
-		// 		extrapolate: "clamp"
-		// 	})
-		// };
-
-		// const animatedRotation = {
-		// 	rotate: swipeAmount.interpolate({
-		// 		inputRange: [-450, 0, 450],
-		// 		outputRange: ["-10deg", "0deg", "10deg"]
-		// 	})
-		// };
+		const right = { x: SCREEN_WIDTH * 1.2, damping: 0.7, tension: 300 };
 
 		const animated = {
 			transform: [
@@ -95,7 +88,7 @@ class Swipeable extends Component {
 				},
 				{
 					rotate: swipeAmount.interpolate({
-						inputRange: [-450, 0, 450],
+						inputRange: [-1.2 * SCREEN_WIDTH, 0, SCREEN_WIDTH * 1.2],
 						outputRange: ["-10deg", "0deg", "10deg"]
 					})
 				},
