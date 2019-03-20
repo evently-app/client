@@ -6,12 +6,15 @@ class Dial extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fill: props.fill || 0
+			fill: props.fill || 0.5,
+			activated: true
 		};
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
 		if (nextState.fill != this.state.fill) {
+			return true;
+		} else if (nextState.activated != this.state.activated) {
 			return true;
 		} else {
 			return false;
@@ -27,7 +30,11 @@ class Dial extends Component {
 
 			onPanResponderMove: (e, { x0, y0, dx, dy }) => {
 				// animate dial fill
+
 				const panPoint = { x: x0 + dx, y: y0 + dy };
+
+				const onRightSide = panPoint.x > this.center.x;
+
 				// get lengths of implicit lines for calculation
 				const centerTop = this.center.y - this.centerTop.y;
 				const centerOut = Math.sqrt(
@@ -46,7 +53,14 @@ class Dial extends Component {
 						Math.pow(centerTop, 2)) /
 						(2 * centerOut * topOut)
 				);
-				this.setState({ fill: angle });
+
+				const fillAmount = onRightSide ? 0.5 - angle * 0.5 : 0.5 + angle * 0.5;
+
+				this.setState({ fill: fillAmount });
+				if (this.state.fill >= 0 && !this.state.activated) {
+					this.setState({ activated: true });
+				}
+
 			},
 
 			onPanResponderRelease: (e, { vx, vy }) => {
@@ -72,11 +86,24 @@ class Dial extends Component {
 					rotation={0}
 					fill={this.state.fill * 100}
 					tintColor="rgba(110,10,234,0.95)"
-					onAnimationComplete={() => console.log("onAnimationComplete")}
+					onAnimationComplete={({finished}) => {
+						if (finished && this.state.fill < 0 && this.state.activated) {
+							this.setState({ activated: false })
+						}
+					}}
 					backgroundColor="rgba(110,10,234,0.30)"
 				/>
 				<View style={styles.innerCircleWrapper}>
-					<View style={styles.innerCircle} />
+					<View
+						style={[
+							styles.innerCircle,
+							{
+								borderColor: this.state.activated
+									? "rgba(255, 255, 255, 1)"
+									: "rgba(255, 255, 255, 0.2)"
+							}
+						]}
+					/>
 				</View>
 			</View>
 		);
@@ -92,7 +119,6 @@ const styles = StyleSheet.create({
 		width: 80,
 		height: 80,
 		borderRadius: 40,
-		borderColor: "white",
 		borderWidth: 15
 	},
 	innerCircleWrapper: {
