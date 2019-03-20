@@ -6,9 +6,9 @@ class Dial extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fill: props.fill || 0.5,
-			activated: true
+			fill: props.fill || 0.5
 		};
+		this.activated = new Animated.Value(1)
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -57,14 +57,24 @@ class Dial extends Component {
 				const fillAmount = onRightSide ? 0.5 - angle * 0.5 : 0.5 + angle * 0.5;
 
 				this.setState({ fill: fillAmount });
-				if (this.state.fill >= 0 && !this.state.activated) {
-					this.setState({ activated: true });
-				}
 
 			},
 
 			onPanResponderRelease: (e, { vx, vy }) => {
 				// publish preference selection
+
+				if (this.state.fill >= 0) {
+					Animated.timing(this.activated, {
+						toValue: 1,
+						duration: 100
+					}).start()
+				}
+				else {
+					Animated.timing(this.activated, {
+						toValue: 0,
+						duration: 100
+					}).start()
+				}
 			}
 		});
 	}
@@ -86,21 +96,18 @@ class Dial extends Component {
 					rotation={0}
 					fill={this.state.fill * 100}
 					tintColor="rgba(110,10,234,0.95)"
-					onAnimationComplete={({finished}) => {
-						if (finished && this.state.fill < 0 && this.state.activated) {
-							this.setState({ activated: false })
-						}
-					}}
+					// onAnimationComplete={({finished}) => {}}
 					backgroundColor="rgba(110,10,234,0.30)"
 				/>
 				<View style={styles.innerCircleWrapper}>
-					<View
+					<Animated.View
 						style={[
 							styles.innerCircle,
 							{
-								borderColor: this.state.activated
-									? "rgba(255, 255, 255, 1)"
-									: "rgba(255, 255, 255, 0.2)"
+								opacity: this.activated.interpolate({
+									inputRange: [0, 1],
+									outputRange: [0.2, 1]
+								})
 							}
 						]}
 					/>
@@ -119,7 +126,8 @@ const styles = StyleSheet.create({
 		width: 80,
 		height: 80,
 		borderRadius: 40,
-		borderWidth: 15
+		borderWidth: 15,
+		borderColor: "white"
 	},
 	innerCircleWrapper: {
 		position: "absolute",
