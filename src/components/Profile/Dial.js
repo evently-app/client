@@ -48,21 +48,24 @@ class Dial extends Component {
 				// console.log(centerTop, centerOut, topOut);
 				// use line lengths and law of cosine to calculate implied angle from drag
 				const angle = Math.acos(
-					(Math.pow(centerOut, 2) +
-						Math.pow(topOut, 2) -
-						Math.pow(centerTop, 2)) /
-						(2 * centerOut * topOut)
+					(Math.pow(centerTop, 2) +
+						Math.pow(centerOut, 2) -
+						Math.pow(topOut, 2)) /
+						(2 * centerOut * centerTop)
 				);
 
-				const fillAmount = onRightSide ? 0.5 - angle * 0.5 : 0.5 + angle * 0.5;
+				console.log(angle)
 
-				this.setState({ fill: fillAmount });
+				const fill = onRightSide ? (angle/Math.PI) * 0.7 - 0.15 : 0.5 + (1 - (angle/Math.PI)) * 0.6
+
+				this.setState({ fill });
 
 			},
 
 			onPanResponderRelease: (e, { vx, vy }) => {
 				// publish preference selection
 
+				// activation animation
 				if (this.state.fill >= 0) {
 					Animated.timing(this.activated, {
 						toValue: 1,
@@ -86,6 +89,7 @@ class Dial extends Component {
 					var { x, y, width, height } = event.nativeEvent.layout;
 					this.centerTop = { x: x + width / 2, y: y };
 					this.center = { x: x + width / 2, y: y + height / 2 };
+					console.log(this.centerTop, this.center)
 				}}
 				style={styles.circleWrapper}
 				{...this._panResponder.panHandlers}
