@@ -24,6 +24,7 @@ import FeedLogo from "../assets/logo.svg";
 import TimelineLogo from "../assets/timeline.svg";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../lib/constants";
+import { WatchUser } from "../redux/user";
 
 const xOffset = new Animated.Value(SCREEN_WIDTH);
 const scrollPosition = Animated.event(
@@ -70,7 +71,8 @@ class App extends Component {
     this.props
       .Auth()
       .then(() => {
-        // Alert.alert("successfully authenticated");
+        // sync user entity in redux with firestore
+        this.watchUser = this.props.WatchUser();
       })
       .catch(error => {
         console.log(error);
@@ -78,6 +80,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // start at middle screen
     xOffset.setValue(SCREEN_WIDTH);
     this.ScrollView.getNode().scrollTo({
       x: SCREEN_WIDTH,
@@ -203,7 +206,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  Auth
+  Auth,
+  WatchUser
 };
 
 export default connect(

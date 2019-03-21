@@ -8,7 +8,7 @@ let firestore = firebase.firestore();
 // define starting state
 const initialState = {
 	uid: null,
-	entity: null,
+	entity: {},
 	isAuthenticating: false,
 	errorAuthenticating: null,
 	isWatchingUser: false,

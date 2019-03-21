@@ -17,7 +17,7 @@ class Dial extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fill: props.fill || 0.5
+			fill: props.fill
 		};
 		this.activated = new Animated.Value(1);
 		this.tick = genTick(this.state.fill);
@@ -47,7 +47,6 @@ class Dial extends Component {
 				// animate dial fill
 
 				const panPoint = { x: x0 + dx, y: y0 + dy };
-				console.log(panPoint);
 
 				const onRightSide = panPoint.x > this.center.x;
 
@@ -71,9 +70,11 @@ class Dial extends Component {
 				);
 
 				// interpret angle as fill amount
-				const fill = onRightSide
+				let fill = onRightSide
 					? (angle / Math.PI) * 0.7 - 0.15
 					: 0.5 + (1 - angle / Math.PI) * 0.6;
+				if (fill < 0) fill = 0;
+				if (fill > 1) fill = 1;
 				this.setState({ fill });
 
 				// haptic if past next tick
@@ -85,7 +86,7 @@ class Dial extends Component {
 
 			onPanResponderRelease: (e, { vx, vy }) => {
 				// activation animation
-				if (this.state.fill >= 0) {
+				if (this.state.fill > 0) {
 					Animated.timing(this.activated, {
 						toValue: 1,
 						duration: 100
