@@ -50,6 +50,7 @@ export default (state = initialState, action) => {
 				errorLoadingQueue: action.error
 			};
 
+//this is mutating -- not good! need to return entirely new object 
 		case POP:
 			// pop item off queue
 			const newQueue = state.queue;
@@ -91,7 +92,7 @@ export const loadQueueFailure = error => {
 export const resetQueue = () => {
 	return {
 		type: RESET_QUEUE
-	};
+	};w
 };
 
 
