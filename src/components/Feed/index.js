@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import _ from "lodash";
 import { connect } from "react-redux";
-import {Alert} from "react-native";
+import { Alert } from "react-native";
 
 import Filter from "./Filter";
 import EventCard from "../EventCard";
@@ -10,7 +10,6 @@ import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 import { LoadQueue } from "../../redux/queue";
-
 
 const randomColor = () => {
 	let r = Math.round(255 * Math.random());
@@ -51,30 +50,36 @@ const DUMMY_DATA = [
 
 class Feed extends Component {
 	// constructor(props) {
- //    	super(props);
- //    	console.log("PROPS", props.queue)
+	//    	super(props);
+	//    	console.log("PROPS", props.queue)
 
 	// }
 
 	componentWillMount() {
- 
-	    this.props
-	      .LoadQueue()
-	      .then(() => {
-	        Alert.alert("successfully got queue");
-	        console.log("MOUNT LOG", this.props)
-	      })
-	      .catch(error => {
-	        console.log(error);
-	      });
-  	}
+		this.props
+			.LoadQueue()
+			.then(() => {
+				const { queue } = this.props;
+				let animatedValues = {};
+				queue.forEach(card => {
+					animatedValues[card.id] = new Animated.Value(0);
+				});
 
+				this.setState({ animatedValues });
+
+				Alert.alert("successfully got queue");
+				console.log("MOUNT LOG", this.props);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	}
 
 	state = {
 		count: 0,
 		filterOpen: false,
 		dragging: false,
-		queue: this.props.queue,//[
+		queue: this.props.queue, //[
 		// 	{
 		// 		id: "event1",
 		// 		eventName: "Khalid Summer Tour",
@@ -96,8 +101,8 @@ class Feed extends Component {
 		// 	// }
 		// ],
 		animatedValues: {
-			event1: new Animated.Value(0),
-			1: new Animated.Value(0)
+			// event1: new Animated.Value(0),
+			// 1: new Animated.Value(0)
 		}
 	};
 
@@ -111,8 +116,6 @@ class Feed extends Component {
 
 	filterDrag = new Animated.Value(0);
 	// swipeAmount = new Animated.Value(0);
-
-
 
 	componentDidMount() {}
 
@@ -129,8 +132,8 @@ class Feed extends Component {
 
 	fetchCards = () => {
 		const { count, queue, animatedValues } = this.state;
-		console.log("HEYYYYY^^^^^")
-		console.log(this.state.queue)
+		console.log("HEYYYYY^^^^^");
+		console.log(this.state.queue);
 
 		let newCard = this.generateCard();
 
@@ -191,8 +194,8 @@ class Feed extends Component {
 		// console.log("render");
 		const { animatedValues, filterOpen } = this.state;
 		const queue = this.props.queue;
-		console.log("RENDER QUEUE:" , this.props.queue);
-		console.log("Queue: ", queue)
+		console.log("RENDER QUEUE:", this.props.queue);
+		console.log("Queue: ", queue);
 
 		const first = queue.length - 1;
 		return (
@@ -250,7 +253,6 @@ const styles = StyleSheet.create({
 		right: 0
 	}
 });
-
 
 const mapStateToProps = state => {
 	return {
