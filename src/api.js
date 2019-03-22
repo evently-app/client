@@ -1,8 +1,13 @@
-// this file handles all calls to firebase and outside api's
+// this file handles all non-redux calls to firebase and outside api's
+import firebase from "react-native-firebase";
+let firestore = firebase.firestore();
 
-export const WatchUser = (userId, successCallback, errorCallback) => {
-	// watches user and fires successCallback on user entity change, returns listener
-	// return firestore.collection("users").doc(uid).onSnapshot(doc => {}, error => {})
+// update user function that returns promise
+export const UpdateUser = (uid, data) => {
+	return firestore
+		.collection("users")
+		.doc(uid)
+		.update(data);
 };
 
 export const WatchEvent = (eventId, successCallback, errorCallback) => {
