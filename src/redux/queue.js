@@ -6,8 +6,10 @@ import axios from "axios";
 const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
-	errorLoadingQueue: null
+	errorLoadingQueue: null,
 };
+
+var coordinates = null
 
 // define actions against state
 const RESET_QUEUE = "evently/queue/RESET_QUEUE";
@@ -32,10 +34,11 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
+			console.log("action data", action.data)
 			return {
 				...state,
 				isLoadingQueue: false,
-				queue: action.data,
+				queue: action.data.data,
 				successLoadingQueue: true
 			};
 
@@ -90,6 +93,7 @@ export const resetQueue = () => {
 	};
 };
 
+
 // complex functions which dispatch multiple action and can be asynchronous
 
 export const LoadQueue = () => {
@@ -102,19 +106,29 @@ export const LoadQueue = () => {
 				uid: state.user.uid
 			};
 
-			// get queue data from api endpoint
-			// should audit data expectations against backend architecture
-			axios
-				.post("ENDPOINT", postData)
+			//get user location and grab events 
+			navigator.geolocation.getCurrentPosition(
+			  (position) => {
+		      	coordinates = (String(position.coords.latitude) + "/" + String(position.coords.longitude))
+		      	console.log(coordinates)
+			  	const request = "http://event-queue-service.herokuapp.com/grab_events/" + coordinates + "/1000km"
+			  	console.log(request)
+
+			  	axios
+				.get(request)
 				.then(response => {
-					console.log(response);
-					dispatch(loadQueueSuccess(response.data.queue));
+					dispatch(loadQueueSuccess(response.data));
 					resolve();
 				})
 				.catch(error => {
 					dispatch(loadQueueFailure(error));
 					reject(error);
 				});
+			  },
+			  (error) => {result =  error},
+			  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+			);
+			
 		});
 	};
 };

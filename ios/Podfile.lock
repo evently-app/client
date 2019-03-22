@@ -6,7 +6,7 @@ PODS:
   - BoringSSL/Implementation (10.0.6):
     - BoringSSL/Interface (= 10.0.6)
   - BoringSSL/Interface (10.0.6)
-  - BVLinearGradient (2.5.3):
+  - BVLinearGradient (2.5.4):
     - React
   - DoubleConversion (1.1.6)
   - Firebase/Auth (5.15.0):
@@ -254,7 +254,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
-  BVLinearGradient: b0b70acf63ee888829b7c2ebbf6b50e227396e55
+  BVLinearGradient: 8cbc5155c978f2e43098818c91d206d07aae6d30
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
@@ -275,13 +275,13 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
-  React: 16c4fb7ce3fc30c041bce809ceae33bf57e7c142
-  react-native-blur: c35c1f6c2c76db7108bde7ed343bd2b01d64e0c0
-  react-native-haptic-feedback: f675486e3889e3229272158943c1e9e075247e5a
-  react-native-mapbox-gl: b42480060cdcc515dfa3d8e403fb4dd32466a1b9
-  RNSVG: 4834be1d644eb77f0e3f6de851881b83758a3124
-  yoga: 0885622311729a02c2bc02dca97167787a51488b
+  React: 6cd5e6fcc3b6a52d2fb27a638f622139da710dff
+  react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
+  react-native-haptic-feedback: c8c526446135d563889ae1b26adf24dee7c99398
+  react-native-mapbox-gl: d0ac3b81a6cadbd7cadc80891da72e3e85379350
+  RNSVG: 6fec2b50e65b4a01ba54155e8e546e0a1eeb16f4
+  yoga: 0e0009ffb2544aeead64a1209f3d488d3849947b
 
 PODFILE CHECKSUM: 4027b8ab6b50094c7d7a5d5f1e3fa2c8db955d6e
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

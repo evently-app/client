@@ -78,6 +78,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log("HEYYYY")
     xOffset.setValue(SCREEN_WIDTH);
     this.ScrollView.getNode().scrollTo({
       x: SCREEN_WIDTH,
@@ -119,6 +120,7 @@ class App extends Component {
 
   render() {
     const { currentPage } = this.state;
+    console.log(this.props)
 
     return (
       <LinearGradient
@@ -196,9 +198,13 @@ const styles = StyleSheet.create({
   }
 });
 
+Feed.defaultProps = {
+  queue: []
+};
+
 const mapStateToProps = state => {
   return {
-    uid: state.user.uid
+    uid: state.user.uid,
   };
 };
 
