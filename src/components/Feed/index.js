@@ -67,8 +67,6 @@ class Feed extends Component {
 	      .catch(error => {
 	        console.log(error);
 	      });
-
-
   	}
 
 
@@ -191,8 +189,10 @@ class Feed extends Component {
 
 	render() {
 		// console.log("render");
-		const { queue, animatedValues, filterOpen } = this.state;
+		const { animatedValues, filterOpen } = this.state;
+		const queue = this.props.queue;
 		console.log("RENDER QUEUE:" , this.props.queue);
+		console.log("Queue: ", queue)
 
 		const first = queue.length - 1;
 		return (
@@ -251,9 +251,6 @@ const styles = StyleSheet.create({
 	}
 });
 
-Feed.defaultProps = {
-  queue: []
-};
 
 const mapStateToProps = state => {
 	return {

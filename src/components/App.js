@@ -198,9 +198,6 @@ const styles = StyleSheet.create({
   }
 });
 
-Feed.defaultProps = {
-  queue: []
-};
 
 const mapStateToProps = state => {
   return {

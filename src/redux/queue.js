@@ -7,6 +7,7 @@ const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
 	errorLoadingQueue: null,
+	queue: []
 };
 
 var coordinates = null
@@ -38,7 +39,7 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				isLoadingQueue: false,
-				queue: action.data.data,
+				queue: action.data,
 				successLoadingQueue: true
 			};
 
