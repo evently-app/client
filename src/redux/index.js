@@ -11,5 +11,6 @@ export default combineReducers({
 	user,
 	// filter,
 	queue,
+	//timeline, 
 	timeline
 });
