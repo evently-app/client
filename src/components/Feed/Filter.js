@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+	Animated,
+	View,
+	Text,
+	TouchableOpacity,
+	StyleSheet
+} from "react-native";
 
 import Interactable from "react-native-interactable";
 
@@ -33,7 +39,7 @@ const Filter = ({ filterDrag, onPress, onDrag, onSnap, interactableRef }) => {
 			{
 				translateY: filterDrag.interpolate({
 					inputRange,
-					outputRange: [-10, -30, -90]
+					outputRange: [-15, -35, -95]
 				})
 			}
 		]
@@ -67,7 +73,11 @@ const Filter = ({ filterDrag, onPress, onDrag, onSnap, interactableRef }) => {
 	};
 
 	return (
-		<TouchableOpacity activeOpacity={1} style={styles.container} onPress={onPress}>
+		<TouchableOpacity
+			activeOpacity={1}
+			style={styles.container}
+			onPress={onPress}
+		>
 			<Interactable.View
 				animatedNativeDriver
 				verticalOnly
@@ -81,22 +91,22 @@ const Filter = ({ filterDrag, onPress, onDrag, onSnap, interactableRef }) => {
 				animatedValueY={filterDrag}
 			>
 				<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
-					I want events in
+					Location
 				</Paragraph>
 				<Header animated style={animatedLocation}>
-					New York
+					Nearby
 				</Header>
 				<Paragraph animated style={{ ...animatedTime, ...animatedOpacity }}>
-					for
+					Time
 				</Paragraph>
 				<SubHeader animated style={animatedTime}>
-					tonight
+					Upcoming
 				</SubHeader>
 				<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
-					I'm in the mood for
+					Type
 				</Paragraph>
 				<SubHeader animated style={{ ...animatedType, ...animatedOpacity2 }}>
-					anything
+					Anything
 				</SubHeader>
 			</Interactable.View>
 		</TouchableOpacity>

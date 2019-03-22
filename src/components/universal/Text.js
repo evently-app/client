@@ -17,36 +17,51 @@ props {
 
 const headerStyle = {
 	fontSize: 20,
-	fontWeight: "bold",
-	color: "white"
+	fontWeight: "700",
+	color: "white",
+	fontFamily: "Avenir Next"
 };
 
 const subHeaderStyle = {
 	fontSize: 16,
-	fontWeight: "bold",
-	color: "white"
+	fontWeight: "600",
+	color: "white",
+	fontFamily: "Avenir Next"
 };
 
 const paragraphStyle = {
 	fontSize: 12,
-	color: "white"
+	color: "white",
+	fontFamily: "Avenir Next"
 };
 
 const Header = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...headerStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...headerStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...headerStyle, ...style }}>{children}</Text>;
 };
 
 const SubHeader = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...subHeaderStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...subHeaderStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...subHeaderStyle, ...style }}>{children}</Text>;
 };
 
 const Paragraph = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...paragraphStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...paragraphStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...paragraphStyle, ...style }}>{children}</Text>;
 };
 

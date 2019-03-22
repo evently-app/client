@@ -1,10 +1,12 @@
 import React from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet, View, TouchableOpacity } from "react-native";
 
 import { BlurView } from "react-native-blur";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 import { colors } from "../../lib/styles";
+
+import { Header, SubHeader, Paragraph } from "../universal/Text";
 
 const INITIAL_WIDTH = 100;
 
@@ -60,7 +62,7 @@ const ActionButton = ({ title, url, yOffset }) => {
 			{
 				translateX: yOffset.interpolate({
 					inputRange,
-					outputRange: [0, -23.5, -60, -120],
+					outputRange: [0, -23.5, -50, -100],
 					extrapolate: "clamp"
 				})
 			},
@@ -75,14 +77,17 @@ const ActionButton = ({ title, url, yOffset }) => {
 	};
 
 	return (
-		<View>
+		<TouchableOpacity activeOpacity={0.9} onPress={() => console.log("pressed")}>
 			<Animated.View style={[styles.container, animatedStyle]}>
 				<BlurView blurType="xlight" style={styles.fill} />
 			</Animated.View>
+
 			<View style={styles.text}>
-				<Animated.Text style={[animatedTextStyle]}>Buy Tickets</Animated.Text>
+				<SubHeader animated style={{ ...animatedTextStyle, color: "black" }}>
+					{title}
+				</SubHeader>
 			</View>
-		</View>
+		</TouchableOpacity>
 	);
 };
 
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
 	container: {
 		right: 10,
 		bottom: 10,
-		width: 100,
+		width: 150,
 		height: 30,
 		position: "absolute"
 		// borderRadius: 10
@@ -104,10 +109,11 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		position: "absolute",
-		right: 10,
+		right: 20,
 		bottom: 10,
 		height: 30,
-		width: 100,
+		// paddingHorizontal: 10,
+		// width: 300,
 		justifyContent: "center",
 		alignItems: "center"
 	}
