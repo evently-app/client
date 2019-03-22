@@ -1133,7 +1133,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-evently/Pods-evently-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-evently/Pods-evently-frameworks.sh",
 				"${PODS_ROOT}/../../node_modules/@mapbox/react-native-mapbox-gl/ios/Mapbox.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1142,7 +1142,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-evently/Pods-evently-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-evently/Pods-evently-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A5966057CB00F3561BE663FC /* [CP] Check Pods Manifest.lock */ = {
@@ -1169,7 +1169,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-evently/Pods-evently-resources.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-evently/Pods-evently-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestore/gRPCCertificates-Firestore.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -1178,7 +1178,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-evently/Pods-evently-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-evently/Pods-evently-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
