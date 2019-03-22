@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import _ from "lodash";
+import { connect } from "react-redux";
+import { Alert } from "react-native";
 
 import Filter from "./Filter";
 import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
+import { LoadQueue } from "../../redux/queue";
 
 const randomColor = () => {
 	let r = Math.round(255 * Math.random());
@@ -46,34 +49,60 @@ const DUMMY_DATA = [
 ];
 
 class Feed extends Component {
+	// constructor(props) {
+	//    	super(props);
+	//    	console.log("PROPS", props.queue)
+
+	// }
+
+	componentWillMount() {
+		this.props
+			.LoadQueue()
+			.then(() => {
+				const { queue } = this.props;
+				let animatedValues = {};
+				queue.forEach(card => {
+					animatedValues[card.id] = new Animated.Value(0);
+				});
+
+				this.setState({ animatedValues });
+
+				Alert.alert("successfully got queue");
+				console.log("MOUNT LOG", this.props);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	}
+
 	state = {
-		count: 1,
+		count: 0,
 		filterOpen: false,
 		dragging: false,
-		queue: [
-			{
-				id: "event1",
-				eventName: "Khalid Summer Tour",
-				tags: ["concert", "pop", "hip/hop"],
-				startTime: "8:00pm",
-				action: "Tickets from $20",
-				startTime: "2019-03-03T22:00:00",
-				endTime: "2019-03-4T05:00:00",
-				imageUrl:
-					"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280%2Cc_limit/Khalid_Shot_01-edit.jpg"
-			}
-			// 		{
-			// 			id: 1,
-			// 			backgroundColor: randomColor()
-			// 		},
-			// 		{
-			// 			id: 0,
-			// 			backgroundColor: randomColor()
-			// }
-		],
+		queue: this.props.queue, //[
+		// 	{
+		// 		id: "event1",
+		// 		eventName: "Khalid Summer Tour",
+		// 		tags: ["concert", "pop", "hip/hop"],
+		// 		startTime: "8:00pm",
+		// 		action: "Tickets from $20",
+		// 		startTime: "2019-03-03T22:00:00",
+		// 		endTime: "2019-03-4T05:00:00",
+		// 		imageUrl:
+		// 			"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280%2Cc_limit/Khalid_Shot_01-edit.jpg"
+		// 	}
+		// 	// 		{
+		// 	// 			id: 1,
+		// 	// 			backgroundColor: randomColor()
+		// 	// 		},
+		// 	// 		{
+		// 	// 			id: 0,
+		// 	// 			backgroundColor: randomColor()
+		// 	// }
+		// ],
 		animatedValues: {
-			event1: new Animated.Value(0),
-			1: new Animated.Value(0)
+			// event1: new Animated.Value(0),
+			// 1: new Animated.Value(0)
 		}
 	};
 
@@ -103,11 +132,12 @@ class Feed extends Component {
 
 	fetchCards = () => {
 		const { count, queue, animatedValues } = this.state;
+		console.log("HEYYYYY^^^^^");
+		console.log(this.state.queue);
 
 		let newCard = this.generateCard();
 
 		// let queue = ;
-		// console.log("queue:", queue);
 		this.setState({
 			count: count + 1,
 			queue: [...queue, newCard].sort((a, b) => b.id - a.id),
@@ -162,8 +192,10 @@ class Feed extends Component {
 
 	render() {
 		// console.log("render");
-		const { queue, animatedValues, filterOpen } = this.state;
-		// console.log(queue);
+		const { animatedValues, filterOpen } = this.state;
+		const queue = this.props.queue;
+		console.log("RENDER QUEUE:", this.props.queue);
+		console.log("Queue: ", queue);
 
 		const first = queue.length - 1;
 		return (
@@ -222,4 +254,17 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Feed;
+const mapStateToProps = state => {
+	return {
+		queue: state.queue.queue
+	};
+};
+
+const mapDispatchToProps = {
+	LoadQueue
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Feed);
