@@ -18,23 +18,12 @@ const SCROLL_INDICATOR_HEIGHT = 20;
 class EventCard extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event(
-		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
-		{
-			useNativeDriver: true
-		}
-	);
+	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
+		useNativeDriver: true
+	});
 
 	render() {
-		const {
-			eventName,
-			tags,
-			startTime,
-			endTime,
-			action,
-			imageUrl,
-			backgroundColor
-		} = this.props;
+		const { eventName, tags, startTime, endTime, action, imageUrl, backgroundColor } = this.props;
 
 		const animatedScrollIndicator = {
 			transform: [
@@ -56,24 +45,20 @@ class EventCard extends Component {
 					bounces={false}
 					onScroll={this.onScroll}
 				>
-					<Image
-						style={[
-							styles.coloredBackground,
-							{ backgroundColor: backgroundColor }
-						]}
-						source={{ uri: imageUrl }}
-					/>
+					{/*<Image
+											style={[
+												styles.coloredBackground,
+												{ backgroundColor: backgroundColor }
+											]}
+											source={{ uri: imageUrl }}
+										/>*/}
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.7]}
 						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0)"]}
 					/>
-					<Header style={{ position: "absolute", top: 10, left: 10 }}>
-						{eventName}
-					</Header>
-					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>
-						{startTime}
-					</SubHeader>
+					<Header style={{ position: "absolute", top: 10, left: 10 }}>{eventName}</Header>
+					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>{startTime}</SubHeader>
 					{!!tags && (
 						<LinearGradient
 							locations={[0, 1]}
@@ -99,9 +84,7 @@ class EventCard extends Component {
 				</Animated.ScrollView>
 				<ActionButton yOffset={this.yOffset} title={action} />
 				<View style={styles.scrollContainer}>
-					<Animated.View
-						style={[styles.scrollIndicator, animatedScrollIndicator]}
-					/>
+					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
 				</View>
 			</View>
 		);

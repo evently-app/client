@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import _ from "lodash";
 import { connect } from "react-redux";
-import { Alert } from "react-native";
+import _ from "lodash";
 
 import Filter from "./Filter";
 import EventCard from "../EventCard";
@@ -65,9 +64,9 @@ class Feed extends Component {
 					animatedValues[card.id] = new Animated.Value(0);
 				});
 
-				this.setState({ animatedValues });
+				this.setState({ animatedValues, loading: false });
 
-				Alert.alert("successfully got queue");
+				// Alert.alert("successfully got queue");
 				console.log("MOUNT LOG", this.props);
 			})
 			.catch(error => {
@@ -76,6 +75,7 @@ class Feed extends Component {
 	}
 
 	state = {
+		loading: true,
 		count: 0,
 		filterOpen: false,
 		dragging: false,
@@ -192,13 +192,14 @@ class Feed extends Component {
 
 	render() {
 		// console.log("render");
-		const { animatedValues, filterOpen } = this.state;
-		const queue = this.props.queue;
+		const { animatedValues, filterOpen, loading } = this.state;
+		const { queue } = this.props;
+		// const queue = this.props.queue;
 		console.log("RENDER QUEUE:", this.props.queue);
 		console.log("Queue: ", queue);
 
 		const first = queue.length - 1;
-		return (
+		const feed = (
 			<View style={styles.container}>
 				<Filter
 					interactableRef={Filter => (this.Filter = Filter)}
@@ -233,6 +234,8 @@ class Feed extends Component {
 				)}
 			</View>
 		);
+
+		return loading ? <View style={styles.container} /> : feed;
 	}
 }
 
