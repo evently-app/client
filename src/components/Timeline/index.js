@@ -12,8 +12,10 @@ import {
 import { Header, SubHeader } from "../universal/Text";
 import EventCardPreview from "./EventCardPreview";
 import { BlurView } from "react-native-blur";
+import { connect } from "react-redux";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../../lib/constants";
+import { LoadTimeline } from "../../redux/timeline";
 import moment from "moment";
 
 const SCROLL_BAR_HEIGHT = SCREEN_HEIGHT - (IS_X ? 180 : 140);
@@ -371,4 +373,19 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Timeline;
+
+const mapStateToProps = state => {
+	return {
+		timeline: state.timeline.timeline
+	};
+};
+
+const mapDispatchToProps = {
+	LoadTimeline
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Timeline);
+
