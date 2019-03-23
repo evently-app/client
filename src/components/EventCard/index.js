@@ -4,6 +4,7 @@ import LinearGradient from "react-native-linear-gradient";
 import MapboxGL from "@mapbox/react-native-mapbox-gl";
 
 import ActionButton from "./ActionButton";
+import Description from "./Description";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
 
 import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
@@ -23,7 +24,16 @@ class EventCard extends Component {
 	});
 
 	render() {
-		const { eventName, tags, startTime, endTime, action, imageUrl, backgroundColor } = this.props;
+		const {
+			eventName,
+			tags,
+			startTime,
+			endTime,
+			action,
+			description,
+			imageUrl,
+			backgroundColor
+		} = this.props;
 
 		const animatedScrollIndicator = {
 			transform: [
@@ -80,6 +90,7 @@ class EventCard extends Component {
 						showUserLocation={true}
 						zoomLevel={12}
 					/>
+					<Description description={description} />
 					<View style={{ height: SCREEN_HEIGHT }} />
 				</Animated.ScrollView>
 				<ActionButton yOffset={this.yOffset} title={action} />
