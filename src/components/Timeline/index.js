@@ -12,8 +12,10 @@ import {
 import { Header, SubHeader } from "../universal/Text";
 import EventCardPreview from "./EventCardPreview";
 import { BlurView } from "react-native-blur";
+import { connect } from "react-redux";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../../lib/constants";
+import { LoadTimeline } from "../../redux/timeline";
 import moment from "moment";
 
 const SCROLL_BAR_HEIGHT = SCREEN_HEIGHT - (IS_X ? 180 : 140);
@@ -56,8 +58,7 @@ const DUMMY_DATA = [
 		startTime: "2019-03-04T22:00:00",
 		endTime: "2019-03-5T05:00:00",
 		action: "Add to Calendar",
-		imageUrl:
-			"http://assets.saatchiart.com/saatchi/882784/art/3164475/2234366-ECTUFHAI-8.jpg"
+		imageUrl: "http://assets.saatchiart.com/saatchi/882784/art/3164475/2234366-ECTUFHAI-8.jpg"
 	},
 	{
 		id: "event1",
@@ -75,8 +76,7 @@ const DUMMY_DATA = [
 		startTime: "2019-03-04T22:00:00",
 		endTime: "2019-03-5T05:00:00",
 		action: "Add to Calendar",
-		imageUrl:
-			"http://assets.saatchiart.com/saatchi/882784/art/3164475/2234366-ECTUFHAI-8.jpg"
+		imageUrl: "http://assets.saatchiart.com/saatchi/882784/art/3164475/2234366-ECTUFHAI-8.jpg"
 	},
 	{
 		id: "event1",
@@ -94,8 +94,7 @@ const DUMMY_DATA = [
 		startTime: "2019-03-04T22:00:00",
 		endTime: "2019-03-5T05:00:00",
 		action: "Add to Calendar",
-		imageUrl:
-			"http://assets.saatchiart.com/saatchi/882784/art/3164475/2234366-ECTUFHAI-8.jpg"
+		imageUrl: "http://assets.saatchiart.com/saatchi/882784/art/3164475/2234366-ECTUFHAI-8.jpg"
 	},
 	{
 		id: "event3",
@@ -154,12 +153,9 @@ const SECTION_LIST_HEIGHT =
 class Timeline extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event(
-		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
-		{
-			useNativeDriver: true
-		}
-	);
+	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
+		useNativeDriver: true
+	});
 
 	shouldComponentUpdate(nextProps, nextState) {
 		return false;
@@ -176,12 +172,7 @@ class Timeline extends Component {
 				const scrollTopDifference = IS_X ? 80 : 60;
 				const scrollPosition = y0 - scrollTopDifference + dy;
 				let scrollPercentage = scrollPosition / SCROLL_BAR_HEIGHT;
-				scrollPercentage =
-					scrollPercentage > 0
-						? scrollPercentage < 1
-							? scrollPercentage
-							: 1
-						: 0;
+				scrollPercentage = scrollPercentage > 0 ? (scrollPercentage < 1 ? scrollPercentage : 1) : 0;
 				this.yOffset.setValue(scrollPercentage * SECTION_LIST_HEIGHT);
 				// this.Timeline.getNode().scrollTo({
 				// 	y: scrollPercentage * SECTION_LIST_HEIGHT,
@@ -295,11 +286,7 @@ class Timeline extends Component {
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}
-								date={
-									["Past", "Later"].includes(section.title)
-										? formatDay(startDate)
-										: null
-								}
+								date={["Past", "Later"].includes(section.title) ? formatDay(startDate) : null}
 								action={section.title != "Past" ? item.action : null}
 								onAction={() => {
 									Alert.alert(`action for ${item.id}`);
@@ -371,4 +358,18 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Timeline;
+const mapStateToProps = state => {
+	console.log("timeline: ", state);
+	return {
+		timeline: state.timeline.timeline
+	};
+};
+
+const mapDispatchToProps = {
+	LoadTimeline
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Timeline);

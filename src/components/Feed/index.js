@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 import _ from "lodash";
 
 import Filter from "./Filter";
@@ -7,6 +8,7 @@ import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
+import { LoadQueue } from "../../redux/queue";
 
 const randomColor = () => {
 	let r = Math.round(255 * Math.random());
@@ -46,35 +48,61 @@ const DUMMY_DATA = [
 ];
 
 class Feed extends Component {
+	// constructor(props) {
+	//    	super(props);
+	//    	console.log("PROPS", props.queue)
+
+	// }
+
+	componentWillMount() {
+		this.props
+			.LoadQueue()
+			.then(() => {
+				const { queue } = this.props;
+				let animatedValues = {};
+				queue.forEach(card => {
+					animatedValues[card.id] = new Animated.Value(0);
+				});
+
+				this.setState({ animatedValues, loading: false });
+
+				// Alert.alert("successfully got queue");
+				console.log("MOUNT LOG", this.props);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	}
+
 	state = {
-		count: 1,
+		loading: true,
+		count: 0,
 		filterOpen: false,
 		dragging: false,
-		queue: [
-			{
-				id: "event1",
-				eventName: "Khalid Summer Tour",
-				tags: ["concert", "pop", "hip/hop"],
-				startTime: "8:00pm",
-				action: "Tickets from $20",
-				description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-				startTime: "2019-03-03T22:00:00",
-				endTime: "2019-03-4T05:00:00",
-				imageUrl:
-					"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280%2Cc_limit/Khalid_Shot_01-edit.jpg"
-			}
-			// 		{
-			// 			id: 1,
-			// 			backgroundColor: randomColor()
-			// 		},
-			// 		{
-			// 			id: 0,
-			// 			backgroundColor: randomColor()
-			// }
-		],
+		queue: this.props.queue, //[
+		// 	{
+		// 		id: "event1",
+		// 		eventName: "Khalid Summer Tour",
+		// 		tags: ["concert", "pop", "hip/hop"],
+		// 		startTime: "8:00pm",
+		// 		action: "Tickets from $20",
+		// 		startTime: "2019-03-03T22:00:00",
+		// 		endTime: "2019-03-4T05:00:00",
+		// 		imageUrl:
+		// 			"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280%2Cc_limit/Khalid_Shot_01-edit.jpg"
+		// 	}
+		// 	// 		{
+		// 	// 			id: 1,
+		// 	// 			backgroundColor: randomColor()
+		// 	// 		},
+		// 	// 		{
+		// 	// 			id: 0,
+		// 	// 			backgroundColor: randomColor()
+		// 	// }
+		// ],
 		animatedValues: {
-			event1: new Animated.Value(0),
-			1: new Animated.Value(0)
+			// event1: new Animated.Value(0),
+			// 1: new Animated.Value(0)
 		}
 	};
 
@@ -104,11 +132,12 @@ class Feed extends Component {
 
 	fetchCards = () => {
 		const { count, queue, animatedValues } = this.state;
+		console.log("HEYYYYY^^^^^");
+		console.log(this.state.queue);
 
 		let newCard = this.generateCard();
 
 		// let queue = ;
-		// console.log("queue:", queue);
 		this.setState({
 			count: count + 1,
 			queue: [...queue, newCard].sort((a, b) => b.id - a.id),
@@ -163,11 +192,14 @@ class Feed extends Component {
 
 	render() {
 		// console.log("render");
-		const { queue, animatedValues, filterOpen } = this.state;
-		// console.log(queue);
+		const { animatedValues, filterOpen, loading } = this.state;
+		const { queue } = this.props;
+		// const queue = this.props.queue;
+		console.log("RENDER QUEUE:", this.props.queue);
+		console.log("Queue: ", queue);
 
 		const first = queue.length - 1;
-		return (
+		const feed = (
 			<View style={styles.container}>
 				<Filter
 					interactableRef={Filter => (this.Filter = Filter)}
@@ -202,6 +234,8 @@ class Feed extends Component {
 				)}
 			</View>
 		);
+
+		return loading ? <View style={styles.container} /> : feed;
 	}
 }
 
@@ -223,4 +257,17 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Feed;
+const mapStateToProps = state => {
+	return {
+		queue: state.queue.queue
+	};
+};
+
+const mapDispatchToProps = {
+	LoadQueue
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Feed);
