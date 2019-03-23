@@ -5,10 +5,5 @@ export const colors = {
 	lightgray: "#D3D6DA"
 };
 
-// fonts object
-export const fonts = {
-	descriptions: "Helvetica Neue",
-};
-
 // default styles
 export const defaults = {};
