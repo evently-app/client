@@ -140,6 +140,15 @@ class Timeline extends Component {
 
 			onPanResponderRelease: (e, { vx, vy }) => {}
 		});
+
+		this.props
+			.LoadTimeline()
+			.then(() => {
+				console.log("timeline synced");
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 
 	render() {
@@ -200,12 +209,14 @@ class Timeline extends Component {
 					sections={sections}
 					keyExtractor={(item, index) => item + index}
 				/>
-				<View style={styles.scrollContainer}>
-					<Animated.View
-						{...this._panResponder.panHandlers}
-						style={[styles.scrollIndicator, animatedScrollIndicator]}
-					/>
-				</View>
+				{SECTION_LIST_HEIGHT != 0 && (
+					<View style={styles.scrollContainer}>
+						<Animated.View
+							{...this._panResponder.panHandlers}
+							style={[styles.scrollIndicator, animatedScrollIndicator]}
+						/>
+					</View>
+				)}
 			</View>
 		);
 	}
