@@ -76,10 +76,13 @@ const ActionButton = ({ title, url, yOffset }) => {
 			}
 		]
 	};
+	console.log(url)
 
 	return (
 		<TouchableOpacity activeOpacity={0.9} 
-			onPress={() => {Linking.openURL(url);}}>
+			onPress={() => {
+				Linking.openURL(url)
+			}}>
 			<Animated.View style={[styles.container, animatedStyle]}>
 				<BlurView blurType="xlight" style={styles.fill} />
 			</Animated.View>
