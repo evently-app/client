@@ -62,11 +62,15 @@ export const WatchTimeline = (userId, successCallback, errorCallback) => {
 	// watches events that should be in users timeline, returns listenerr
 	return firestore
 		.collection("users")
-		.doc(uid)
+		.doc(userId)
 		.collection("timeline")
 		.onSnapshot(
 			snap => {
-				successCallback(snap.docs);
+				let results = [];
+				for (let i = 0; i < snap.docs.length; i++) {
+					results.push(snap.docs[i].data());
+				}
+				successCallback(results);
 			},
 			error => {
 				errorCallback(error);

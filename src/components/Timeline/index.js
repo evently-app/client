@@ -7,6 +7,7 @@ import {
 	PanResponder,
 	Text,
 	Animated,
+	Linking,
 	Alert
 } from "react-native";
 import { Header, SubHeader } from "../universal/Text";
@@ -193,10 +194,12 @@ class Timeline extends Component {
 								}
 								action={section.title != "Past" ? item.action : null}
 								onAction={() => {
-									Alert.alert(`action for ${item.id}`);
+									// Alert.alert(`action for ${item.id}`);
 								}}
 								onPress={() => {
-									Alert.alert(`view ${item.id}`);
+									if (item.ticketUrl) {
+										Linking.openURL(item.ticketUrl);
+									}
 								}}
 							/>
 						);
