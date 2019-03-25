@@ -15,7 +15,7 @@ import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 import { LoadQueue } from "../../redux/queue";
-import { SwipeRight } from "../../redux/timeline";
+import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
@@ -198,7 +198,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
 	LoadQueue,
-	SwipeRight
+	SwipeRight,
+	SwipeLeft
 };
 
 export default connect(

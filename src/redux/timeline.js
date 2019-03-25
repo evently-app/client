@@ -1,7 +1,7 @@
 // redux module for timeline
 import axios from "axios";
 import { pop } from "./queue";
-import { RegisterSwipeRight, WatchTimeline } from "../api";
+import { RegisterSwipeRight, RegisterSwipeLeft, WatchTimeline } from "../api";
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
