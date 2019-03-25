@@ -85,7 +85,7 @@ function compileSections(data) {
 	let SECTION_LIST_HEIGHT =
 		sections.length * SECTION_HEADER_HEIGHT +
 		CARD_HEIGHT * data.length -
-		(SCREEN_HEIGHT - (IS_X ? 140 : 120));
+		(SCREEN_HEIGHT - (IS_X ? 120 : 100));
 
 	if (SECTION_LIST_HEIGHT < 0) SECTION_LIST_HEIGHT = 0;
 
