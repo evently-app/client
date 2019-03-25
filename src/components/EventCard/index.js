@@ -86,7 +86,7 @@ class EventCard extends Component {
 					/>
 					<View style={{ height: SCREEN_HEIGHT }} />
 				</Animated.ScrollView>
-				<ActionButton yOffset={this.yOffset} title="Purchase Tickets" link={ticketUrl} />
+				<ActionButton yOffset={this.yOffset} title="Purchase Tickets" url={ticketUrl} />
 				<View style={styles.scrollContainer}>
 					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
 				</View>

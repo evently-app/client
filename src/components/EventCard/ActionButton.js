@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Animated, StyleSheet, View, TouchableOpacity, Linking } from "react-native";
 
 import { BlurView } from "react-native-blur";
 
@@ -11,6 +11,7 @@ import { Header, SubHeader, Paragraph } from "../universal/Text";
 const INITIAL_WIDTH = 100;
 
 const ActionButton = ({ title, url, yOffset }) => {
+	console.log("URL IS: ", url)
 	const inputRange = [0, 50, 110, 150];
 
 	const animatedStyle = {
@@ -77,12 +78,12 @@ const ActionButton = ({ title, url, yOffset }) => {
 	};
 
 	return (
-		<TouchableOpacity activeOpacity={0.9} onPress={() => console.log("pressed")}>
+		<TouchableOpacity activeOpacity={0.9} onPress={Linking.openURL(url)}>
 			<Animated.View style={[styles.container, animatedStyle]}>
 				<BlurView blurType="xlight" style={styles.fill} />
 			</Animated.View>
 
-			<View href={url} style={styles.text}>
+			<View style={styles.text}>
 				<SubHeader animated style={{ ...animatedTextStyle, color: "black" }}>
 					{title}
 				</SubHeader>
