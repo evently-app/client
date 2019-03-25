@@ -15,14 +15,63 @@ export const WatchEvent = (eventId, successCallback, errorCallback) => {
 	// return firestore.collection("users").doc(uid).onSnapshot(doc => {}, error => {})
 };
 
-export const RegisterSwipe = (userId, eventId, swipedRight) => {
+export const RegisterSwipeRight = (userId, eventId, eventData) => {
 	// registers a users swipe
-	// returns promise
+	return new Promise((resolve, reject) => {
+		// add event to timeline
+		firestore
+			.collection("users")
+			.doc(userId)
+			.collection("timeline")
+			.doc(eventId)
+			.set(eventData)
+			.then(() => {
+				// register explicit swipe
+				firestore
+					.collection("swipes")
+					.add({
+						user: userId,
+						event: eventId,
+						match: true
+					})
+					.then(() => resolve())
+					.catch(error => reject(error));
+			})
+			.catch(error => reject(error));
+	});
 };
 
-export const WatchTimeline = userId => {
+export const RegisterSwipeLeft = (userId, eventId, eventData) => {
+	// registers a users swipe
+	return new Promise((resolve, reject) => {
+		// add event to timeline
+		// register explicit swipe
+		firestore
+			.collection("swipes")
+			.add({
+				user: userId,
+				event: eventId,
+				match: true
+			})
+			.then(() => resolve())
+			.catch(error => reject(error));
+	});
+};
+
+export const WatchTimeline = (userId, successCallback, errorCallback) => {
 	// watches events that should be in users timeline, returns listenerr
-	// return firestore.collection("users").doc(uid).collection("timeline").onSnapshot(doc => {}, error => {})
+	return firestore
+		.collection("users")
+		.doc(uid)
+		.collection("timeline")
+		.onSnapshot(
+			snap => {
+				successCallback(snap.docs);
+			},
+			error => {
+				errorCallback(error);
+			}
+		);
 };
 
 export const PullCalendarInfo = (startTime, endTime) => {

@@ -1,5 +1,7 @@
 // redux module for timeline
 import axios from "axios";
+import { pop } from "./queue";
+import { RegisterSwipeRight, WatchTimeline } from "../api";
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
@@ -49,9 +51,8 @@ export default (state = initialState, action) => {
 			};
 
 		case PUSH:
-			// push item onto timeline, when right swipe on queue card 
-			const newTimeline = state.timeline;
-			newTimeline.push();
+			// push item onto timeline, when right swipe on queue card
+			const newTimeline = [...state.timeline, action.event];
 			return {
 				...state,
 				timeline: newTimeline
@@ -90,8 +91,55 @@ export const resetTimeline = () => {
 	};
 };
 
+export const push = event => {
+	return {
+		type: PUSH,
+		event
+	};
+};
 
 // complex functions which dispatch multiple action and can be asynchronous
+
+export const SwipeRight = event => {
+	return (dispatch, getState) => {
+		return new Promise((resolve, reject) => {
+			// move from redux queue to timeline
+			dispatch(pop());
+			dispatch(push(event));
+
+			const state = getState();
+
+			let eventData = event;
+			const eventId = event.id;
+			delete eventData.id;
+
+			// add to firebase
+			RegisterSwipeRight(state.user.uid, eventId, eventData)
+				.then(() => resolve())
+				.catch(error => reject(error));
+		});
+	};
+};
+
+export const SwipeLeft = event => {
+	return (dispatch, getState) => {
+		return new Promise((resolve, reject) => {
+			// remove from redux queue
+			dispatch(pop());
+
+			const state = getState();
+
+			let eventData = event;
+			const eventId = event.id;
+			delete eventData.id;
+
+			// add to firebase
+			RegisterSwipeLeft(state.user.uid, eventId, eventData)
+				.then(() => resolve())
+				.catch(error => reject(error));
+		});
+	};
+};
 
 export const LoadTimeline = () => {
 	return (dispatch, getState) => {
@@ -99,10 +147,17 @@ export const LoadTimeline = () => {
 			dispatch(loadTimelineInit());
 
 			const state = getState();
-			const postData = {
-				uid: state.user.uid
-			};
-			
+			const uid = state.user.uid;
+
+			WatchTimeline(
+				uid,
+				data => {
+					dispatch(loadTimelineSuccess(data));
+				},
+				error => {
+					dispatch(loadTimelineFailure(error));
+				}
+			);
 		});
 	};
 };

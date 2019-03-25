@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+	Animated,
+	View,
+	Text,
+	TouchableOpacity,
+	StyleSheet
+} from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -9,6 +15,7 @@ import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 import { LoadQueue } from "../../redux/queue";
+import { SwipeRight } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
@@ -78,11 +85,13 @@ class Feed extends Component {
 
 	onSwipeCardRight = card => {
 		this.popCard(card);
+		this.props.SwipeRight(card);
 		// this.fetchCards();
 	};
 
 	onSwipeCardLeft = card => {
 		this.popCard(card);
+		this.props.SwipeLeft(card);
 		// this.fetchCards();
 	};
 
@@ -91,7 +100,9 @@ class Feed extends Component {
 	};
 
 	closeFilter = () => {
-		this.setState({ filterOpen: false }, () => this.Filter.snapTo({ index: 0 }));
+		this.setState({ filterOpen: false }, () =>
+			this.Filter.snapTo({ index: 0 })
+		);
 	};
 
 	onDrag = event => {
@@ -186,7 +197,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-	LoadQueue
+	LoadQueue,
+	SwipeRight
 };
 
 export default connect(
