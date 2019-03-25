@@ -82,7 +82,7 @@ const ActionButton = ({ title, url, yOffset }) => {
 				<BlurView blurType="xlight" style={styles.fill} />
 			</Animated.View>
 
-			<View style={styles.text}>
+			<View href={url} style={styles.text}>
 				<SubHeader animated style={{ ...animatedTextStyle, color: "black" }}>
 					{title}
 				</SubHeader>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		position: "absolute",
-		right: 20,
+		right: 25,
 		bottom: 10,
 		height: 30,
 		// paddingHorizontal: 10,
