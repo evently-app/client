@@ -80,7 +80,7 @@ const ActionButton = ({ title, url, yOffset }) => {
 
 	return (
 		<TouchableOpacity activeOpacity={0.9} 
-			onPress={() => {
+			onPressIn={() => {
 				Linking.openURL(url)
 			}}>
 			<Animated.View style={[styles.container, animatedStyle]}>
