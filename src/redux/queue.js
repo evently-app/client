@@ -10,7 +10,7 @@ const initialState = {
 	queue: []
 };
 
-var coordinates = null
+var coordinates = null;
 
 // define actions against state
 const RESET_QUEUE = "evently/queue/RESET_QUEUE";
@@ -35,7 +35,7 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
-			console.log("action data", action.data)
+			// console.log("action data", action.data)
 			return {
 				...state,
 				isLoadingQueue: false,
@@ -50,10 +50,9 @@ export default (state = initialState, action) => {
 				errorLoadingQueue: action.error
 			};
 
-//this is mutating -- not good! need to return entirely new object 
 		case POP:
 			// pop item off queue
-			const newQueue = state.queue;
+			let newQueue = state.queue;
 			if (newQueue.length > 0) {
 				newQueue.pop();
 			}
@@ -92,9 +91,15 @@ export const loadQueueFailure = error => {
 export const resetQueue = () => {
 	return {
 		type: RESET_QUEUE
-	};w
+	};
+	w;
 };
 
+export const pop = () => {
+	return {
+		type: POP
+	};
+};
 
 // complex functions which dispatch multiple action and can be asynchronous
 
@@ -108,29 +113,36 @@ export const LoadQueue = () => {
 				uid: state.user.uid
 			};
 
-			//get user location and grab events 
+			//get user location and grab events
 			navigator.geolocation.getCurrentPosition(
-			  (position) => {
-		      	coordinates = (String(position.coords.latitude) + "/" + String(position.coords.longitude))
-		      	console.log(coordinates)
-			  	const request = "http://event-queue-service.herokuapp.com/grab_events/" + coordinates + "/1000km"
-			  	console.log(request)
+				position => {
+					coordinates =
+						String(position.coords.latitude) +
+						"/" +
+						String(position.coords.longitude);
+					console.log(coordinates);
+					const request =
+						"http://event-queue-service.herokuapp.com/grab_events/" +
+						coordinates +
+						"/1000km";
+					console.log(request);
 
-			  	axios
-				.get(request)
-				.then(response => {
-					dispatch(loadQueueSuccess(response.data));
-					resolve();
-				})
-				.catch(error => {
-					dispatch(loadQueueFailure(error));
-					reject(error);
-				});
-			  },
-			  (error) => {result =  error},
-			  { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+					axios
+						.get(request)
+						.then(response => {
+							dispatch(loadQueueSuccess(response.data));
+							resolve();
+						})
+						.catch(error => {
+							dispatch(loadQueueFailure(error));
+							reject(error);
+						});
+				},
+				error => {
+					result = error;
+				},
+				{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
 			);
-			
 		});
 	};
 };

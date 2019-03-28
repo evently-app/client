@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Animated, View, Image, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import MapboxGL from "@mapbox/react-native-mapbox-gl";
+import moment from "moment";
 
 import ActionButton from "./ActionButton";
 import Description from "./Description";
@@ -15,6 +16,11 @@ const SCROLL_BAR_WIDTH = 5;
 const SCROLL_INDICATOR_HEIGHT = 20;
 
 // const EventCard = () => {
+
+// takes date object returns readable day
+function formatDay(date) {
+	return moment(date).format("ddd MMMM Do h:mm a");
+}
 
 class EventCard extends Component {
 	yOffset = new Animated.Value(0);
@@ -30,9 +36,9 @@ class EventCard extends Component {
 			startTime,
 			endTime,
 			action,
-			description,
 			imageUrl,
-			backgroundColor
+			backgroundColor,
+			ticketUrl
 		} = this.props;
 
 		const animatedScrollIndicator = {
@@ -65,7 +71,9 @@ class EventCard extends Component {
 						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0)"]}
 					/>
 					<Header style={{ position: "absolute", top: 10, left: 10 }}>{eventName}</Header>
-					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>{startTime}</SubHeader>
+					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>
+						{formatDay(startTime)}
+					</SubHeader>
 					{!!tags && (
 						<LinearGradient
 							locations={[0, 1]}
@@ -90,7 +98,7 @@ class EventCard extends Component {
 					<Description description={description} />
 					<View style={{ height: SCREEN_HEIGHT }} />
 				</Animated.ScrollView>
-				<ActionButton yOffset={this.yOffset} title={action} />
+				<ActionButton yOffset={this.yOffset} title="Purchase Tickets" url={ticketUrl} />
 				<View style={styles.scrollContainer}>
 					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
 				</View>
