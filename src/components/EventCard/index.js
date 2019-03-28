@@ -90,7 +90,7 @@ class EventCard extends Component {
 					)}
 					<MapboxGL.MapView
 						logoEnabled={false}
-						style={{ height: 200, backgroundColor: "white" }}
+						style={styles.map}
 						userTrackingMode={MapboxGL.UserTrackingModes.Follow}
 						styleURL={MapboxGL.StyleURL.Light}
 						showUserLocation={true}
@@ -159,6 +159,10 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.purple,
 		overflow: "hidden",
 		fontWeight: "bold"
+	},
+	map: {
+		height: 200,
+		backgroundColor: "white"
 	}
 });
 
