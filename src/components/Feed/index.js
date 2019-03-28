@@ -173,7 +173,7 @@ class Feed extends Component {
 	};
 
 	onDrag = event => {
-		// this.setState({ dragging: !this.state.dragging });
+		this.setState({ dragging: !this.state.dragging });
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {

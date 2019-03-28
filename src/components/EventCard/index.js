@@ -55,13 +55,10 @@ class EventCard extends Component {
 					bounces={false}
 					onScroll={this.onScroll}
 				>
-					{/*<Image
-											style={[
-												styles.coloredBackground,
-												{ backgroundColor: backgroundColor }
-											]}
-											source={{ uri: imageUrl }}
-										/>*/}
+					<Image
+						style={[styles.coloredBackground, { backgroundColor: backgroundColor }]}
+						source={{ uri: imageUrl }}
+					/>
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.7]}
