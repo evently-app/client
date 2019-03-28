@@ -38,7 +38,8 @@ class EventCard extends Component {
 			action,
 			imageUrl,
 			backgroundColor,
-			ticketUrl
+			ticketUrl,
+			description
 		} = this.props;
 
 		const animatedScrollIndicator = {
