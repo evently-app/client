@@ -135,8 +135,8 @@ class App extends Component {
         <View style={styles.tabBarContainer}>
           <LinearGradient
             style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 100 }}
-            locations={[0, 0.9]}
-            colors={["rgba(21,2,24,0.1)", "rgba(21,2,24,0.95)"]}
+            locations={[0, 0.8, 1]}
+            colors={["rgba(21,2,24,0)", "rgba(21,2,24,0.95)", "rgba(21,2,24,1)"]}
           />
           <TouchableScale
             style={styles.tabBarButton}
