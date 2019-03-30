@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-	Animated,
-	View,
-	Text,
-	TouchableOpacity,
-	StyleSheet
-} from "react-native";
+import { Animated, View, TouchableOpacity, StyleSheet } from "react-native";
 
 import Interactable from "react-native-interactable";
 
@@ -73,11 +67,7 @@ const Filter = ({ filterDrag, onPress, onDrag, onSnap, interactableRef }) => {
 	};
 
 	return (
-		<TouchableOpacity
-			activeOpacity={1}
-			style={styles.container}
-			onPress={onPress}
-		>
+		<TouchableOpacity activeOpacity={1} style={styles.container} onPress={onPress}>
 			<Interactable.View
 				animatedNativeDriver
 				verticalOnly

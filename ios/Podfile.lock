@@ -114,6 +114,10 @@ PODS:
   - gRPC-Core/Interface (1.14.0)
   - GTMSessionFetcher/Core (1.2.1)
   - leveldb-library (1.20)
+  - lottie-ios (2.5.0)
+  - lottie-react-native (2.6.1):
+    - lottie-ios (~> 2.5.0)
+    - React
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -194,6 +198,8 @@ DEPENDENCIES:
   - Firebase/Messaging (~> 5.15.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - lottie-ios (from `../node_modules/lottie-ios`)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - react-native-blur (from `../node_modules/react-native-blur`)
   - react-native-haptic-feedback (from `../node_modules/react-native-haptic-feedback`)
   - "react-native-mapbox-gl (from `../node_modules/@mapbox/react-native-mapbox-gl`)"
@@ -244,6 +250,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  lottie-ios:
+    :path: "../node_modules/lottie-ios"
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   React:
     :path: "../node_modules/react-native"
   react-native-blur:
@@ -279,6 +289,8 @@ SPEC CHECKSUMS:
   gRPC-Core: f4836515817c0eb479aeeb9cc27c91c4ba62a9f6
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  lottie-ios: d699fdee68d7b63e721d949388b015fef1aaa4ac
+  lottie-react-native: 3d8181d43619b1fe804c828bd5a09d20fe8bdea7
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   React: 9d063e2f356c8cd2f54dd550d4507740037cbabe
@@ -288,6 +300,6 @@ SPEC CHECKSUMS:
   RNSVG: 6fec2b50e65b4a01ba54155e8e546e0a1eeb16f4
   yoga: 3768a3026ade0fb46a68f3a31a917cf86bc34fc4
 
-PODFILE CHECKSUM: 4027b8ab6b50094c7d7a5d5f1e3fa2c8db955d6e
+PODFILE CHECKSUM: 51bf0b1e3839b6b20a2d073794285d7c8dd5362b
 
 COCOAPODS: 1.6.1

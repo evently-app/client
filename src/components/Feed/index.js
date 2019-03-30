@@ -3,6 +3,7 @@ import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native
 import { connect } from "react-redux";
 import _ from "lodash";
 
+import Spinner from "../universal/Spinner";
 import Filter from "./Filter";
 import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
@@ -17,12 +18,11 @@ class Feed extends Component {
 		count: 0,
 		filterOpen: false,
 		dragging: false,
-		animatedValues: {
-			// event1: new Animated.Value(0),
-			// 1: new Animated.Value(0)
-		},
+		animatedValues: {},
 		userLocation: {}
 	};
+
+	filterDrag = new Animated.Value(0);
 
 	componentWillMount() {
 		navigator.geolocation.getCurrentPosition(
@@ -52,7 +52,6 @@ class Feed extends Component {
 			});
 	}
 
-	filterDrag = new Animated.Value(0);
 	// swipeAmount = new Animated.Value(0);
 
 	componentDidMount() {}
@@ -127,12 +126,8 @@ class Feed extends Component {
 	};
 
 	render() {
-		// console.log("render");
 		const { animatedValues, filterOpen, loading, userLocation } = this.state;
 		const { queue } = this.props;
-		// const queue = this.props.queue;
-		console.log("RENDER QUEUE:", this.props.queue);
-		console.log("Queue: ", queue);
 
 		const first = queue.length - 1;
 		const feed = (
@@ -149,10 +144,7 @@ class Feed extends Component {
 						key={card.id}
 						id={card.id}
 						index={queue.length - i}
-						// firstCard={i == firstCardIndex}
-						// secondCard={i == firstCardIndex - 1}
 						filterDrag={this.filterDrag}
-						// swipeAmount={this.swipeAmount}
 						swipeAmount={animatedValues[card.id]}
 						scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
 						onStartSwipe={this.handleOnStartSwipe}
@@ -172,7 +164,13 @@ class Feed extends Component {
 			</View>
 		);
 
-		return loading ? <View style={styles.container} /> : feed;
+		const spinner = (
+			<View style={styles.container}>
+				<Spinner />
+			</View>
+		);
+
+		return loading ? spinner : feed;
 	}
 }
 
