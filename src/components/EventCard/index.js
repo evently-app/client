@@ -38,9 +38,13 @@ class EventCard extends Component {
 			action,
 			imageUrl,
 			backgroundColor,
+			latitude,
+			longitude,
 			ticketUrl,
 			description
 		} = this.props;
+
+		console.log(this.props);
 
 		const animatedScrollIndicator = {
 			transform: [
@@ -68,8 +72,8 @@ class EventCard extends Component {
 					/>
 					<LinearGradient
 						style={styles.gradient}
-						locations={[0, 0.7]}
-						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0)"]}
+						locations={[0, 0.1]}
+						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0.1)"]}
 					/>
 					<Header style={{ position: "absolute", top: 10, left: 10 }}>{eventName}</Header>
 					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>
@@ -82,7 +86,7 @@ class EventCard extends Component {
 							style={styles.tags}
 						>
 							{tags.map((tag, i) => (
-								<Paragraph bold key={tag} style={styles.tag}>
+								<Paragraph bold key={i} style={styles.tag}>
 									{tag}
 								</Paragraph>
 							))}
@@ -92,10 +96,12 @@ class EventCard extends Component {
 						logoEnabled={false}
 						style={styles.map}
 						userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-						styleURL={MapboxGL.StyleURL.Light}
+						styleURL={MapboxGL.StyleURL.Dark}
 						showUserLocation={true}
 						zoomLevel={12}
-					/>
+					>
+						<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} />
+					</MapboxGL.MapView>
 					<Description description={description} />
 					<View style={{ height: SCREEN_HEIGHT }} />
 				</Animated.ScrollView>

@@ -11,7 +11,7 @@ import { Header, SubHeader, Paragraph } from "../universal/Text";
 const INITIAL_WIDTH = 100;
 
 const ActionButton = ({ title, url, yOffset }) => {
-	console.log("URL IS: ", url)
+	console.log("URL IS: ", url);
 	const inputRange = [0, 50, 110, 150];
 
 	const animatedStyle = {
@@ -76,13 +76,15 @@ const ActionButton = ({ title, url, yOffset }) => {
 			}
 		]
 	};
-	console.log(url)
+	// console.log(url);
 
 	return (
-		<TouchableOpacity activeOpacity={0.9} 
+		<TouchableOpacity
+			activeOpacity={0.9}
 			onPressIn={() => {
-				Linking.openURL(url)
-			}}>
+				Linking.openURL(url);
+			}}
+		>
 			<Animated.View style={[styles.container, animatedStyle]}>
 				<BlurView blurType="xlight" style={styles.fill} />
 			</Animated.View>
@@ -107,6 +109,7 @@ const styles = StyleSheet.create({
 	},
 	fill: {
 		position: "absolute",
+		// backgroundColor: "rgba(255,255,255,0.5)",
 		top: 0,
 		bottom: 0,
 		left: 0,

@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-	Animated,
-	View,
-	Text,
-	TouchableOpacity,
-	StyleSheet
-} from "react-native";
+import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -100,13 +94,11 @@ class Feed extends Component {
 	};
 
 	closeFilter = () => {
-		this.setState({ filterOpen: false }, () =>
-			this.Filter.snapTo({ index: 0 })
-		);
+		this.setState({ filterOpen: false }, () => this.Filter.snapTo({ index: 0 }));
 	};
 
 	onDrag = event => {
-		this.setState({ dragging: !this.state.dragging });
+		// this.setState({ dragging: !this.state.dragging });
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
