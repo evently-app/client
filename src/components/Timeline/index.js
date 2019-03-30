@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
 	sectionList: {
 		overflow: "hidden",
 		marginTop: IS_X ? 30 : 10
-		// marginBottom: IS_X ? 22 : 70
+		// marginBottom: IS_X ? 90 : 70
 	},
 	sectionHeader: {
 		width: SCREEN_WIDTH,

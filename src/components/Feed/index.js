@@ -148,7 +148,7 @@ class Feed extends Component {
 					<Swipeable
 						key={card.id}
 						id={card.id}
-						index={i}
+						index={queue.length - i}
 						// firstCard={i == firstCardIndex}
 						// secondCard={i == firstCardIndex - 1}
 						filterDrag={this.filterDrag}

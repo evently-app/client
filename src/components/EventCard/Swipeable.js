@@ -117,8 +117,9 @@ class Swipeable extends Component {
 		);
 
 		// return firstCard || secondCard ? swipeable : null;
-		// return index < 3 ? swipeable : null;
-		return swipeable;
+		return index <= 3 ? swipeable : null;
+		// console.log(index);
+		// return swipeable;
 	}
 }
 
