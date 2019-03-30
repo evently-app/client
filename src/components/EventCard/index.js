@@ -29,6 +29,19 @@ class EventCard extends Component {
 		useNativeDriver: true
 	});
 
+	componentDidMount() {
+		const { latitude, longitude, userLocation } = this.props;
+		setTimeout(
+			() =>
+				this.map.fitBounds(
+					[+longitude, +latitude],
+					[userLocation.longitude, userLocation.latitude],
+					5
+				),
+			100
+		);
+	}
+
 	render() {
 		const {
 			eventName,
@@ -38,6 +51,8 @@ class EventCard extends Component {
 			action,
 			imageUrl,
 			backgroundColor,
+			latitude,
+			longitude,
 			ticketUrl,
 			description
 		} = this.props;
@@ -62,19 +77,16 @@ class EventCard extends Component {
 					bounces={false}
 					onScroll={this.onScroll}
 				>
-					<Image
-						style={[styles.coloredBackground, { backgroundColor: backgroundColor }]}
-						source={{ uri: imageUrl }}
-					/>
+					<Image style={styles.image} source={{ uri: imageUrl }} />
 					<LinearGradient
 						style={styles.gradient}
-						locations={[0, 0.7]}
-						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0)"]}
+						locations={[0, 0.1]}
+						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0.1)"]}
 					/>
-					<Header style={{ position: "absolute", top: 10, left: 10 }}>{eventName}</Header>
-					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>
-						{formatDay(startTime)}
-					</SubHeader>
+					<View style={styles.textContainer}>
+						<Header>{eventName}</Header>
+						<SubHeader>{formatDay(startTime)}</SubHeader>
+					</View>
 					{!!tags && (
 						<LinearGradient
 							locations={[0, 1]}
@@ -82,24 +94,24 @@ class EventCard extends Component {
 							style={styles.tags}
 						>
 							{tags.map((tag, i) => (
-								<Paragraph bold key={tag} style={styles.tag}>
+								<Paragraph bold key={i} style={styles.tag}>
 									{tag}
 								</Paragraph>
 							))}
 						</LinearGradient>
 					)}
 					<MapboxGL.MapView
+						showUserLocation
+						ref={map => (this.map = map)}
 						logoEnabled={false}
-						style={{ height: 200, backgroundColor: "white" }}
-						userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-						styleURL={MapboxGL.StyleURL.Light}
-						showUserLocation={true}
-						zoomLevel={12}
-					/>
+						style={styles.map}
+						styleURL={MapboxGL.StyleURL.Dark}
+					>
+						<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} />
+					</MapboxGL.MapView>
 					<Description description={description} />
-					<View style={{ height: SCREEN_HEIGHT }} />
 				</Animated.ScrollView>
-				<ActionButton yOffset={this.yOffset} title="Purchase Tickets" url={ticketUrl} />
+				<ActionButton yOffset={this.yOffset} title="Get Tickets" url={ticketUrl} />
 				<View style={styles.scrollContainer}>
 					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
 				</View>
@@ -123,7 +135,7 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0
 	},
-	coloredBackground: {
+	image: {
 		alignItems: "center",
 		justifyContent: "center",
 		width: SCREEN_WIDTH - 20,
@@ -147,6 +159,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "lightgray",
 		borderRadius: SCROLL_BAR_WIDTH / 2
 	},
+	textContainer: {
+		position: "absolute",
+		padding: 10
+	},
 	tags: {
 		flexDirection: "row",
 		backgroundColor: colors.purple,
@@ -159,6 +175,10 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.purple,
 		overflow: "hidden",
 		fontWeight: "bold"
+	},
+	map: {
+		height: 200,
+		backgroundColor: "white"
 	}
 });
 
