@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Auth } from "../redux/user";
 import { connect } from "react-redux";
-import { StyleSheet, StatusBar, Animated, Text, TouchableOpacity, View, Alert } from "react-native";
+import { StyleSheet, StatusBar, Animated, View } from "react-native";
 
 import LinearGradient from "react-native-linear-gradient";
 import Haptics from "react-native-haptic-feedback";
@@ -70,11 +70,15 @@ class App extends Component {
 
   componentDidMount() {
     xOffset.setValue(SCREEN_WIDTH);
-    this.ScrollView.getNode().scrollTo({
-      x: SCREEN_WIDTH,
-      y: 0,
-      animated: false
-    });
+    setTimeout(
+      () =>
+        this.ScrollView.getNode().scrollTo({
+          x: SCREEN_WIDTH,
+          y: 0,
+          animated: false
+        }),
+      1
+    );
   }
 
   /* navigation functions */
@@ -110,7 +114,7 @@ class App extends Component {
 
   render() {
     const { currentPage } = this.state;
-    console.log(this.props);
+    // console.log(this.props);
 
     return (
       <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>

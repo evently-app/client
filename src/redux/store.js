@@ -19,9 +19,9 @@ export default function configureStore() {
 
 	const middleware = [loggerMiddleware, thunkMiddleware];
 
-	let store = compose(applyMiddleware(...middleware))(createStore)(
-		persistedReducer
-	);
+	let store = compose(applyMiddleware(...middleware))(createStore)(persistedReducer);
 
-	return store;
+	let persistor = persistStore(store);
+
+	return { store, persistor };
 }
