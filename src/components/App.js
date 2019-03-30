@@ -1,15 +1,7 @@
 import React, { Component } from "react";
 import { Auth } from "../redux/user";
 import { connect } from "react-redux";
-import {
-  StyleSheet,
-  StatusBar,
-  Animated,
-  Text,
-  TouchableOpacity,
-  View,
-  Alert
-} from "react-native";
+import { StyleSheet, StatusBar, Animated, Text, TouchableOpacity, View, Alert } from "react-native";
 
 import LinearGradient from "react-native-linear-gradient";
 import Haptics from "react-native-haptic-feedback";
@@ -27,12 +19,9 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../lib/constants";
 import { WatchUser } from "../redux/user";
 
 const xOffset = new Animated.Value(SCREEN_WIDTH);
-const scrollPosition = Animated.event(
-  [{ nativeEvent: { contentOffset: { x: xOffset } } }],
-  {
-    useNativeDriver: true
-  }
-);
+const scrollPosition = Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
+  useNativeDriver: true
+});
 
 const opacityStyle = index => {
   const inputRange = [0, SCREEN_WIDTH, 2 * SCREEN_WIDTH];
@@ -121,14 +110,10 @@ class App extends Component {
 
   render() {
     const { currentPage } = this.state;
-    console.log(this.props)
+    console.log(this.props);
 
     return (
-      <LinearGradient
-        style={styles.container}
-        locations={[0, 0.9]}
-        colors={["black", "#150218"]}
-      >
+      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>
         <StatusBar barStyle="light-content" />
         <Animated.ScrollView
           horizontal
@@ -148,6 +133,11 @@ class App extends Component {
           <Timeline />
         </Animated.ScrollView>
         <View style={styles.tabBarContainer}>
+          <LinearGradient
+            style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 100 }}
+            locations={[0, 0.8, 1]}
+            colors={["rgba(21,2,24,0)", "rgba(21,2,24,0.95)", "rgba(21,2,24,1)"]}
+          />
           <TouchableScale
             style={styles.tabBarButton}
             animatedStyle={opacityStyle(0)}
@@ -181,11 +171,12 @@ const styles = StyleSheet.create({
   },
   tabBarContainer: {
     position: "absolute",
-    bottom: 5,
+    bottom: 0,
     left: 0,
     right: 0,
     height: 100,
     padding: 25,
+    paddingBottom: 30,
     backgroundColor: "transparent",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -199,10 +190,9 @@ const styles = StyleSheet.create({
   }
 });
 
-
 const mapStateToProps = state => {
   return {
-    uid: state.user.uid,
+    uid: state.user.uid
   };
 };
 

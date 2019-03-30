@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-	Animated,
-	View,
-	Text,
-	TouchableOpacity,
-	StyleSheet
-} from "react-native";
+import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -26,10 +20,19 @@ class Feed extends Component {
 		animatedValues: {
 			// event1: new Animated.Value(0),
 			// 1: new Animated.Value(0)
-		}
+		},
+		userLocation: {}
 	};
 
 	componentWillMount() {
+		navigator.geolocation.getCurrentPosition(
+			({ coords }) => {
+				this.setState({ userLocation: coords });
+			},
+			error => Alert.alert(error.message),
+			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+		);
+
 		this.props
 			.LoadQueue()
 			.then(() => {
@@ -84,14 +87,16 @@ class Feed extends Component {
 	};
 
 	onSwipeCardRight = card => {
-		this.popCard(card);
 		this.props.SwipeRight(card);
+		this.popCard(card);
+
 		// this.fetchCards();
 	};
 
 	onSwipeCardLeft = card => {
-		this.popCard(card);
 		this.props.SwipeLeft(card);
+		this.popCard(card);
+
 		// this.fetchCards();
 	};
 
@@ -100,13 +105,11 @@ class Feed extends Component {
 	};
 
 	closeFilter = () => {
-		this.setState({ filterOpen: false }, () =>
-			this.Filter.snapTo({ index: 0 })
-		);
+		this.setState({ filterOpen: false }, () => this.Filter.snapTo({ index: 0 }));
 	};
 
 	onDrag = event => {
-		this.setState({ dragging: !this.state.dragging });
+		// this.setState({ dragging: !this.state.dragging });
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
@@ -125,7 +128,7 @@ class Feed extends Component {
 
 	render() {
 		// console.log("render");
-		const { animatedValues, filterOpen, loading } = this.state;
+		const { animatedValues, filterOpen, loading, userLocation } = this.state;
 		const { queue } = this.props;
 		// const queue = this.props.queue;
 		console.log("RENDER QUEUE:", this.props.queue);
@@ -145,6 +148,7 @@ class Feed extends Component {
 					<Swipeable
 						key={card.id}
 						id={card.id}
+						index={queue.length - i}
 						// firstCard={i == firstCardIndex}
 						// secondCard={i == firstCardIndex - 1}
 						filterDrag={this.filterDrag}
@@ -155,7 +159,7 @@ class Feed extends Component {
 						onSwipeRight={() => this.onSwipeCardRight(card)}
 						onSwipeLeft={() => this.onSwipeCardLeft(card)}
 					>
-						<EventCard {...card} />
+						<EventCard userLocation={userLocation} {...card} />
 					</Swipeable>
 				))}
 				{filterOpen && (
