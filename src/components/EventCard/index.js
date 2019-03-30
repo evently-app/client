@@ -75,10 +75,10 @@ class EventCard extends Component {
 						locations={[0, 0.1]}
 						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0.1)"]}
 					/>
-					<Header style={{ position: "absolute", top: 10, left: 10 }}>{eventName}</Header>
-					<SubHeader style={{ position: "absolute", top: 35, left: 10 }}>
-						{formatDay(startTime)}
-					</SubHeader>
+					<View style={{ position: "absolute", padding: 10 }}>
+						<Header>{eventName}</Header>
+						<SubHeader>{formatDay(startTime)}</SubHeader>
+					</View>
 					{!!tags && (
 						<LinearGradient
 							locations={[0, 1]}
@@ -152,6 +152,16 @@ const styles = StyleSheet.create({
 		height: SCROLL_INDICATOR_HEIGHT,
 		backgroundColor: "lightgray",
 		borderRadius: SCROLL_BAR_WIDTH / 2
+	},
+	eventName: {
+		// position: "absolute",
+		// top: 10,
+		// left: 10
+	},
+	startTime: {
+		// position: "absolute",
+		// top: 35,
+		// left: 10
 	},
 	tags: {
 		flexDirection: "row",
