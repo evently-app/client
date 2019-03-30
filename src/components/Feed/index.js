@@ -20,10 +20,19 @@ class Feed extends Component {
 		animatedValues: {
 			// event1: new Animated.Value(0),
 			// 1: new Animated.Value(0)
-		}
+		},
+		userLocation: {}
 	};
 
 	componentWillMount() {
+		navigator.geolocation.getCurrentPosition(
+			({ coords }) => {
+				this.setState({ userLocation: coords });
+			},
+			error => Alert.alert(error.message),
+			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+		);
+
 		this.props
 			.LoadQueue()
 			.then(() => {
@@ -119,7 +128,7 @@ class Feed extends Component {
 
 	render() {
 		// console.log("render");
-		const { animatedValues, filterOpen, loading } = this.state;
+		const { animatedValues, filterOpen, loading, userLocation } = this.state;
 		const { queue } = this.props;
 		// const queue = this.props.queue;
 		console.log("RENDER QUEUE:", this.props.queue);
@@ -150,7 +159,7 @@ class Feed extends Component {
 						onSwipeRight={() => this.onSwipeCardRight(card)}
 						onSwipeLeft={() => this.onSwipeCardLeft(card)}
 					>
-						<EventCard {...card} />
+						<EventCard userLocation={userLocation} {...card} />
 					</Swipeable>
 				))}
 				{filterOpen && (

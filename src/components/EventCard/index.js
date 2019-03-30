@@ -29,6 +29,19 @@ class EventCard extends Component {
 		useNativeDriver: true
 	});
 
+	componentDidMount() {
+		const { latitude, longitude, userLocation } = this.props;
+		setTimeout(
+			() =>
+				this.map.fitBounds(
+					[+longitude, +latitude],
+					[userLocation.longitude, userLocation.latitude],
+					5
+				),
+			100
+		);
+	}
+
 	render() {
 		const {
 			eventName,
@@ -43,8 +56,6 @@ class EventCard extends Component {
 			ticketUrl,
 			description
 		} = this.props;
-
-		console.log(this.props);
 
 		const animatedScrollIndicator = {
 			transform: [
@@ -90,12 +101,11 @@ class EventCard extends Component {
 						</LinearGradient>
 					)}
 					<MapboxGL.MapView
+						showUserLocation
+						ref={map => (this.map = map)}
 						logoEnabled={false}
 						style={styles.map}
-						userTrackingMode={MapboxGL.UserTrackingModes.Follow}
 						styleURL={MapboxGL.StyleURL.Dark}
-						showUserLocation={true}
-						zoomLevel={12}
 					>
 						<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} />
 					</MapboxGL.MapView>
