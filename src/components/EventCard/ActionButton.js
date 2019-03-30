@@ -63,7 +63,7 @@ const ActionButton = ({ title, url, yOffset }) => {
 			{
 				translateX: yOffset.interpolate({
 					inputRange,
-					outputRange: [0, -23.5, -50, -100],
+					outputRange: [0, -23.5, -55, -110],
 					extrapolate: "clamp"
 				})
 			},
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 	container: {
 		right: 10,
 		bottom: 10,
-		width: 150,
+		width: 112,
 		height: 30,
 		position: "absolute"
 		// borderRadius: 10

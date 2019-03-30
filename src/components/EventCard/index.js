@@ -111,7 +111,7 @@ class EventCard extends Component {
 					</MapboxGL.MapView>
 					<Description description={description} />
 				</Animated.ScrollView>
-				<ActionButton yOffset={this.yOffset} title="Purchase Tickets" url={ticketUrl} />
+				<ActionButton yOffset={this.yOffset} title="Get Tickets" url={ticketUrl} />
 				<View style={styles.scrollContainer}>
 					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
 				</View>
