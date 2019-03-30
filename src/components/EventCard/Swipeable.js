@@ -65,14 +65,7 @@ class Swipeable extends Component {
 	};
 
 	render() {
-		const {
-			swipeAmount,
-			scaleAmount,
-			filterDrag,
-			firstCard,
-			secondCard,
-			children
-		} = this.props;
+		const { index, swipeAmount, scaleAmount, filterDrag, children } = this.props;
 
 		const left = { x: -1.2 * SCREEN_WIDTH, damping: 0.7, tension: 300 };
 		const centered = { x: 0, damping: 0.7, tension: 200 };
@@ -124,6 +117,7 @@ class Swipeable extends Component {
 		);
 
 		// return firstCard || secondCard ? swipeable : null;
+		// return index < 3 ? swipeable : null;
 		return swipeable;
 	}
 }

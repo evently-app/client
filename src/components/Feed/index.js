@@ -78,14 +78,16 @@ class Feed extends Component {
 	};
 
 	onSwipeCardRight = card => {
-		this.popCard(card);
 		this.props.SwipeRight(card);
+		this.popCard(card);
+
 		// this.fetchCards();
 	};
 
 	onSwipeCardLeft = card => {
-		this.popCard(card);
 		this.props.SwipeLeft(card);
+		this.popCard(card);
+
 		// this.fetchCards();
 	};
 

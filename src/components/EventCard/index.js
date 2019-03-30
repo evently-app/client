@@ -66,16 +66,13 @@ class EventCard extends Component {
 					bounces={false}
 					onScroll={this.onScroll}
 				>
-					<Image
-						style={[styles.coloredBackground, { backgroundColor: backgroundColor }]}
-						source={{ uri: imageUrl }}
-					/>
+					<Image style={styles.image} source={{ uri: imageUrl }} />
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.1]}
 						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0.1)"]}
 					/>
-					<View style={{ position: "absolute", padding: 10 }}>
+					<View style={styles.textContainer}>
 						<Header>{eventName}</Header>
 						<SubHeader>{formatDay(startTime)}</SubHeader>
 					</View>
@@ -103,7 +100,6 @@ class EventCard extends Component {
 						<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} />
 					</MapboxGL.MapView>
 					<Description description={description} />
-					<View style={{ height: SCREEN_HEIGHT }} />
 				</Animated.ScrollView>
 				<ActionButton yOffset={this.yOffset} title="Purchase Tickets" url={ticketUrl} />
 				<View style={styles.scrollContainer}>
@@ -129,7 +125,7 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0
 	},
-	coloredBackground: {
+	image: {
 		alignItems: "center",
 		justifyContent: "center",
 		width: SCREEN_WIDTH - 20,
@@ -153,15 +149,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "lightgray",
 		borderRadius: SCROLL_BAR_WIDTH / 2
 	},
-	eventName: {
-		// position: "absolute",
-		// top: 10,
-		// left: 10
-	},
-	startTime: {
-		// position: "absolute",
-		// top: 35,
-		// left: 10
+	textContainer: {
+		position: "absolute",
+		padding: 10
 	},
 	tags: {
 		flexDirection: "row",
