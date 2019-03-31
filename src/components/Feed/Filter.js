@@ -5,8 +5,8 @@ import Interactable from "react-native-interactable";
 import Haptics from "react-native-haptic-feedback";
 
 import {
-	BeginDrag,
-	EndDrag,
+	BeginTransition,
+	EndTransition,
 	SnapOpen,
 	SnapClosed,
 	ScrollTimeSelection,
@@ -31,10 +31,10 @@ class Filter extends PureComponent {
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
-		const { BeginDrag, EndDrag } = this.props;
+		const { BeginTransition, EndTransition } = this.props;
 
-		if (state === "start") BeginDrag();
-		else EndDrag();
+		if (state === "start") BeginTransition();
+		else EndTransition();
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
@@ -77,7 +77,7 @@ class Filter extends PureComponent {
 	};
 
 	timeSelectionStyle = index => {
-		const { open, dragging, timeSelection, filterDrag } = this.props;
+		const { open, transitioning, timeSelection, filterDrag } = this.props;
 
 		return {
 			// transform: [
@@ -89,7 +89,7 @@ class Filter extends PureComponent {
 			// 	}
 			// ],
 			opacity:
-				!dragging && open
+				!transitioning && open
 					? this.timeXOffset.interpolate({
 							inputRange: [-SCREEN_WIDTH / 3, 0, SCREEN_WIDTH / 3],
 							outputRange: [index === 2 ? 1 : 0.5, index === 1 ? 1 : 0.5, index === 0 ? 1 : 0.5],
@@ -108,11 +108,11 @@ class Filter extends PureComponent {
 	};
 
 	typeSelectionStyle = index => {
-		const { open, dragging, typeSelection, filterDrag } = this.props;
+		const { open, transitioning, typeSelection, filterDrag } = this.props;
 
 		return {
 			opacity:
-				!dragging && open
+				!transitioning && open
 					? this.typeXOffset.interpolate({
 							inputRange: [
 								(-3 * SCREEN_WIDTH) / 8,
@@ -200,7 +200,7 @@ class Filter extends PureComponent {
 					snapPoints={[closed_point, open_point]}
 					ref={interactableRef}
 					onDrag={this.handleOnDrag}
-					// onSnap={this.handleOnSnap}
+					// onSnap={this.props.EndTransition}
 					onSnapStart={this.handleOnSnap}
 					boundaries={boundaries}
 					initialPosition={closed_point}
@@ -363,18 +363,18 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-	const { open, dragging, timeSelection, typeSelection } = state.filter;
+	const { open, transitioning, timeSelection, typeSelection } = state.filter;
 	return {
 		open,
-		dragging,
+		transitioning,
 		timeSelection,
 		typeSelection
 	};
 };
 
 const mapDispatchToProps = {
-	BeginDrag,
-	EndDrag,
+	BeginTransition,
+	EndTransition,
 	SnapOpen,
 	SnapClosed,
 	ScrollTimeSelection,

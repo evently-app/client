@@ -1,13 +1,13 @@
 // filter redux module
 const initialState = {
 	open: false,
-	dragging: false,
+	transitioning: false,
 	timeSelection: 0,
 	typeSelection: 0
 };
 
-const BEGIN_DRAG = "evently/filter/BEGIN_DRAG";
-const END_DRAG = "evently/filter/END_DRAG";
+const BEGIN_TRANSITION = "evently/filter/BEGIN_TRANSITION";
+const END_TRANSITION = "evently/filter/END_TRANSITION";
 const SNAP_OPEN = "evently/filter/SNAP_OPEN";
 const SNAP_CLOSED = "evently/filter/SNAP_CLOSED";
 const SCROLL_TIME_SELECTION = "evently/filter/SCROLL_TIME_SELECTION";
@@ -15,16 +15,16 @@ const SCROLL_TYPE_SELECTION = "evently/filter/SCROLL_TYPE_SELECTION";
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case BEGIN_DRAG:
+		case BEGIN_TRANSITION:
 			return {
 				...state,
-				dragging: true
+				transitioning: true
 			};
 
-		case END_DRAG:
+		case END_TRANSITION:
 			return {
 				...state,
-				dragging: false
+				transitioning: false
 			};
 
 		case SNAP_OPEN:
@@ -57,15 +57,15 @@ export default (state = initialState, action) => {
 };
 
 // functions which return the actions that affects the state
-export const BeginDrag = () => {
+export const BeginTransition = () => {
 	return {
-		type: BEGIN_DRAG
+		type: BEGIN_TRANSITION
 	};
 };
 
-export const EndDrag = () => {
+export const EndTransition = () => {
 	return {
-		type: END_DRAG
+		type: END_TRANSITION
 	};
 };
 

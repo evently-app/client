@@ -10,14 +10,13 @@ import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
 import { LoadQueue } from "../../redux/queue";
+import { BeginTransition } from "../../redux/filter";
 import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
 		loading: true,
 		count: 0,
-		// filterOpen: false,
-		// dragging: false,
 		animatedValues: {},
 		userLocation: {}
 	};
@@ -80,10 +79,14 @@ class Feed extends Component {
 	};
 
 	openFilter = () => {
+		const { BeginTransition } = this.props;
+		BeginTransition();
 		this.Filter.snapTo({ index: 1 });
 	};
 
 	closeFilter = () => {
+		const { BeginTransition } = this.props;
+		BeginTransition();
 		this.Filter.snapTo({ index: 0 });
 	};
 
@@ -173,7 +176,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
 	LoadQueue,
 	SwipeRight,
-	SwipeLeft
+	SwipeLeft,
+	BeginTransition
 };
 
 export default connect(
