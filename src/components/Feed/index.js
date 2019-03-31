@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -17,7 +17,7 @@ class Feed extends Component {
 		loading: true,
 		count: 0,
 		filterOpen: false,
-		dragging: false,
+		// dragging: false,
 		animatedValues: {},
 		userLocation: {}
 	};
@@ -33,23 +33,23 @@ class Feed extends Component {
 			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
 		);
 
-		this.props
-			.LoadQueue()
-			.then(() => {
-				const { queue } = this.props;
-				let animatedValues = {};
-				queue.forEach(({ id }) => {
-					animatedValues[id] = new Animated.Value(0);
-				});
+		// this.props
+		// 	.LoadQueue()
+		// 	.then(() => {
+		// 		const { queue } = this.props;
+		// 		let animatedValues = {};
+		// 		queue.forEach(({ id }) => {
+		// 			animatedValues[id] = new Animated.Value(0);
+		// 		});
 
-				this.setState({ animatedValues, loading: false });
+		// 		this.setState({ animatedValues, loading: false });
 
-				// Alert.alert("successfully got queue");
-				console.log("MOUNT LOG", this.props);
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		// 		// Alert.alert("successfully got queue");
+		// 		// console.log("MOUNT LOG", this.props);
+		// 	})
+		// 	.catch(error => {
+		// 		console.log(error);
+		// 	});
 	}
 
 	// swipeAmount = new Animated.Value(0);
@@ -59,17 +59,6 @@ class Feed extends Component {
 	// shouldComponentUpdate() {
 	// 	return false;
 	// }
-
-	fetchCards = () => {
-		const { count, queue, animatedValues } = this.state;
-
-		let newCard = this.generateCard();
-		this.setState({
-			count: count + 1,
-			queue: [...queue, newCard].sort((a, b) => b.id - a.id),
-			animatedValues: { ...animatedValues, [newCard.id]: new Animated.Value(0) }
-		});
-	};
 
 	popCard = ({ id }) => {
 		const { queue, animatedValues } = this.state;
@@ -88,15 +77,11 @@ class Feed extends Component {
 	onSwipeCardRight = card => {
 		this.props.SwipeRight(card);
 		this.popCard(card);
-
-		// this.fetchCards();
 	};
 
 	onSwipeCardLeft = card => {
 		this.props.SwipeLeft(card);
 		this.popCard(card);
-
-		// this.fetchCards();
 	};
 
 	openFilter = () => {
@@ -130,15 +115,8 @@ class Feed extends Component {
 		const { queue } = this.props;
 
 		const first = queue.length - 1;
-		const feed = (
-			<View style={styles.container}>
-				<Filter
-					interactableRef={Filter => (this.Filter = Filter)}
-					onDrag={this.onDrag}
-					onSnap={this.handleOnSnap}
-					onPress={filterOpen ? this.closeFilter : this.openFilter}
-					filterDrag={this.filterDrag}
-				/>
+		const cards = (
+			<>
 				{queue.map((card, i) => (
 					<Swipeable
 						key={card.id}
@@ -161,16 +139,30 @@ class Feed extends Component {
 						onPressIn={this.closeFilter}
 					/>
 				)}
-			</View>
+			</>
 		);
 
-		const spinner = (
+		const feed = (
 			<View style={styles.container}>
-				<Spinner />
+				<Filter
+					interactableRef={Filter => (this.Filter = Filter)}
+					filterOpen={filterOpen}
+					// onDrag={this.onDrag}
+					onSnap={this.handleOnSnap}
+					onPress={filterOpen ? this.closeFilter : this.openFilter}
+					filterDrag={this.filterDrag}
+				/>
+				{loading ? <Spinner /> : cards}
 			</View>
 		);
 
-		return loading ? spinner : feed;
+		// const spinner = (
+		// 	<View style={styles.container}>
+
+		// 	</View>
+		// );
+
+		return feed;
 	}
 }
 
