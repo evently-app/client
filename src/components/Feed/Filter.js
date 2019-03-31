@@ -234,7 +234,7 @@ class Filter extends PureComponent {
 						Nearby
 					</Header>
 					<Paragraph animated style={{ ...animatedTime, ...animatedOpacity }}>
-						occuring
+						that are
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
@@ -257,7 +257,7 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 					<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
-						which are
+						and
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
@@ -323,8 +323,8 @@ const styles = StyleSheet.create({
 	},
 	typeIndicator: {
 		position: "absolute",
-		paddingHorizontal: 10,
-		paddingVertical: 8,
+		paddingHorizontal: 12,
+		paddingVertical: 6,
 		borderRadius: 10,
 		backgroundColor: colors.lightpurple,
 		top: 10,
