@@ -28,7 +28,6 @@
     "react-native-svg-transformer": "^0.12.1",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
-    "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0"
   },
@@ -40,7 +39,8 @@
     "eslint": "^5.15.3",
     "jest": "^24.5.0",
     "metro-react-native-babel-preset": "^0.53.1",
-    "react-test-renderer": "16.8.3"
+    "react-test-renderer": "16.8.3",
+    "redux-devtools-extension": "^2.13.8"
   },
   "jest": {
     "preset": "react-native"

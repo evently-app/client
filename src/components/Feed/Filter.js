@@ -354,13 +354,11 @@ const styles = StyleSheet.create({
 	},
 	interactable: {
 		height: 300,
-		top: -175,
+		top: -185,
 		padding: 5,
 		paddingTop: 155,
 		alignItems: "center",
-		// backgroundColor: "red",
 		justifyContent: "center"
-		// justifyContent: "space-around"
 	}
 });
 

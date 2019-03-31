@@ -33,23 +33,23 @@ class Feed extends Component {
 			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
 		);
 
-		// 		this.props
-		// 			.LoadQueue()
-		// 			.then(() => {
-		// 				const { queue } = this.props;
-		// 				let animatedValues = {};
-		// 				queue.forEach(({ id }) => {
-		// 					animatedValues[id] = new Animated.Value(0);
-		// 				});
-		//
-		// 				this.setState({ animatedValues, loading: false });
-		//
-		// 				// Alert.alert("successfully got queue");
-		// 				// console.log("MOUNT LOG", this.props);
-		// 			})
-		// 			.catch(error => {
-		// 				console.log(error);
-		// 			});
+		this.props
+			.LoadQueue()
+			.then(() => {
+				const { queue } = this.props;
+				let animatedValues = {};
+				queue.forEach(({ id }) => {
+					animatedValues[id] = new Animated.Value(0);
+				});
+
+				this.setState({ animatedValues, loading: false });
+
+				// Alert.alert("successfully got queue");
+				// console.log("MOUNT LOG", this.props);
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 
 	// swipeAmount = new Animated.Value(0);
