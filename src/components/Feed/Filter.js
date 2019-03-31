@@ -26,8 +26,8 @@ const boundaries = {
 const filterDragRange = [0, 50, 150];
 
 class Filter extends PureComponent {
-	timeXOffset = new Animated.Value(SCREEN_WIDTH / 3);
-	typeXOffset = new Animated.Value(SCREEN_WIDTH / 3);
+	timeXOffset = new Animated.Value(0);
+	typeXOffset = new Animated.Value(0);
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
@@ -39,12 +39,13 @@ class Filter extends PureComponent {
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const { SnapOpen, SnapClosed, timeSelection } = this.props;
+		const { SnapOpen, SnapClosed, timeSelection, typeSelection } = this.props;
 
 		Haptics.trigger("impactLight");
 
 		// weird necessary fix
-		// this.timeXOffset.setValue((timeSelection * SCREEN_WIDTH) / 3);
+		this.timeXOffset.setValue(-1 * (((timeSelection - 1) * SCREEN_WIDTH) / 3));
+		this.typeXOffset.setValue(((3 - typeSelection * 2) * SCREEN_WIDTH) / 8);
 
 		if (index == 0) SnapClosed();
 		else SnapOpen();
@@ -55,19 +56,24 @@ class Filter extends PureComponent {
 		const { index } = nativeEvent;
 		const { ScrollTimeSelection } = this.props;
 
+		Haptics.trigger("impactLight");
+
 		if (index === 0) ScrollTimeSelection(0);
 		else if (index === 1) ScrollTimeSelection(1);
 		else ScrollTimeSelection(2);
 	};
 
 	// update type selection in redux
-	handleTypeScrollEnd = ({ nativeEvent }) => {
-		const { x } = nativeEvent.contentOffset;
+	handleTypeScroll = ({ nativeEvent }) => {
+		const { index } = nativeEvent;
 		const { ScrollTypeSelection } = this.props;
 
-		if (x === 0) ScrollTypeSelection(0);
-		else if (x === SCREEN_WIDTH / 3) ScrollTypeSelection(1);
-		else ScrollTypeSelection(2);
+		Haptics.trigger("impactLight");
+
+		if (index === 0) ScrollTypeSelection(0);
+		else if (index === 1) ScrollTypeSelection(1);
+		else if (index === 2) ScrollTypeSelection(2);
+		else ScrollTypeSelection(3);
 	};
 
 	timeSelectionStyle = index => {
@@ -160,11 +166,6 @@ class Filter extends PureComponent {
 		};
 
 		const animatedType = {
-			opacity: filterDrag.interpolate({
-				inputRange: filterDragRange,
-				outputRange: [0, 0.25, 0.5],
-				extrapolate: "clamp"
-			}),
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
@@ -266,22 +267,23 @@ class Filter extends PureComponent {
 							This Month
 						</SubHeader>
 					</Interactable.View>
-					<Paragraph animated style={animatedType}>
+					<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
 						Type
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
 						dragEnabled={open}
 						snapPoints={[
-							{ x: (-3 * SCREEN_WIDTH) / 8 },
-							{ x: (-1 * SCREEN_WIDTH) / 8 },
+							{ x: (3 * SCREEN_WIDTH) / 8 },
 							{ x: SCREEN_WIDTH / 8 },
-							{ x: (3 * SCREEN_WIDTH) / 8 }
+							{ x: (-1 * SCREEN_WIDTH) / 8 },
+							{ x: (-3 * SCREEN_WIDTH) / 8 }
 						]}
 						initialPosition={{ x: (3 * SCREEN_WIDTH) / 8 }}
-						onSnapStart={this.handleTimeScroll}
+						onSnapStart={this.handleTypeScroll}
 						style={[
 							animatedType,
+							animatedOpacity2,
 							{
 								width: SCREEN_WIDTH,
 								flexDirection: "row",
@@ -363,11 +365,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-	const { open, dragging, timeSelection } = state.filter;
+	const { open, dragging, timeSelection, typeSelection } = state.filter;
 	return {
 		open,
 		dragging,
-		timeSelection
+		timeSelection,
+		typeSelection
 	};
 };
 
