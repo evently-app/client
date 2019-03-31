@@ -27,8 +27,13 @@ const filterDragRange = [0, 50, 150];
 
 class Filter extends PureComponent {
 	timeXOffset = new Animated.Value(0);
+	typeXOffset = new Animated.Value(0);
 
 	onTimeScroll = Animated.event([{ nativeEvent: { contentOffset: { x: this.timeXOffset } } }], {
+		useNativeDriver: true
+	});
+
+	onTypeScroll = Animated.event([{ nativeEvent: { contentOffset: { x: this.typeXOffset } } }], {
 		useNativeDriver: true
 	});
 
@@ -55,6 +60,15 @@ class Filter extends PureComponent {
 		if (x === 0) ScrollTimeSelection(0);
 		else if (x === SCREEN_WIDTH / 3) ScrollTimeSelection(1);
 		else ScrollTimeSelection(2);
+	};
+
+	handleTypeScrollEnd = ({ nativeEvent }) => {
+		const { x } = nativeEvent.contentOffset;
+		const { ScrollTypeSelection } = this.props;
+
+		if (x === 0) ScrollTypeSelection(0);
+		else if (x === SCREEN_WIDTH / 3) ScrollTypeSelection(1);
+		else ScrollTypeSelection(2);
 	};
 
 	timeOpacity = index => {
@@ -106,6 +120,11 @@ class Filter extends PureComponent {
 		};
 
 		const animatedType = {
+			opacity: filterDrag.interpolate({
+				inputRange: filterDragRange,
+				outputRange: [0, 0.5, 1],
+				extrapolate: "clamp"
+			}),
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
@@ -211,13 +230,70 @@ class Filter extends PureComponent {
 						</SubHeader>
 						<View style={styles.bufferView} />
 					</Animated.ScrollView>
-
-					{/* <Paragraph animated style={{ ...animatedType, ...animatedOpacity }}> */}
-					{/* 	Type */}
-					{/* </Paragraph> */}
-					{/* <SubHeader animated style={{ ...animatedType, ...animatedOpacity2 }}> */}
-					{/* 	Anything */}
-					{/* </SubHeader> */}
+					<Paragraph animated style={animatedType}>
+						Type
+					</Paragraph>
+					<Animated.ScrollView
+						horizontal
+						pagingEnabled
+						scrollEnabled={open}
+						showsHorizontalScrollIndicator={false}
+						onScroll={this.onTypeScroll}
+						onMomentumScrollEnd={this.handleTypeScrollEnd}
+						scrollEventThrottle={16}
+						style={[animatedType, { width: SCREEN_WIDTH }]}
+						decelerationRate={0}
+						snapToInterval={SCREEN_WIDTH / 3}
+						snapToAlignment={"center"}
+						contentContainerStyle={{ justifyContent: "space-around" }}
+					>
+						<View style={styles.bufferView} />
+						<SubHeader
+							pointerEvents="none"
+							animated
+							style={{
+								// ...this.timeOpacity(0),
+								width: SCREEN_WIDTH / 3,
+								textAlign: "center"
+							}}
+						>
+							Anything
+						</SubHeader>
+						<SubHeader
+							pointerEvents="none"
+							animated
+							style={{
+								// ...this.timeOpacity(0),
+								width: SCREEN_WIDTH / 3,
+								textAlign: "center"
+							}}
+						>
+							Concerts
+						</SubHeader>
+						<SubHeader
+							pointerEvents="none"
+							animated
+							style={{
+								// ...this.timeOpacity(1),
+								width: SCREEN_WIDTH / 3,
+								textAlign: "center"
+							}}
+						>
+							Sports
+						</SubHeader>
+						<SubHeader
+							pointerEvents="none"
+							animated
+							style={{
+								// ...this.timeOpacity(2),
+								width: SCREEN_WIDTH / 3,
+								textAlign: "center"
+							}}
+						>
+							Shows
+						</SubHeader>
+						<View style={styles.bufferView} />
+					</Animated.ScrollView>
 				</Interactable.View>
 				{/*</TouchableOpacity>*/}
 			</View>
@@ -234,7 +310,7 @@ const styles = StyleSheet.create({
 		height: 150
 	},
 	interactable: {
-		height: 250,
+		height: 300,
 		top: -160,
 		padding: 5,
 		paddingTop: 155,
