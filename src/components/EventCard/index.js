@@ -31,15 +31,15 @@ class EventCard extends Component {
 
 	componentDidMount() {
 		const { latitude, longitude, userLocation } = this.props;
-		setTimeout(
-			() =>
-				this.map.fitBounds(
-					[+longitude, +latitude],
-					[userLocation.longitude, userLocation.latitude],
-					5
-				),
-			100
-		);
+		// setTimeout(
+		// 	() =>
+		// 		this.map.fitBounds(
+		// 			[+longitude, +latitude],
+		// 			[userLocation.longitude, userLocation.latitude],
+		// 			5
+		// 		),
+		// 	100
+		// );
 	}
 
 	render() {
@@ -100,15 +100,15 @@ class EventCard extends Component {
 							))}
 						</LinearGradient>
 					)}
-					<MapboxGL.MapView
-						showUserLocation
-						ref={map => (this.map = map)}
-						logoEnabled={false}
-						style={styles.map}
-						styleURL={MapboxGL.StyleURL.Dark}
-					>
-						{/* <MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} /> */}
-					</MapboxGL.MapView>
+					{/* <MapboxGL.MapView */}
+					{/* 	showUserLocation */}
+					{/* 	ref={map => (this.map = map)} */}
+					{/* 	logoEnabled={false} */}
+					{/* 	style={styles.map} */}
+					{/* 	styleURL={MapboxGL.StyleURL.Dark} */}
+					{/* > */}
+					{/* 	<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} /> */}
+					{/* </MapboxGL.MapView> */}
 					<Description description={description} />
 				</Animated.ScrollView>
 				<ActionButton yOffset={this.yOffset} title="Get Tickets" url={ticketUrl} />

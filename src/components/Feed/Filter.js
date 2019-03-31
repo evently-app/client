@@ -105,7 +105,7 @@ class Filter extends PureComponent {
 			opacity:
 				!transitioning && open
 					? this.timeXOffset.interpolate({
-							inputRange: [-SCREEN_WIDTH / 3, 0, SCREEN_WIDTH / 3],
+							inputRange: TIME_SNAP_POINTS.map(({ x }) => x).reverse(),
 							outputRange: [index === 2 ? 1 : 0.5, index === 1 ? 1 : 0.5, index === 0 ? 1 : 0.5],
 							extrapolate: "clamp"
 					  })
@@ -128,12 +128,7 @@ class Filter extends PureComponent {
 			opacity:
 				!transitioning && open
 					? this.typeXOffset.interpolate({
-							inputRange: [
-								(-3 * SCREEN_WIDTH) / 8,
-								(-1 * SCREEN_WIDTH) / 8,
-								SCREEN_WIDTH / 8,
-								(3 * SCREEN_WIDTH) / 8
-							],
+							inputRange: TYPE_SNAP_POINTS.map(({ x }) => x).reverse(),
 							outputRange: [
 								index === 3 ? 1 : 0.5,
 								index === 2 ? 1 : 0.5,
