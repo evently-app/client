@@ -46,7 +46,10 @@ class Filter extends PureComponent {
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const { SnapOpen, SnapClosed } = this.props;
+		const { SnapOpen, SnapClosed, timeSelection } = this.props;
+
+		// weird necessary fix
+		this.timeXOffset.setValue((timeSelection * SCREEN_WIDTH) / 3);
 
 		if (index == 0) SnapClosed();
 		else SnapOpen();
@@ -76,14 +79,14 @@ class Filter extends PureComponent {
 		const { open, dragging, timeSelection, filterDrag } = this.props;
 
 		return {
-			transform: [
-				{
-					scale: this.timeXOffset.interpolate({
-						inputRange: [0, SCREEN_WIDTH / 3, (2 * SCREEN_WIDTH) / 3],
-						outputRange: [index === 0 ? 1 : 0.7, index === 1 ? 1 : 0.7, index === 2 ? 1 : 0.7]
-					})
-				}
-			],
+			// transform: [
+			// 	{
+			// 		scale: this.timeXOffset.interpolate({
+			// 			inputRange: [0, SCREEN_WIDTH / 3, (2 * SCREEN_WIDTH) / 3],
+			// 			outputRange: [index === 0 ? 1 : 0.7, index === 1 ? 1 : 0.7, index === 2 ? 1 : 0.7]
+			// 		})
+			// 	}
+			// ],
 			opacity:
 				!dragging && open
 					? this.timeXOffset.interpolate({
@@ -103,7 +106,7 @@ class Filter extends PureComponent {
 	};
 
 	render() {
-		const { open, filterDrag, onPress, interactableRef } = this.props;
+		const { open, filterDrag, onPress, interactableRef, timeSelection } = this.props;
 
 		const animatedLocation = {
 			transform: [
@@ -167,6 +170,7 @@ class Filter extends PureComponent {
 					snapPoints={[closed_point, open_point]}
 					ref={interactableRef}
 					onDrag={this.handleOnDrag}
+					// onSnap={this.handleOnSnap}
 					onSnapStart={this.handleOnSnap}
 					boundaries={boundaries}
 					initialPosition={closed_point}

@@ -8,6 +8,7 @@ import { createLogger } from "redux-logger";
 export default function configureStore() {
 	const config = {
 		key: "root",
+		blacklist: ["filter"],
 		storage
 	};
 
