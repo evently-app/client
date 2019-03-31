@@ -14,6 +14,7 @@ import {
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { SB_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
+import { colors } from "../../lib/styles";
 
 const closed_point = { y: 0 };
 const open_point = { y: 150 };
@@ -24,6 +25,13 @@ const boundaries = {
 };
 
 const filterDragRange = [0, 50, 150];
+
+const EVENT_TYPES = {
+	0: "Anything",
+	1: "Concerts",
+	2: "Sports",
+	3: "Shows"
+};
 
 class Filter extends PureComponent {
 	timeXOffset = new Animated.Value(0);
@@ -141,7 +149,7 @@ class Filter extends PureComponent {
 	};
 
 	render() {
-		const { open, filterDrag, onPress, interactableRef, timeSelection } = this.props;
+		const { open, filterDrag, onPress, interactableRef, timeSelection, typeSelection } = this.props;
 
 		const animatedLocation = {
 			transform: [
@@ -192,8 +200,19 @@ class Filter extends PureComponent {
 			})
 		};
 
+		const indicatorOpacity = {
+			opacity: filterDrag.interpolate({
+				inputRange: filterDragRange,
+				outputRange: [1, 0.2, 0],
+				extrapolate: "clamp"
+			})
+		};
+
 		return (
 			<View style={styles.container}>
+				<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
+					<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
+				</Animated.View>
 				<Interactable.View
 					animatedNativeDriver
 					verticalOnly
@@ -359,6 +378,14 @@ const styles = StyleSheet.create({
 		paddingTop: 155,
 		alignItems: "center",
 		justifyContent: "center"
+	},
+	typeIndicator: {
+		position: "absolute",
+		padding: 10,
+		borderRadius: 10,
+		backgroundColor: colors.lightpurple,
+		top: 30,
+		left: 30
 	}
 });
 

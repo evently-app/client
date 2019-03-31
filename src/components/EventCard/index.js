@@ -107,7 +107,7 @@ class EventCard extends Component {
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}
 					>
-						<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} />
+						{/* <MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} /> */}
 					</MapboxGL.MapView>
 					<Description description={description} />
 				</Animated.ScrollView>

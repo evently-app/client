@@ -15,10 +15,23 @@ import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
-		loading: true,
+		loading: false,
 		count: 0,
-		animatedValues: {},
-		userLocation: {}
+		animatedValues: { 1: new Animated.Value(0) },
+		userLocation: {},
+		queue: [
+			{
+				id: "1",
+				title: "khalid tour",
+				description: "come see kahlid live!",
+				latitude: 37.7749,
+				longitude: 122.4194,
+				tags: ["concert", "music", "pop"],
+				startTime: "",
+				imageUrl:
+					"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280,c_limit/Khalid_Shot_01-edit.jpg"
+			}
+		]
 	};
 
 	filterDrag = new Animated.Value(0);
@@ -32,23 +45,23 @@ class Feed extends Component {
 			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
 		);
 
-		this.props
-			.LoadQueue()
-			.then(() => {
-				const { queue } = this.props;
-				let animatedValues = {};
-				queue.forEach(({ id }) => {
-					animatedValues[id] = new Animated.Value(0);
-				});
-
-				this.setState({ animatedValues, loading: false });
-
-				// Alert.alert("successfully got queue");
-				// console.log("MOUNT LOG", this.props);
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		// 		this.props
+		// 			.LoadQueue()
+		// 			.then(() => {
+		// 				const { queue } = this.props;
+		// 				let animatedValues = {};
+		// 				queue.forEach(({ id }) => {
+		// 					animatedValues[id] = new Animated.Value(0);
+		// 				});
+		//
+		// 				this.setState({ animatedValues, loading: false });
+		//
+		// 				// Alert.alert("successfully got queue");
+		// 				// console.log("MOUNT LOG", this.props);
+		// 			})
+		// 			.catch(error => {
+		// 				console.log(error);
+		// 			});
 	}
 
 	// swipeAmount = new Animated.Value(0);
@@ -95,8 +108,8 @@ class Feed extends Component {
 	};
 
 	render() {
-		const { animatedValues, loading, userLocation } = this.state;
-		const { queue, filter } = this.props;
+		const { animatedValues, loading, userLocation, queue } = this.state;
+		const { filter } = this.props;
 
 		const first = queue.length - 1;
 		const cards = (
