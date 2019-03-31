@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import { Animated, View, TouchableOpacity, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-
 import Interactable from "react-native-interactable";
 
 import {
@@ -53,6 +52,7 @@ class Filter extends PureComponent {
 		else SnapOpen();
 	};
 
+	// update time selection in redux
 	handleTimeScrollEnd = ({ nativeEvent }) => {
 		const { x } = nativeEvent.contentOffset;
 		const { ScrollTimeSelection } = this.props;
@@ -62,6 +62,7 @@ class Filter extends PureComponent {
 		else ScrollTimeSelection(2);
 	};
 
+	// update type selection in redux
 	handleTypeScrollEnd = ({ nativeEvent }) => {
 		const { x } = nativeEvent.contentOffset;
 		const { ScrollTypeSelection } = this.props;
@@ -71,11 +72,18 @@ class Filter extends PureComponent {
 		else ScrollTypeSelection(2);
 	};
 
-	timeOpacity = index => {
-		// const { dragging, timeSelection } = this.state;
+	timeSelectionStyle = index => {
 		const { open, dragging, timeSelection, filterDrag } = this.props;
 
 		return {
+			transform: [
+				{
+					scale: this.timeXOffset.interpolate({
+						inputRange: [0, SCREEN_WIDTH / 3, (2 * SCREEN_WIDTH) / 3],
+						outputRange: [index === 0 ? 1 : 0.7, index === 1 ? 1 : 0.7, index === 2 ? 1 : 0.7]
+					})
+				}
+			],
 			opacity:
 				!dragging && open
 					? this.timeXOffset.interpolate({
@@ -129,7 +137,7 @@ class Filter extends PureComponent {
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: filterDragRange,
-						outputRange: [0, -25, -75]
+						outputRange: [0, -35, -85]
 					})
 				}
 			]
@@ -153,12 +161,6 @@ class Filter extends PureComponent {
 
 		return (
 			<View style={styles.container}>
-				{/*<TouchableOpacity
-			activeOpacity={1}
-			
-			// onPress={onPress}
-			onPress={() => console.log("his")}
-		>*/}
 				<Interactable.View
 					animatedNativeDriver
 					verticalOnly
@@ -192,14 +194,17 @@ class Filter extends PureComponent {
 						decelerationRate={0}
 						snapToInterval={SCREEN_WIDTH / 3}
 						snapToAlignment={"center"}
-						contentContainerStyle={{ justifyContent: "space-around" }}
+						contentContainerStyle={{
+							justifyContent: "space-around",
+							alignItems: "center"
+						}}
 					>
 						<View style={styles.bufferView} />
 						<SubHeader
 							pointerEvents="none"
 							animated
 							style={{
-								...this.timeOpacity(0),
+								...this.timeSelectionStyle(0),
 								width: SCREEN_WIDTH / 3,
 								textAlign: "center"
 							}}
@@ -210,7 +215,7 @@ class Filter extends PureComponent {
 							pointerEvents="none"
 							animated
 							style={{
-								...this.timeOpacity(1),
+								...this.timeSelectionStyle(1),
 								width: SCREEN_WIDTH / 3,
 								textAlign: "center"
 							}}
@@ -221,7 +226,7 @@ class Filter extends PureComponent {
 							pointerEvents="none"
 							animated
 							style={{
-								...this.timeOpacity(2),
+								...this.timeSelectionStyle(2),
 								width: SCREEN_WIDTH / 3,
 								textAlign: "center"
 							}}
@@ -295,7 +300,6 @@ class Filter extends PureComponent {
 						<View style={styles.bufferView} />
 					</Animated.ScrollView>
 				</Interactable.View>
-				{/*</TouchableOpacity>*/}
 			</View>
 		);
 	}
@@ -311,12 +315,11 @@ const styles = StyleSheet.create({
 	},
 	interactable: {
 		height: 300,
-		top: -160,
+		top: -175,
 		padding: 5,
 		paddingTop: 155,
 		alignItems: "center",
 		justifyContent: "center"
-		// backgroundColor: "red"
 		// justifyContent: "space-around"
 	},
 	bufferView: {
