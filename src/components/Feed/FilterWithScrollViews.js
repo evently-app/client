@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import { Animated, View, TouchableOpacity, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import Interactable from "react-native-interactable";
-import Haptics from "react-native-haptic-feedback";
 
 import {
 	BeginDrag,
@@ -26,8 +25,16 @@ const boundaries = {
 const filterDragRange = [0, 50, 150];
 
 class Filter extends PureComponent {
-	timeXOffset = new Animated.Value(SCREEN_WIDTH / 3);
-	typeXOffset = new Animated.Value(SCREEN_WIDTH / 3);
+	timeXOffset = new Animated.Value(0);
+	typeXOffset = new Animated.Value(0);
+
+	onTimeScroll = Animated.event([{ nativeEvent: { contentOffset: { x: this.timeXOffset } } }], {
+		useNativeDriver: true
+	});
+
+	onTypeScroll = Animated.event([{ nativeEvent: { contentOffset: { x: this.typeXOffset } } }], {
+		useNativeDriver: true
+	});
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
@@ -41,22 +48,20 @@ class Filter extends PureComponent {
 		const { index } = nativeEvent;
 		const { SnapOpen, SnapClosed, timeSelection } = this.props;
 
-		Haptics.trigger("impactLight");
-
 		// weird necessary fix
-		// this.timeXOffset.setValue((timeSelection * SCREEN_WIDTH) / 3);
+		this.timeXOffset.setValue((timeSelection * SCREEN_WIDTH) / 3);
 
 		if (index == 0) SnapClosed();
 		else SnapOpen();
 	};
 
 	// update time selection in redux
-	handleTimeScroll = ({ nativeEvent }) => {
-		const { index } = nativeEvent;
+	handleTimeScrollEnd = ({ nativeEvent }) => {
+		const { x } = nativeEvent.contentOffset;
 		const { ScrollTimeSelection } = this.props;
 
-		if (index === 0) ScrollTimeSelection(0);
-		else if (index === 1) ScrollTimeSelection(1);
+		if (x === 0) ScrollTimeSelection(0);
+		else if (x === SCREEN_WIDTH / 3) ScrollTimeSelection(1);
 		else ScrollTimeSelection(2);
 	};
 
@@ -85,8 +90,8 @@ class Filter extends PureComponent {
 			opacity:
 				!dragging && open
 					? this.timeXOffset.interpolate({
-							inputRange: [-SCREEN_WIDTH / 3, 0, SCREEN_WIDTH / 3],
-							outputRange: [index === 2 ? 1 : 0.5, index === 1 ? 1 : 0.5, index === 0 ? 1 : 0.5],
+							inputRange: [0, SCREEN_WIDTH / 3, (2 * SCREEN_WIDTH) / 3],
+							outputRange: [index === 0 ? 1 : 0.5, index === 1 ? 1 : 0.5, index === 2 ? 1 : 0.5],
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -94,42 +99,8 @@ class Filter extends PureComponent {
 							outputRange: [
 								index === timeSelection ? 1 : 0,
 								index === timeSelection ? 1 : 0.25,
-								index === timeSelection ? 1 : 0.3
-							],
-							extrapolate: "clamp"
-					  })
-		};
-	};
-
-	typeSelectionStyle = index => {
-		const { open, dragging, typeSelection, filterDrag } = this.props;
-
-		return {
-			opacity:
-				!dragging && open
-					? this.typeXOffset.interpolate({
-							inputRange: [
-								(-3 * SCREEN_WIDTH) / 8,
-								(-1 * SCREEN_WIDTH) / 8,
-								SCREEN_WIDTH / 8,
-								(3 * SCREEN_WIDTH) / 8
-							],
-							outputRange: [
-								index === 3 ? 1 : 0.5,
-								index === 2 ? 1 : 0.5,
-								index === 1 ? 1 : 0.5,
-								index === 0 ? 1 : 0.5
-							],
-							extrapolate: "clamp"
-					  })
-					: filterDrag.interpolate({
-							inputRange: filterDragRange,
-							outputRange: [
-								index === typeSelection ? 1 : 0,
-								index === typeSelection ? 1 : 0.25,
-								index === typeSelection ? 1 : 0.3
-							],
-							extrapolate: "clamp"
+								index === timeSelection ? 1 : 0.5
+							]
 					  })
 		};
 	};
@@ -162,7 +133,7 @@ class Filter extends PureComponent {
 		const animatedType = {
 			opacity: filterDrag.interpolate({
 				inputRange: filterDragRange,
-				outputRange: [0, 0.25, 0.5],
+				outputRange: [0, 0.5, 1],
 				extrapolate: "clamp"
 			}),
 			transform: [
@@ -215,23 +186,24 @@ class Filter extends PureComponent {
 					<Paragraph animated style={{ ...animatedTime, ...animatedOpacity }}>
 						Time
 					</Paragraph>
-					<Interactable.View
-						horizontalOnly
-						dragEnabled={open}
-						snapPoints={[{ x: SCREEN_WIDTH / 3 }, { x: 0 }, { x: -SCREEN_WIDTH / 3 }]}
-						initialPosition={{ x: SCREEN_WIDTH / 3 }}
-						onSnapStart={this.handleTimeScroll}
-						style={[
-							animatedTime,
-							{
-								width: SCREEN_WIDTH,
-								flexDirection: "row",
-								justifyContent: "space-around",
-								alignItems: "center"
-							}
-						]}
-						animatedValueX={this.timeXOffset}
+					<Animated.ScrollView
+						horizontal
+						pagingEnabled
+						scrollEnabled={open}
+						showsHorizontalScrollIndicator={false}
+						onScroll={this.onTimeScroll}
+						onMomentumScrollEnd={this.handleTimeScrollEnd}
+						scrollEventThrottle={16}
+						style={[animatedTime, { width: SCREEN_WIDTH }]}
+						decelerationRate={0}
+						snapToInterval={SCREEN_WIDTH / 3}
+						snapToAlignment={"center"}
+						contentContainerStyle={{
+							justifyContent: "space-around",
+							alignItems: "center"
+						}}
 					>
+						<View style={styles.bufferView} />
 						<SubHeader
 							pointerEvents="none"
 							animated
@@ -265,38 +237,32 @@ class Filter extends PureComponent {
 						>
 							This Month
 						</SubHeader>
-					</Interactable.View>
+						<View style={styles.bufferView} />
+					</Animated.ScrollView>
 					<Paragraph animated style={animatedType}>
 						Type
 					</Paragraph>
-					<Interactable.View
-						horizontalOnly
-						dragEnabled={open}
-						snapPoints={[
-							{ x: (-3 * SCREEN_WIDTH) / 8 },
-							{ x: (-1 * SCREEN_WIDTH) / 8 },
-							{ x: SCREEN_WIDTH / 8 },
-							{ x: (3 * SCREEN_WIDTH) / 8 }
-						]}
-						initialPosition={{ x: (3 * SCREEN_WIDTH) / 8 }}
-						onSnapStart={this.handleTimeScroll}
-						style={[
-							animatedType,
-							{
-								width: SCREEN_WIDTH,
-								flexDirection: "row",
-								justifyContent: "space-around",
-								alignItems: "center"
-							}
-						]}
-						animatedValueX={this.typeXOffset}
+					<Animated.ScrollView
+						horizontal
+						pagingEnabled
+						scrollEnabled={open}
+						showsHorizontalScrollIndicator={false}
+						onScroll={this.onTypeScroll}
+						onMomentumScrollEnd={this.handleTypeScrollEnd}
+						scrollEventThrottle={16}
+						style={[animatedType, { width: SCREEN_WIDTH }]}
+						decelerationRate={0}
+						snapToInterval={SCREEN_WIDTH / 3}
+						snapToAlignment={"center"}
+						contentContainerStyle={{ justifyContent: "space-around" }}
 					>
+						<View style={styles.bufferView} />
 						<SubHeader
 							pointerEvents="none"
 							animated
 							style={{
-								...this.typeSelectionStyle(0),
-								width: SCREEN_WIDTH / 4,
+								// ...this.timeOpacity(0),
+								width: SCREEN_WIDTH / 3,
 								textAlign: "center"
 							}}
 						>
@@ -306,8 +272,8 @@ class Filter extends PureComponent {
 							pointerEvents="none"
 							animated
 							style={{
-								...this.typeSelectionStyle(1),
-								width: SCREEN_WIDTH / 4,
+								// ...this.timeOpacity(0),
+								width: SCREEN_WIDTH / 3,
 								textAlign: "center"
 							}}
 						>
@@ -317,8 +283,8 @@ class Filter extends PureComponent {
 							pointerEvents="none"
 							animated
 							style={{
-								...this.typeSelectionStyle(2),
-								width: SCREEN_WIDTH / 4,
+								// ...this.timeOpacity(1),
+								width: SCREEN_WIDTH / 3,
 								textAlign: "center"
 							}}
 						>
@@ -328,14 +294,15 @@ class Filter extends PureComponent {
 							pointerEvents="none"
 							animated
 							style={{
-								...this.typeSelectionStyle(3),
-								width: SCREEN_WIDTH / 4,
+								// ...this.timeOpacity(2),
+								width: SCREEN_WIDTH / 3,
 								textAlign: "center"
 							}}
 						>
 							Shows
 						</SubHeader>
-					</Interactable.View>
+						<View style={styles.bufferView} />
+					</Animated.ScrollView>
 				</Interactable.View>
 			</View>
 		);
@@ -356,9 +323,11 @@ const styles = StyleSheet.create({
 		padding: 5,
 		paddingTop: 155,
 		alignItems: "center",
-		// backgroundColor: "red",
 		justifyContent: "center"
 		// justifyContent: "space-around"
+	},
+	bufferView: {
+		width: SCREEN_WIDTH / 3
 	}
 });
 
