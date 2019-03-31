@@ -1,8 +1,17 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Animated, View, TouchableOpacity, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 
 import Interactable from "react-native-interactable";
 
+import {
+	BeginDrag,
+	EndDrag,
+	SnapOpen,
+	SnapClosed,
+	ScrollTimeSelection,
+	ScrollTypeSelection
+} from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { SB_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 
@@ -16,13 +25,7 @@ const boundaries = {
 
 const filterDragRange = [0, 50, 150];
 
-class Filter extends Component {
-	state = {
-		// open: false,
-		dragging: true,
-		timeSelection: 0
-	};
-
+class Filter extends PureComponent {
 	timeXOffset = new Animated.Value(0);
 
 	onTimeScroll = Animated.event([{ nativeEvent: { contentOffset: { x: this.timeXOffset } } }], {
@@ -31,27 +34,36 @@ class Filter extends Component {
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
-		if (state === "start") {
-			this.setState({ dragging: true });
-		} else {
-			this.setState({ dragging: false });
-		}
+		const { BeginDrag, EndDrag } = this.props;
+
+		if (state === "start") BeginDrag();
+		else EndDrag();
+	};
+
+	handleOnSnap = ({ nativeEvent }) => {
+		const { index } = nativeEvent;
+		const { SnapOpen, SnapClosed } = this.props;
+
+		if (index == 0) SnapClosed();
+		else SnapOpen();
 	};
 
 	handleTimeScrollEnd = ({ nativeEvent }) => {
 		const { x } = nativeEvent.contentOffset;
-		if (x === 0) this.setState({ timeSelection: 0 });
-		else if (x === SCREEN_WIDTH / 3) this.setState({ timeSelection: 1 });
-		else this.setState({ timeSelection: 2 });
+		const { ScrollTimeSelection } = this.props;
+
+		if (x === 0) ScrollTimeSelection(0);
+		else if (x === SCREEN_WIDTH / 3) ScrollTimeSelection(1);
+		else ScrollTimeSelection(2);
 	};
 
 	timeOpacity = index => {
-		const { dragging, timeSelection } = this.state;
-		const { filterOpen, filterDrag } = this.props;
+		// const { dragging, timeSelection } = this.state;
+		const { open, dragging, timeSelection, filterDrag } = this.props;
 
 		return {
 			opacity:
-				!dragging && filterOpen
+				!dragging && open
 					? this.timeXOffset.interpolate({
 							inputRange: [0, SCREEN_WIDTH / 3, (2 * SCREEN_WIDTH) / 3],
 							outputRange: [index === 0 ? 1 : 0.5, index === 1 ? 1 : 0.5, index === 2 ? 1 : 0.5],
@@ -69,7 +81,7 @@ class Filter extends Component {
 	};
 
 	render() {
-		const { filterOpen, filterDrag, onPress, onSnap, interactableRef } = this.props;
+		const { open, filterDrag, onPress, interactableRef } = this.props;
 
 		const animatedLocation = {
 			transform: [
@@ -134,7 +146,7 @@ class Filter extends Component {
 					snapPoints={[closed_point, open_point]}
 					ref={interactableRef}
 					onDrag={this.handleOnDrag}
-					onSnapStart={onSnap}
+					onSnapStart={this.handleOnSnap}
 					boundaries={boundaries}
 					initialPosition={closed_point}
 					style={styles.interactable}
@@ -152,7 +164,7 @@ class Filter extends Component {
 					<Animated.ScrollView
 						horizontal
 						pagingEnabled
-						scrollEnabled={filterOpen}
+						scrollEnabled={open}
 						showsHorizontalScrollIndicator={false}
 						onScroll={this.onTimeScroll}
 						onMomentumScrollEnd={this.handleTimeScrollEnd}
@@ -163,7 +175,7 @@ class Filter extends Component {
 						snapToAlignment={"center"}
 						contentContainerStyle={{ justifyContent: "space-around" }}
 					>
-						<View style={{ width: SCREEN_WIDTH / 3 }} />
+						<View style={styles.bufferView} />
 						<SubHeader
 							pointerEvents="none"
 							animated
@@ -197,7 +209,7 @@ class Filter extends Component {
 						>
 							This Month
 						</SubHeader>
-						<View style={{ width: SCREEN_WIDTH / 3 }} />
+						<View style={styles.bufferView} />
 					</Animated.ScrollView>
 
 					{/* <Paragraph animated style={{ ...animatedType, ...animatedOpacity }}> */}
@@ -223,14 +235,38 @@ const styles = StyleSheet.create({
 	},
 	interactable: {
 		height: 250,
-		top: -150,
+		top: -160,
 		padding: 5,
 		paddingTop: 155,
 		alignItems: "center",
 		justifyContent: "center"
 		// backgroundColor: "red"
 		// justifyContent: "space-around"
+	},
+	bufferView: {
+		width: SCREEN_WIDTH / 3
 	}
 });
 
-export default Filter;
+const mapStateToProps = state => {
+	const { open, dragging, timeSelection } = state.filter;
+	return {
+		open,
+		dragging,
+		timeSelection
+	};
+};
+
+const mapDispatchToProps = {
+	BeginDrag,
+	EndDrag,
+	SnapOpen,
+	SnapClosed,
+	ScrollTimeSelection,
+	ScrollTypeSelection
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Filter);

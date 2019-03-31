@@ -16,7 +16,7 @@ class Feed extends Component {
 	state = {
 		loading: true,
 		count: 0,
-		filterOpen: false,
+		// filterOpen: false,
 		// dragging: false,
 		animatedValues: {},
 		userLocation: {}
@@ -92,20 +92,6 @@ class Feed extends Component {
 		this.setState({ filterOpen: false }, () => this.Filter.snapTo({ index: 0 }));
 	};
 
-	onDrag = event => {
-		// this.setState({ dragging: !this.state.dragging });
-	};
-
-	handleOnSnap = ({ nativeEvent }) => {
-		const { index } = nativeEvent;
-
-		if (index == 0) {
-			this.setState({ filterOpen: false });
-		} else {
-			this.setState({ filterOpen: true });
-		}
-	};
-
 	handleOnStartSwipe = () => {
 		// this.fetchCards();
 	};
@@ -146,9 +132,7 @@ class Feed extends Component {
 			<View style={styles.container}>
 				<Filter
 					interactableRef={Filter => (this.Filter = Filter)}
-					filterOpen={filterOpen}
 					// onDrag={this.onDrag}
-					onSnap={this.handleOnSnap}
 					onPress={filterOpen ? this.closeFilter : this.openFilter}
 					filterDrag={this.filterDrag}
 				/>
@@ -186,7 +170,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		queue: state.queue.queue
+		queue: state.queue.queue,
+		filter: state.filter
 	};
 };
 
