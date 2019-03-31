@@ -16,15 +16,15 @@ import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { SB_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
-const closed_point = { y: 0 };
-const open_point = { y: 150 };
-const boundaries = {
+const CLOSED_POINT = { y: 0 };
+const OPEN_POINT = { y: 150 };
+const BOUNDARIES = {
 	top: -1,
 	bottom: 225,
 	haptics: true
 };
 
-const filterDragRange = [0, 50, 150];
+const FILTER_DRAG_RANGE = [0, 50, 150];
 
 const EVENT_TYPES = ["Anything", "Concerts", "Sports", "Shows"];
 
@@ -110,7 +110,7 @@ class Filter extends PureComponent {
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
-							inputRange: filterDragRange,
+							inputRange: FILTER_DRAG_RANGE,
 							outputRange: [
 								index === timeSelection ? 1 : 0,
 								index === timeSelection ? 1 : 0.25,
@@ -138,7 +138,7 @@ class Filter extends PureComponent {
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
-							inputRange: filterDragRange,
+							inputRange: FILTER_DRAG_RANGE,
 							outputRange: [
 								index === typeSelection ? 1 : 0,
 								index === typeSelection ? 1 : 0.25,
@@ -156,7 +156,7 @@ class Filter extends PureComponent {
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
-						inputRange: filterDragRange,
+						inputRange: FILTER_DRAG_RANGE,
 						outputRange: [0, -35, -105]
 					})
 				}
@@ -167,7 +167,7 @@ class Filter extends PureComponent {
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
-						inputRange: filterDragRange,
+						inputRange: FILTER_DRAG_RANGE,
 						outputRange: [-15, -35, -95]
 					})
 				}
@@ -178,7 +178,7 @@ class Filter extends PureComponent {
 			transform: [
 				{
 					translateY: filterDrag.interpolate({
-						inputRange: filterDragRange,
+						inputRange: FILTER_DRAG_RANGE,
 						outputRange: [0, -35, -85]
 					})
 				}
@@ -187,7 +187,7 @@ class Filter extends PureComponent {
 
 		const animatedOpacity = {
 			opacity: filterDrag.interpolate({
-				inputRange: filterDragRange,
+				inputRange: FILTER_DRAG_RANGE,
 				outputRange: [0, 0.25, 0.5],
 				extrapolate: "clamp"
 			})
@@ -195,7 +195,7 @@ class Filter extends PureComponent {
 
 		const animatedOpacity2 = {
 			opacity: filterDrag.interpolate({
-				inputRange: filterDragRange,
+				inputRange: FILTER_DRAG_RANGE,
 				outputRange: [0, 0.5, 1],
 				extrapolate: "clamp"
 			})
@@ -203,7 +203,7 @@ class Filter extends PureComponent {
 
 		const indicatorOpacity = {
 			opacity: filterDrag.interpolate({
-				inputRange: filterDragRange,
+				inputRange: FILTER_DRAG_RANGE,
 				outputRange: [1, 0.2, 0],
 				extrapolate: "clamp"
 			})
@@ -217,24 +217,24 @@ class Filter extends PureComponent {
 				<Interactable.View
 					animatedNativeDriver
 					verticalOnly
-					snapPoints={[closed_point, open_point]}
+					snapPoints={[CLOSED_POINT, OPEN_POINT]}
 					ref={interactableRef}
 					onDrag={this.handleOnDrag}
 					// onSnap={this.props.EndTransition}
 					onSnapStart={this.handleOnSnap}
-					boundaries={boundaries}
-					initialPosition={closed_point}
+					boundaries={BOUNDARIES}
+					initialPosition={CLOSED_POINT}
 					style={styles.interactable}
 					animatedValueY={filterDrag}
 				>
 					<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
-						Location
+						I want events
 					</Paragraph>
 					<Header animated style={animatedLocation}>
 						Nearby
 					</Header>
 					<Paragraph animated style={{ ...animatedTime, ...animatedOpacity }}>
-						Time
+						occuring
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
@@ -257,7 +257,7 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 					<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
-						Type
+						which are
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
@@ -280,6 +280,12 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 				</Interactable.View>
+				{/* {!open && ( */}
+				{/* 	<TouchableOpacity */}
+				{/* 		onPress={onPress} */}
+				{/* 		style={{ position: "absolute", top: 0, left: 0, right: 0, height: 100 }} */}
+				{/* 	/> */}
+				{/* )} */}
 			</View>
 		);
 	}
@@ -317,10 +323,11 @@ const styles = StyleSheet.create({
 	},
 	typeIndicator: {
 		position: "absolute",
-		padding: 10,
+		paddingHorizontal: 10,
+		paddingVertical: 8,
 		borderRadius: 10,
 		backgroundColor: colors.lightpurple,
-		top: 30,
+		top: 10,
 		left: 30
 	}
 });
