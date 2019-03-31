@@ -26,12 +26,18 @@ const boundaries = {
 
 const filterDragRange = [0, 50, 150];
 
-const EVENT_TYPES = {
-	0: "Anything",
-	1: "Concerts",
-	2: "Sports",
-	3: "Shows"
-};
+const EVENT_TYPES = ["Anything", "Concerts", "Sports", "Shows"];
+
+const TYPE_SNAP_POINTS = [
+	{ x: (3 * SCREEN_WIDTH) / 8 },
+	{ x: SCREEN_WIDTH / 8 },
+	{ x: (-1 * SCREEN_WIDTH) / 8 },
+	{ x: (-3 * SCREEN_WIDTH) / 8 }
+];
+
+const TIME_TYPES = ["Upcoming", "Next Week", "This Month"];
+
+const TIME_SNAP_POINTS = [{ x: SCREEN_WIDTH / 3 }, { x: 0 }, { x: -SCREEN_WIDTH / 3 }];
 
 class Filter extends PureComponent {
 	timeXOffset = new Animated.Value(0);
@@ -238,53 +244,22 @@ class Filter extends PureComponent {
 					<Interactable.View
 						horizontalOnly
 						dragEnabled={open}
-						snapPoints={[{ x: SCREEN_WIDTH / 3 }, { x: 0 }, { x: -SCREEN_WIDTH / 3 }]}
-						initialPosition={{ x: SCREEN_WIDTH / 3 }}
+						snapPoints={TIME_SNAP_POINTS}
+						initialPosition={TIME_SNAP_POINTS[0]}
 						onSnapStart={this.handleTimeScroll}
-						style={[
-							animatedTime,
-							{
-								width: SCREEN_WIDTH,
-								flexDirection: "row",
-								justifyContent: "space-around",
-								alignItems: "center"
-							}
-						]}
+						style={[animatedTime, styles.horizontalSelector]}
 						animatedValueX={this.timeXOffset}
 					>
-						<SubHeader
-							pointerEvents="none"
-							animated
-							style={{
-								...this.timeSelectionStyle(0),
-								width: SCREEN_WIDTH / 3,
-								textAlign: "center"
-							}}
-						>
-							Upcoming
-						</SubHeader>
-						<SubHeader
-							pointerEvents="none"
-							animated
-							style={{
-								...this.timeSelectionStyle(1),
-								width: SCREEN_WIDTH / 3,
-								textAlign: "center"
-							}}
-						>
-							Next Week
-						</SubHeader>
-						<SubHeader
-							pointerEvents="none"
-							animated
-							style={{
-								...this.timeSelectionStyle(2),
-								width: SCREEN_WIDTH / 3,
-								textAlign: "center"
-							}}
-						>
-							This Month
-						</SubHeader>
+						{TIME_TYPES.map((time, i) => (
+							<SubHeader
+								animated
+								key={i}
+								pointerEvents="none"
+								style={{ ...this.timeSelectionStyle(i), ...styles.timeSelection }}
+							>
+								{time}
+							</SubHeader>
+						))}
 					</Interactable.View>
 					<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
 						Type
@@ -292,70 +267,22 @@ class Filter extends PureComponent {
 					<Interactable.View
 						horizontalOnly
 						dragEnabled={open}
-						snapPoints={[
-							{ x: (3 * SCREEN_WIDTH) / 8 },
-							{ x: SCREEN_WIDTH / 8 },
-							{ x: (-1 * SCREEN_WIDTH) / 8 },
-							{ x: (-3 * SCREEN_WIDTH) / 8 }
-						]}
-						initialPosition={{ x: (3 * SCREEN_WIDTH) / 8 }}
+						snapPoints={TYPE_SNAP_POINTS}
+						initialPosition={TYPE_SNAP_POINTS[0]}
 						onSnapStart={this.handleTypeScroll}
-						style={[
-							animatedType,
-							animatedOpacity2,
-							{
-								width: SCREEN_WIDTH,
-								flexDirection: "row",
-								justifyContent: "space-around",
-								alignItems: "center"
-							}
-						]}
+						style={[animatedType, animatedOpacity2, styles.horizontalSelector]}
 						animatedValueX={this.typeXOffset}
 					>
-						<SubHeader
-							pointerEvents="none"
-							animated
-							style={{
-								...this.typeSelectionStyle(0),
-								width: SCREEN_WIDTH / 4,
-								textAlign: "center"
-							}}
-						>
-							Anything
-						</SubHeader>
-						<SubHeader
-							pointerEvents="none"
-							animated
-							style={{
-								...this.typeSelectionStyle(1),
-								width: SCREEN_WIDTH / 4,
-								textAlign: "center"
-							}}
-						>
-							Concerts
-						</SubHeader>
-						<SubHeader
-							pointerEvents="none"
-							animated
-							style={{
-								...this.typeSelectionStyle(2),
-								width: SCREEN_WIDTH / 4,
-								textAlign: "center"
-							}}
-						>
-							Sports
-						</SubHeader>
-						<SubHeader
-							pointerEvents="none"
-							animated
-							style={{
-								...this.typeSelectionStyle(3),
-								width: SCREEN_WIDTH / 4,
-								textAlign: "center"
-							}}
-						>
-							Shows
-						</SubHeader>
+						{EVENT_TYPES.map((type, i) => (
+							<SubHeader
+								animated
+								key={i}
+								pointerEvents="none"
+								style={{ ...this.typeSelectionStyle(i), ...styles.typeSelection }}
+							>
+								{type}
+							</SubHeader>
+						))}
 					</Interactable.View>
 				</Interactable.View>
 			</View>
@@ -378,6 +305,20 @@ const styles = StyleSheet.create({
 		paddingTop: 155,
 		alignItems: "center",
 		justifyContent: "center"
+	},
+	horizontalSelector: {
+		width: SCREEN_WIDTH,
+		flexDirection: "row",
+		justifyContent: "space-around",
+		alignItems: "center"
+	},
+	timeSelection: {
+		width: SCREEN_WIDTH / 3,
+		textAlign: "center"
+	},
+	typeSelection: {
+		width: SCREEN_WIDTH / 4,
+		textAlign: "center"
 	},
 	typeIndicator: {
 		position: "absolute",
