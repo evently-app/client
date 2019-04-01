@@ -103,7 +103,7 @@ export const pop = () => {
 
 // complex functions which dispatch multiple action and can be asynchronous
 
-export const LoadQueue = () => {
+export const LoadQueue = eventType => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			dispatch(loadQueueInit());
@@ -116,19 +116,33 @@ export const LoadQueue = () => {
 			//get user location and grab events
 			navigator.geolocation.getCurrentPosition(
 				position => {
-					coordinates =
-						String(position.coords.latitude) +
-						"/" +
-						String(position.coords.longitude);
-					console.log(coordinates);
-					const request =
-						"http://event-queue-service.herokuapp.com/grab_events/" +
-						coordinates +
-						"/1000km";
-					console.log(request);
+					const { latitude, longitude } = position.coords;
 
+					const request =
+						"http://event-queue-service.herokuapp.com/grab_events";
+
+					// axios
+					// 	.post(request, {
+					// 		coordinates: {
+					// 			latitude,
+					// 			longitude
+					// 		},
+					// 		radius: "50km",
+					// 		userPreferences: state.user.entity.preferences,
+					// 		eventType: null
+					// 	})
+					// 	.then(response => {
+					// 		dispatch(loadQueueSuccess(response.data));
+					// 		resolve();
+					// 	})
+					// 	.catch(error => {
+					// 		dispatch(loadQueueFailure(error));
+					// 		reject(error);
+					// 	});
+
+					coordinates = `${latitude}/${longitude}`;
 					axios
-						.get(request)
+						.get(`${request}/${coordinates}/1000km`)
 						.then(response => {
 							dispatch(loadQueueSuccess(response.data));
 							resolve();

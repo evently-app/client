@@ -48,44 +48,48 @@ class Dial extends Component {
 
 				const panPoint = { x: x0 + dx, y: y0 + dy };
 
-				// const onRightSide = panPoint.x > this.center.x;
+				// pattern 1
 
-				// // get lengths of implicit lines for calculation
-				// const centerTop = this.center.y - this.centerTop.y;
-				// const centerOut = Math.sqrt(
-				// 	Math.pow(this.center.y - panPoint.y, 2) +
-				// 		Math.pow(this.center.x - panPoint.x, 2)
-				// );
-				// const topOut = Math.sqrt(
-				// 	Math.pow(this.centerTop.y - panPoint.y, 2) +
-				// 		Math.pow(this.centerTop.x - panPoint.x, 2)
-				// );
+				const onRightSide = panPoint.x > this.center.x;
 
-				// // use line lengths and law of cosine to calculate implied angle from drag
-				// const angle = Math.acos(
-				// 	(Math.pow(centerTop, 2) +
-				// 		Math.pow(centerOut, 2) -
-				// 		Math.pow(topOut, 2)) /
-				// 		(2 * centerOut * centerTop)
-				// );
-
-				// // interpret angle as fill amount
-				// let fill = onRightSide
-				// 	? (angle / Math.PI) * 0.7 - 0.15
-				// 	: 0.5 + (1 - angle / Math.PI) * 0.6;
-				// if (fill < 0) fill = 0;
-				// if (fill > 1) fill = 1;
-				// this.setState({ fill });
-
-				// measure distance from center
-				const distance = Math.sqrt(
+				// get lengths of implicit lines for calculation
+				const centerTop = this.center.y - this.centerTop.y;
+				const centerOut = Math.sqrt(
 					Math.pow(this.center.y - panPoint.y, 2) +
 						Math.pow(this.center.x - panPoint.x, 2)
 				);
-				let fill = (distance - 40) / 300;
+				const topOut = Math.sqrt(
+					Math.pow(this.centerTop.y - panPoint.y, 2) +
+						Math.pow(this.centerTop.x - panPoint.x, 2)
+				);
+
+				// use line lengths and law of cosine to calculate implied angle from drag
+				const angle = Math.acos(
+					(Math.pow(centerTop, 2) +
+						Math.pow(centerOut, 2) -
+						Math.pow(topOut, 2)) /
+						(2 * centerOut * centerTop)
+				);
+
+				// interpret angle as fill amount
+				let fill = onRightSide
+					? (angle / Math.PI) * 0.7 - 0.15
+					: 0.5 + (1 - angle / Math.PI) * 0.6;
 				if (fill < 0) fill = 0;
 				if (fill > 1) fill = 1;
 				this.setState({ fill });
+
+				// pattern 2
+
+				// measure distance from center
+				// const distance = Math.sqrt(
+				// 	Math.pow(this.center.y - panPoint.y, 2) +
+				// 		Math.pow(this.center.x - panPoint.x, 2)
+				// );
+				// let fill = (distance - 40) / 300;
+				// if (fill < 0) fill = 0;
+				// if (fill > 1) fill = 1;
+				// this.setState({ fill });
 
 				// haptic if past next tick
 				if (this.tick != genTick(fill)) {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
-import { Header } from "../universal/Text";
+import { Header, SubHeader } from "../universal/Text";
 import Dial from "./Dial";
 import { WatchUser } from "../../redux/user";
 import { UpdateUser } from "../../api";
@@ -10,30 +10,30 @@ import {
 	SCREEN_WIDTH,
 	SCREEN_HEIGHT,
 	IS_X,
-	CATEGORIES
+	PREFERENCES
 } from "../../lib/constants";
 
 export class Profile extends Component {
 	render() {
 		const Dials = [];
-		for (let i = 0; i < CATEGORIES.length; i++) {
-			const category = CATEGORIES[i];
+		for (let i = 0; i < PREFERENCES.length; i++) {
+			const preference = PREFERENCES[i];
 			const fill =
 				!!this.props.userEntity.preferences &&
-				!!this.props.userEntity.preferences[category.name]
-					? this.props.userEntity.preferences[category.name]
+				!!this.props.userEntity.preferences[preference.name]
+					? this.props.userEntity.preferences[preference.name]
 					: 0;
 			Dials.push(
 				<Dial
-					key={`dial-${category.name}`}
-					title={category.title}
+					key={`dial-${preference.name}`}
+					title={preference.title}
 					fill={fill}
 					onChange={value => {
 						UpdateUser(this.props.uid, {
-							[`preferences.${category.name}`]: value
+							[`preferences.${preference.name}`]: value
 						}).then(() => {
 							// successfully updated
-							console.log(`updated ${category.name} to ${value}`);
+							console.log(`updated ${preference.name} to ${value}`);
 						});
 					}}
 				/>
@@ -43,6 +43,9 @@ export class Profile extends Component {
 		return (
 			<View style={styles.wrapper}>
 				<Header style={styles.header}>Preferences</Header>
+				<SubHeader style={styles.explanation}>
+					I like events that are...
+				</SubHeader>
 				<View style={styles.dials}>{Dials}</View>
 			</View>
 		);
@@ -61,7 +64,10 @@ const styles = StyleSheet.create({
 		paddingTop: IS_X ? 60 : 40
 	},
 	header: {
-		marginLeft: 20
+		marginHorizontal: 20
+	},
+	explanation: {
+		marginHorizontal: 20
 	},
 	dials: {
 		flexDirection: "row",

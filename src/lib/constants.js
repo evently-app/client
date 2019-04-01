@@ -12,7 +12,18 @@ const CATEGORIES = [
 	{ title: "Shows", name: "shows" },
 	{ title: "Comedy", name: "comedy" },
 	{ title: "Art", name: "art" },
-	{ title: "Clubs", name: "clubs" }
+	{ title: "Nightlife", name: "clubs" },
+	{ title: "Free", name: "free" },
+	{ title: "Family Friendly", "family"},
+	{ title: "Professional", "professional"},
+];
+
+const PREFERENCES = [
+	{ title: "Lit", name: "lit" },
+	{ title: "Active", name: "active" },
+	{ title: "Relaxing", name: "relaxing" },
+	{ title: "Outdoor", name: "outdoor" },
+	{ title: "Cultural", name: "cultural" }
 ];
 
 module.exports = {
@@ -20,5 +31,6 @@ module.exports = {
 	SCREEN_HEIGHT: height,
 	SB_HEIGHT,
 	IS_X,
-	CATEGORIES
+	CATEGORIES,
+	PREFERENCES
 };
