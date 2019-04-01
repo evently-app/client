@@ -3,13 +3,13 @@
 import { combineReducers } from "redux";
 
 import user from "./user";
-// import filter from "./filter";
+import filter from "./filter";
 import queue from "./queue";
 import timeline from "./timeline";
 
 export default combineReducers({
 	user,
-	// filter,
+	filter,
 	queue,
 	timeline
 });

@@ -92,7 +92,6 @@ export const resetQueue = () => {
 	return {
 		type: RESET_QUEUE
 	};
-	w;
 };
 
 export const pop = () => {
@@ -116,16 +115,11 @@ export const LoadQueue = () => {
 			//get user location and grab events
 			navigator.geolocation.getCurrentPosition(
 				position => {
-					coordinates =
-						String(position.coords.latitude) +
-						"/" +
-						String(position.coords.longitude);
-					console.log(coordinates);
+					coordinates = String(position.coords.latitude) + "/" + String(position.coords.longitude);
+					// console.log(coordinates);
 					const request =
-						"http://event-queue-service.herokuapp.com/grab_events/" +
-						coordinates +
-						"/1000km";
-					console.log(request);
+						"http://event-queue-service.herokuapp.com/grab_events/" + coordinates + "/100km";
+					// console.log(request);
 
 					axios
 						.get(request)

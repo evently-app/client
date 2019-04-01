@@ -11,7 +11,6 @@ import { Header, SubHeader, Paragraph } from "../universal/Text";
 const INITIAL_WIDTH = 100;
 
 const ActionButton = ({ title, url, yOffset }) => {
-	console.log("URL IS: ", url);
 	const inputRange = [0, 50, 110, 150];
 
 	const animatedStyle = {
