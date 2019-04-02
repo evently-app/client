@@ -278,8 +278,6 @@ class Filter extends PureComponent {
 							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
 								<SubHeader
 									animated
-									key={i}
-									pointerEvents="none"
 									style={{ ...this.typeSelectionStyle(i), ...styles.typeSelection }}
 								>
 									{type}
