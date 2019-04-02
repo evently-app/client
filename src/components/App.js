@@ -15,7 +15,7 @@ import ProfileLogo from "../assets/profile.svg";
 import FeedLogo from "../assets/logo.svg";
 import TimelineLogo from "../assets/timeline.svg";
 
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../lib/constants";
+import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../lib/constants";
 import { WatchUser } from "../redux/user";
 
 // TESTING GEOFIRESTORE
@@ -202,13 +202,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 100,
-    padding: 25,
-    paddingBottom: 30,
+    height: 75,
+    padding: IS_X ? 25 : 15,
+    paddingBottom: IS_X ? 30 : 15,
     backgroundColor: "transparent",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "flex-end"
   },
   tabBarButton: {
     width: 60,

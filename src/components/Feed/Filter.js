@@ -13,7 +13,7 @@ import {
 	ScrollTypeSelection
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import { SB_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
+import { SB_HEIGHT, SCREEN_WIDTH, IS_X } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
 const CLOSED_POINT = { y: 0 };
@@ -102,6 +102,7 @@ class Filter extends PureComponent {
 			// 		})
 			// 	}
 			// ],
+			...styles.timeSelection,
 			opacity:
 				!transitioning && open
 					? this.timeXOffset.interpolate({
@@ -125,6 +126,7 @@ class Filter extends PureComponent {
 		const { open, transitioning, typeSelection, filterDrag } = this.props;
 
 		return {
+			...styles.typeSelection,
 			opacity:
 				!transitioning && open
 					? this.typeXOffset.interpolate({
@@ -234,7 +236,7 @@ class Filter extends PureComponent {
 					onSnapStart={this.handleOnSnap}
 					boundaries={BOUNDARIES}
 					initialPosition={CLOSED_POINT}
-					style={styles.interactable}
+					style={styles.filterContainer}
 					animatedValueY={filterDrag}
 				>
 					<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
@@ -259,10 +261,7 @@ class Filter extends PureComponent {
 					>
 						{TIME_TYPES.map((time, i) => (
 							<TouchableOpacity key={i} onPress={() => this.timeSelector.snapTo({ index: i })}>
-								<SubHeader
-									animated
-									style={{ ...this.timeSelectionStyle(i), ...styles.timeSelection }}
-								>
+								<SubHeader animated style={this.timeSelectionStyle(i)}>
 									{time}
 								</SubHeader>
 							</TouchableOpacity>
@@ -284,10 +283,7 @@ class Filter extends PureComponent {
 					>
 						{EVENT_TYPES.map((type, i) => (
 							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
-								<SubHeader
-									animated
-									style={{ ...this.typeSelectionStyle(i), ...styles.typeSelection }}
-								>
+								<SubHeader animated style={this.typeSelectionStyle(i)}>
 									{type}
 								</SubHeader>
 							</TouchableOpacity>
@@ -312,22 +308,15 @@ class Filter extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-	container: {
+	filterContainer: {
 		position: "absolute",
-		top: SB_HEIGHT,
-		left: 0,
-		right: 0
-		// height: 150
-	},
-	interactable: {
-		position: "absolute",
-		top: -40,
+		// backgroundColor: "rgba(255,0,0,0.5)",
+		top: SB_HEIGHT + (IS_X ? 0 : 10),
 		left: 0,
 		right: 0,
-		height: 300,
-		padding: 5,
+		height: 150,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "flex-end"
 	},
 	horizontalSelector: {
 		width: SCREEN_WIDTH,
@@ -350,10 +339,11 @@ const styles = StyleSheet.create({
 		paddingVertical: 6,
 		borderRadius: 10,
 		backgroundColor: colors.lightpurple,
-		top: 10,
+		top: SB_HEIGHT + 12,
 		left: 30
 	},
 	toggleButton: {
+		// backgroundColor: "rgba(0,255,0,0.5)",
 		position: "absolute",
 		top: SB_HEIGHT - 10,
 		left: 0,
@@ -369,8 +359,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = state => {
-	const { open, transitioning, timeSelection, typeSelection } = state.filter;
+const mapStateToProps = ({ filter }) => {
+	const { open, transitioning, timeSelection, typeSelection } = filter;
 	return {
 		open,
 		transitioning,
