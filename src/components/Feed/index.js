@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Animated, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Animated, Easing, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -19,21 +19,9 @@ class Feed extends Component {
 		count: 0,
 		animatedValues: {},
 		userLocation: {}
-		// queue: [
-		// 	{
-		// 		id: "1",
-		// 		title: "khalid tour",
-		// 		description: "come see kahlid live!",
-		// 		latitude: 37.7749,
-		// 		longitude: 122.4194,
-		// 		tags: ["concert", "music", "pop"],
-		// 		startTime: "",
-		// 		imageUrl:
-		// 			"https://media.gq.com/photos/5a625821df8e105e64e8df4b/16:9/w_1280,c_limit/Khalid_Shot_01-edit.jpg"
-		// 	}
-		// ]
 	};
 
+	animatedEntry = new Animated.Value(1);
 	filterDrag = new Animated.Value(0);
 
 	componentWillMount() {
@@ -54,10 +42,7 @@ class Feed extends Component {
 					animatedValues[id] = new Animated.Value(0);
 				});
 
-				this.setState({ animatedValues, loading: false });
-
-				// Alert.alert("successfully got queue");
-				// console.log("MOUNT LOG", this.props);
+				this.setState({ animatedValues, loading: false }, this.entryAnimation);
 			})
 			.catch(error => {
 				console.log(error);
@@ -67,6 +52,24 @@ class Feed extends Component {
 	// swipeAmount = new Animated.Value(0);
 
 	componentDidMount() {}
+
+	entryAnimation = () => {
+		Animated.timing(this.animatedEntry, {
+			toValue: 0,
+			duration: 500,
+			easing: Easing.quad,
+			useNativeDriver: true
+		}).start();
+	};
+
+	exitAnimation = () => {
+		Animated.timing(this.animatedEntry, {
+			toValue: 1,
+			duration: 500,
+			easing: Easing.quad,
+			useNativeDriver: true
+		}).start();
+	};
 
 	// shouldComponentUpdate() {
 	// 	return false;
@@ -111,9 +114,26 @@ class Feed extends Component {
 		const { animatedValues, loading, userLocation } = this.state;
 		const { filter, queue } = this.props;
 
+		const cardContainerStyle = {
+			transform: [
+				{
+					translateY: this.animatedEntry.interpolate({
+						inputRange: [0, 1],
+						outputRange: [0, SCREEN_HEIGHT]
+					})
+				},
+				{
+					scale: this.animatedEntry.interpolate({
+						inputRange: [0, 0.1, 1],
+						outputRange: [1, 0.9, 0.9]
+					})
+				}
+			]
+		};
+
 		const first = queue.length - 1;
 		const cards = (
-			<>
+			<Animated.View style={[styles.center, cardContainerStyle]}>
 				{queue.map((card, i) => (
 					<Swipeable
 						key={card.id}
@@ -136,7 +156,7 @@ class Feed extends Component {
 						onPressIn={this.closeFilter}
 					/>
 				)}
-			</>
+			</Animated.View>
 		);
 
 		const feed = (
@@ -170,9 +190,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center"
 	},
+	center: {
+		alignItems: "center",
+		justifyContent: "center"
+	},
 	closeFilterButton: {
 		position: "absolute",
-		top: 200,
+		top: 260,
 		bottom: 0,
 		left: 0,
 		right: 0

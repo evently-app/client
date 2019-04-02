@@ -18,6 +18,30 @@ import TimelineLogo from "../assets/timeline.svg";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../lib/constants";
 import { WatchUser } from "../redux/user";
 
+// TESTING GEOFIRESTORE
+// import firebase from "react-native-firebase";
+// import { GeoFirestore } from "geofirestore";
+//
+// let firestore = firebase.firestore();
+// let geofirestore = new GeoFirestore(firestore);
+//
+// let geocollection = geofirestore.collection("eventsLocations"); //(firestore.collection("eventsLocations"));
+//
+// let query = geocollection.near({
+//   center: new firebase.firestore.GeoPoint(41.3083, -72.9279),
+//   radius: 100
+// });
+//
+// query.onSnapshot(snapshot => {
+//   console.log(snapshot);
+// });
+//
+// console.log(query);
+
+// query.on("key_entered", (key, document, distance) => {
+//   console.log(key, document, distance);
+// });
+
 const xOffset = new Animated.Value(SCREEN_WIDTH);
 const scrollPosition = Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
   useNativeDriver: true

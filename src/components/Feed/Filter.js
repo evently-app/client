@@ -168,7 +168,7 @@ class Filter extends PureComponent {
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: FILTER_DRAG_RANGE,
-						outputRange: [-15, -35, -95]
+						outputRange: [-15 - 2, -35 - 2, -95 - 2]
 					})
 				}
 			]
@@ -179,7 +179,7 @@ class Filter extends PureComponent {
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: FILTER_DRAG_RANGE,
-						outputRange: [0, -35, -85]
+						outputRange: [0 - 30, -35 - 30, -85 - 30]
 					})
 				}
 			]
@@ -209,11 +209,16 @@ class Filter extends PureComponent {
 			})
 		};
 
+		const TypeBubble = (
+			<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
+				<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
+			</Animated.View>
+		);
+
+		const ToggleButton = <TouchableOpacity style={styles.toggleButton} onPress={onPress} />;
+
 		return (
 			<View style={styles.container}>
-				<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
-					<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
-				</Animated.View>
 				<Interactable.View
 					animatedNativeDriver
 					verticalOnly
@@ -280,12 +285,8 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 				</Interactable.View>
-				{/* {!open && ( */}
-				{/* 	<TouchableOpacity */}
-				{/* 		onPress={onPress} */}
-				{/* 		style={{ position: "absolute", top: 0, left: 0, right: 0, height: 100 }} */}
-				{/* 	/> */}
-				{/* )} */}
+				{typeSelection !== 0 && TypeBubble}
+				{!open && ToggleButton}
 			</View>
 		);
 	}
@@ -301,14 +302,17 @@ const styles = StyleSheet.create({
 	},
 	interactable: {
 		height: 300,
-		top: -185,
+		top: -155,
 		padding: 5,
+		// backgroundColor: "green",
 		paddingTop: 155,
 		alignItems: "center",
 		justifyContent: "center"
 	},
 	horizontalSelector: {
 		width: SCREEN_WIDTH,
+		// backgroundColor: "red",
+		paddingBottom: 25,
 		flexDirection: "row",
 		justifyContent: "space-around",
 		alignItems: "center"
@@ -329,6 +333,13 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.lightpurple,
 		top: 10,
 		left: 30
+	},
+	toggleButton: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		height: 200
 	}
 });
 
