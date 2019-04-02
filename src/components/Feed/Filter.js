@@ -241,6 +241,7 @@ class Filter extends PureComponent {
 					<Interactable.View
 						horizontalOnly
 						animatedNativeDriver
+						ref={Interactable => (this.timeSelector = Interactable)}
 						dragEnabled={open}
 						snapPoints={TIME_SNAP_POINTS}
 						initialPosition={TIME_SNAP_POINTS[0]}
@@ -249,14 +250,14 @@ class Filter extends PureComponent {
 						animatedValueX={this.timeXOffset}
 					>
 						{TIME_TYPES.map((time, i) => (
-							<SubHeader
-								animated
-								key={i}
-								pointerEvents="none"
-								style={{ ...this.timeSelectionStyle(i), ...styles.timeSelection }}
-							>
-								{time}
-							</SubHeader>
+							<TouchableOpacity key={i} onPress={() => this.timeSelector.snapTo({ index: i })}>
+								<SubHeader
+									animated
+									style={{ ...this.timeSelectionStyle(i), ...styles.timeSelection }}
+								>
+									{time}
+								</SubHeader>
+							</TouchableOpacity>
 						))}
 					</Interactable.View>
 					<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
@@ -265,6 +266,7 @@ class Filter extends PureComponent {
 					<Interactable.View
 						horizontalOnly
 						animatedNativeDriver
+						ref={Interactable => (this.typeSelector = Interactable)}
 						dragEnabled={open}
 						snapPoints={TYPE_SNAP_POINTS}
 						initialPosition={TYPE_SNAP_POINTS[0]}
@@ -273,14 +275,16 @@ class Filter extends PureComponent {
 						animatedValueX={this.typeXOffset}
 					>
 						{EVENT_TYPES.map((type, i) => (
-							<SubHeader
-								animated
-								key={i}
-								pointerEvents="none"
-								style={{ ...this.typeSelectionStyle(i), ...styles.typeSelection }}
-							>
-								{type}
-							</SubHeader>
+							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
+								<SubHeader
+									animated
+									key={i}
+									pointerEvents="none"
+									style={{ ...this.typeSelectionStyle(i), ...styles.typeSelection }}
+								>
+									{type}
+								</SubHeader>
+							</TouchableOpacity>
 						))}
 					</Interactable.View>
 				</Interactable.View>
