@@ -49,8 +49,6 @@ class Feed extends Component {
 			});
 	}
 
-	// swipeAmount = new Animated.Value(0);
-
 	componentDidMount() {}
 
 	entryAnimation = () => {
@@ -94,14 +92,6 @@ class Feed extends Component {
 		this.popCard(card);
 	};
 
-	openFilter = () => {
-		this.Filter.snapTo({ index: 1 });
-	};
-
-	closeFilter = () => {
-		this.Filter.snapTo({ index: 0 });
-	};
-
 	handleOnStartSwipe = () => {
 		// this.fetchCards();
 	};
@@ -139,41 +129,28 @@ class Feed extends Component {
 
 		const first = queue.length - 1;
 		const cards = (
-			<>
-				<Animated.View style={[styles.center, cardContainerStyle]}>
-					{queue.map((card, i) => (
-						<Swipeable
-							key={card.id}
-							id={card.id}
-							index={queue.length - i}
-							swipeAmount={animatedValues[card.id]}
-							scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
-							onStartSwipe={this.handleOnStartSwipe}
-							onSwipeRight={() => this.onSwipeCardRight(card)}
-							onSwipeLeft={() => this.onSwipeCardLeft(card)}
-						>
-							<EventCard userLocation={userLocation} {...card} />
-						</Swipeable>
-					))}
-				</Animated.View>
-				{filter.open && (
-					<TouchableOpacity
-						activeOpacity={1}
-						style={styles.closeFilterButton}
-						onPressIn={this.closeFilter}
-					/>
-				)}
-			</>
+			<Animated.View style={[styles.center, cardContainerStyle]}>
+				{queue.map((card, i) => (
+					<Swipeable
+						key={card.id}
+						id={card.id}
+						index={queue.length - i}
+						swipeAmount={animatedValues[card.id]}
+						scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
+						onStartSwipe={this.handleOnStartSwipe}
+						onSwipeRight={() => this.onSwipeCardRight(card)}
+						onSwipeLeft={() => this.onSwipeCardLeft(card)}
+					>
+						<EventCard userLocation={userLocation} {...card} />
+					</Swipeable>
+				))}
+			</Animated.View>
 		);
 
 		return (
 			<View style={styles.container}>
-				<Filter interactableRef={Filter => (this.Filter = Filter)} filterDrag={this.filterDrag} />
-				<TouchableOpacity
-					style={styles.toggleButton}
-					onPress={filter.open ? this.closeFilter : this.openFilter}
-				/>
 				{loading ? <Spinner /> : cards}
+				<Filter filterDrag={this.filterDrag} />
 			</View>
 		);
 	}
@@ -191,20 +168,6 @@ const styles = StyleSheet.create({
 	center: {
 		alignItems: "center",
 		justifyContent: "center"
-	},
-	closeFilterButton: {
-		position: "absolute",
-		top: 250,
-		bottom: 0,
-		left: 0,
-		right: 0
-	},
-	toggleButton: {
-		position: "absolute",
-		top: SB_HEIGHT,
-		left: 0,
-		right: 0,
-		height: 80
 	}
 });
 

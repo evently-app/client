@@ -149,8 +149,16 @@ class Filter extends PureComponent {
 		};
 	};
 
+	openFilter = () => {
+		this.filter.snapTo({ index: 1 });
+	};
+
+	closeFilter = () => {
+		this.filter.snapTo({ index: 0 });
+	};
+
 	render() {
-		const { open, filterDrag, onPress, interactableRef, timeSelection, typeSelection } = this.props;
+		const { open, filterDrag, timeSelection, typeSelection } = this.props;
 
 		const animatedLocation = {
 			transform: [
@@ -216,12 +224,12 @@ class Filter extends PureComponent {
 		);
 
 		return (
-			<View style={styles.container}>
+			<>
 				<Interactable.View
 					verticalOnly
 					animatedNativeDriver
 					snapPoints={[CLOSED_POINT, OPEN_POINT]}
-					ref={interactableRef}
+					ref={Interactable => (this.filter = Interactable)}
 					onDrag={this.handleOnDrag}
 					onSnapStart={this.handleOnSnap}
 					boundaries={BOUNDARIES}
@@ -286,8 +294,19 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 				</Interactable.View>
+				<TouchableOpacity
+					style={styles.toggleButton}
+					onPress={open ? this.closeFilter : this.openFilter}
+				/>
 				{typeSelection !== 0 && TypeBubble}
-			</View>
+				{open && (
+					<TouchableOpacity
+						activeOpacity={1}
+						style={styles.closeFilterButton}
+						onPressIn={this.closeFilter}
+					/>
+				)}
+			</>
 		);
 	}
 }
@@ -297,14 +316,16 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: SB_HEIGHT,
 		left: 0,
-		right: 0,
-		height: 150
+		right: 0
+		// height: 150
 	},
 	interactable: {
+		position: "absolute",
+		top: -40,
+		left: 0,
+		right: 0,
 		height: 300,
-		top: -155,
 		padding: 5,
-		paddingTop: 155,
 		alignItems: "center",
 		justifyContent: "center"
 	},
@@ -331,6 +352,20 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.lightpurple,
 		top: 10,
 		left: 30
+	},
+	toggleButton: {
+		position: "absolute",
+		top: SB_HEIGHT - 10,
+		left: 0,
+		right: 0,
+		height: 80
+	},
+	closeFilterButton: {
+		position: "absolute",
+		top: 250,
+		bottom: 0,
+		left: 0,
+		right: 0
 	}
 });
 
