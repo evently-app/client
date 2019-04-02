@@ -8,7 +8,7 @@ import Filter from "./Filter";
 import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
 
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../lib/constants";
+import { SCREEN_WIDTH, SCREEN_HEIGHT, SB_HEIGHT } from "../../lib/constants";
 import { LoadQueue } from "../../redux/queue";
 import { BeginTransition } from "../../redux/filter";
 import { SwipeRight, SwipeLeft } from "../../redux/timeline";
@@ -56,7 +56,7 @@ class Feed extends Component {
 	entryAnimation = () => {
 		Animated.timing(this.animatedEntry, {
 			toValue: 0,
-			duration: 500,
+			duration: 300,
 			easing: Easing.quad,
 			useNativeDriver: true
 		}).start();
@@ -65,7 +65,7 @@ class Feed extends Component {
 	exitAnimation = () => {
 		Animated.timing(this.animatedEntry, {
 			toValue: 1,
-			duration: 500,
+			duration: 300,
 			easing: Easing.quad,
 			useNativeDriver: true
 		}).start();
@@ -95,14 +95,10 @@ class Feed extends Component {
 	};
 
 	openFilter = () => {
-		const { BeginTransition } = this.props;
-		BeginTransition();
 		this.Filter.snapTo({ index: 1 });
 	};
 
 	closeFilter = () => {
-		const { BeginTransition } = this.props;
-		BeginTransition();
 		this.Filter.snapTo({ index: 0 });
 	};
 
@@ -115,17 +111,27 @@ class Feed extends Component {
 		const { filter, queue } = this.props;
 
 		const cardContainerStyle = {
+			opacity: this.animatedEntry.interpolate({
+				inputRange: [0, 1],
+				outputRange: [1, 0]
+			}),
 			transform: [
+				// {
+				// 	translateY: this.animatedEntry.interpolate({
+				// 		inputRange: [0, 1],
+				// 		outputRange: [0, SCREEN_HEIGHT]
+				// 	})
+				// },
 				{
-					translateY: this.animatedEntry.interpolate({
-						inputRange: [0, 1],
-						outputRange: [0, SCREEN_HEIGHT]
+					translateY: this.filterDrag.interpolate({
+						inputRange: [0, 100],
+						outputRange: [0, 100]
 					})
 				},
 				{
 					scale: this.animatedEntry.interpolate({
-						inputRange: [0, 0.1, 1],
-						outputRange: [1, 0.9, 0.9]
+						inputRange: [0, 1],
+						outputRange: [1, 0.9]
 					})
 				}
 			]
@@ -133,22 +139,23 @@ class Feed extends Component {
 
 		const first = queue.length - 1;
 		const cards = (
-			<Animated.View style={[styles.center, cardContainerStyle]}>
-				{queue.map((card, i) => (
-					<Swipeable
-						key={card.id}
-						id={card.id}
-						index={queue.length - i}
-						filterDrag={this.filterDrag}
-						swipeAmount={animatedValues[card.id]}
-						scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
-						onStartSwipe={this.handleOnStartSwipe}
-						onSwipeRight={() => this.onSwipeCardRight(card)}
-						onSwipeLeft={() => this.onSwipeCardLeft(card)}
-					>
-						<EventCard userLocation={userLocation} {...card} />
-					</Swipeable>
-				))}
+			<>
+				<Animated.View style={[styles.center, cardContainerStyle]}>
+					{queue.map((card, i) => (
+						<Swipeable
+							key={card.id}
+							id={card.id}
+							index={queue.length - i}
+							swipeAmount={animatedValues[card.id]}
+							scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
+							onStartSwipe={this.handleOnStartSwipe}
+							onSwipeRight={() => this.onSwipeCardRight(card)}
+							onSwipeLeft={() => this.onSwipeCardLeft(card)}
+						>
+							<EventCard userLocation={userLocation} {...card} />
+						</Swipeable>
+					))}
+				</Animated.View>
 				{filter.open && (
 					<TouchableOpacity
 						activeOpacity={1}
@@ -156,28 +163,19 @@ class Feed extends Component {
 						onPressIn={this.closeFilter}
 					/>
 				)}
-			</Animated.View>
+			</>
 		);
 
-		const feed = (
+		return (
 			<View style={styles.container}>
-				<Filter
-					interactableRef={Filter => (this.Filter = Filter)}
-					// onDrag={this.onDrag}
+				<Filter interactableRef={Filter => (this.Filter = Filter)} filterDrag={this.filterDrag} />
+				<TouchableOpacity
+					style={styles.toggleButton}
 					onPress={filter.open ? this.closeFilter : this.openFilter}
-					filterDrag={this.filterDrag}
 				/>
 				{loading ? <Spinner /> : cards}
 			</View>
 		);
-
-		// const spinner = (
-		// 	<View style={styles.container}>
-
-		// 	</View>
-		// );
-
-		return feed;
 	}
 }
 
@@ -196,10 +194,17 @@ const styles = StyleSheet.create({
 	},
 	closeFilterButton: {
 		position: "absolute",
-		top: 260,
+		top: 250,
 		bottom: 0,
 		left: 0,
 		right: 0
+	},
+	toggleButton: {
+		position: "absolute",
+		top: SB_HEIGHT,
+		left: 0,
+		right: 0,
+		height: 80
 	}
 });
 

@@ -74,12 +74,6 @@ class Swipeable extends Component {
 		const animated = {
 			transform: [
 				{
-					translateY: filterDrag.interpolate({
-						inputRange: [0, 100],
-						outputRange: [0, 100]
-					})
-				},
-				{
 					rotate: swipeAmount.interpolate({
 						inputRange: [-1.2 * SCREEN_WIDTH, 0, SCREEN_WIDTH * 1.2],
 						outputRange: ["-10deg", "0deg", "10deg"]

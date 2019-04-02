@@ -45,7 +45,7 @@ class Filter extends PureComponent {
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
-		const { BeginTransition, EndTransition } = this.props;
+		const { open, onPress, BeginTransition, EndTransition } = this.props;
 
 		if (state === "start") BeginTransition();
 		else EndTransition();
@@ -215,17 +215,14 @@ class Filter extends PureComponent {
 			</Animated.View>
 		);
 
-		const ToggleButton = <TouchableOpacity style={styles.toggleButton} onPress={onPress} />;
-
 		return (
 			<View style={styles.container}>
 				<Interactable.View
-					animatedNativeDriver
 					verticalOnly
+					animatedNativeDriver
 					snapPoints={[CLOSED_POINT, OPEN_POINT]}
 					ref={interactableRef}
 					onDrag={this.handleOnDrag}
-					// onSnap={this.props.EndTransition}
 					onSnapStart={this.handleOnSnap}
 					boundaries={BOUNDARIES}
 					initialPosition={CLOSED_POINT}
@@ -243,6 +240,7 @@ class Filter extends PureComponent {
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
+						animatedNativeDriver
 						dragEnabled={open}
 						snapPoints={TIME_SNAP_POINTS}
 						initialPosition={TIME_SNAP_POINTS[0]}
@@ -266,6 +264,7 @@ class Filter extends PureComponent {
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
+						animatedNativeDriver
 						dragEnabled={open}
 						snapPoints={TYPE_SNAP_POINTS}
 						initialPosition={TYPE_SNAP_POINTS[0]}
@@ -286,7 +285,6 @@ class Filter extends PureComponent {
 					</Interactable.View>
 				</Interactable.View>
 				{typeSelection !== 0 && TypeBubble}
-				{!open && ToggleButton}
 			</View>
 		);
 	}
@@ -339,7 +337,7 @@ const styles = StyleSheet.create({
 		top: 0,
 		left: 0,
 		right: 0,
-		height: 200
+		height: 80
 	}
 });
 
