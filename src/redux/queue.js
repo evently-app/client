@@ -92,7 +92,6 @@ export const resetQueue = () => {
 	return {
 		type: RESET_QUEUE
 	};
-	w;
 };
 
 export const pop = () => {

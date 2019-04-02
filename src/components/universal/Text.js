@@ -37,31 +37,28 @@ const paragraphStyle = {
 
 const Header = ({ animated, style, children }) => {
 	if (animated)
-		return (
-			<Animated.Text style={{ ...headerStyle, ...style }}>
-				{children}
-			</Animated.Text>
-		);
+		return <Animated.Text style={{ ...headerStyle, ...style }}>{children}</Animated.Text>;
 	else return <Text style={{ ...headerStyle, ...style }}>{children}</Text>;
 };
 
-const SubHeader = ({ animated, style, children }) => {
+const SubHeader = ({ animated, style, children, pointerEvents }) => {
 	if (animated)
 		return (
-			<Animated.Text style={{ ...subHeaderStyle, ...style }}>
+			<Animated.Text pointerEvents={pointerEvents} style={{ ...subHeaderStyle, ...style }}>
 				{children}
 			</Animated.Text>
 		);
-	else return <Text style={{ ...subHeaderStyle, ...style }}>{children}</Text>;
+	else
+		return (
+			<Text pointerEvents={pointerEvents} style={{ ...subHeaderStyle, ...style }}>
+				{children}
+			</Text>
+		);
 };
 
 const Paragraph = ({ animated, style, children }) => {
 	if (animated)
-		return (
-			<Animated.Text style={{ ...paragraphStyle, ...style }}>
-				{children}
-			</Animated.Text>
-		);
+		return <Animated.Text style={{ ...paragraphStyle, ...style }}>{children}</Animated.Text>;
 	else return <Text style={{ ...paragraphStyle, ...style }}>{children}</Text>;
 };
 

@@ -48,6 +48,10 @@ target 'evently' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+pod 'lottie-ios', :path => '../node_modules/lottie-ios'
+
+pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+
 #  target 'eventlyTests' do
 #    inherit! :search_paths
 #    # Pods for testing
