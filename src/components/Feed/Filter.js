@@ -302,14 +302,12 @@ const styles = StyleSheet.create({
 		height: 300,
 		top: -155,
 		padding: 5,
-		// backgroundColor: "green",
 		paddingTop: 155,
 		alignItems: "center",
 		justifyContent: "center"
 	},
 	horizontalSelector: {
 		width: SCREEN_WIDTH,
-		// backgroundColor: "red",
 		paddingBottom: 25,
 		flexDirection: "row",
 		justifyContent: "space-around",
@@ -331,13 +329,6 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.lightpurple,
 		top: 10,
 		left: 30
-	},
-	toggleButton: {
-		position: "absolute",
-		top: 0,
-		left: 0,
-		right: 0,
-		height: 80
 	}
 });
 
