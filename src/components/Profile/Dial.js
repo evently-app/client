@@ -48,6 +48,8 @@ class Dial extends Component {
 
 				const panPoint = { x: x0 + dx, y: y0 + dy };
 
+				// pattern 1
+
 				const onRightSide = panPoint.x > this.center.x;
 
 				// get lengths of implicit lines for calculation
@@ -76,6 +78,18 @@ class Dial extends Component {
 				if (fill < 0) fill = 0;
 				if (fill > 1) fill = 1;
 				this.setState({ fill });
+
+				// pattern 2
+
+				// measure distance from center
+				// const distance = Math.sqrt(
+				// 	Math.pow(this.center.y - panPoint.y, 2) +
+				// 		Math.pow(this.center.x - panPoint.x, 2)
+				// );
+				// let fill = (distance - 40) / 300;
+				// if (fill < 0) fill = 0;
+				// if (fill > 1) fill = 1;
+				// this.setState({ fill });
 
 				// haptic if past next tick
 				if (this.tick != genTick(fill)) {
