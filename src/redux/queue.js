@@ -115,9 +115,10 @@ export const LoadQueue = eventType => {
 			dispatch(loadQueueInit());
 
 			const state = getState();
+			const uid = state.user.uid;
 			const alreadySwiped = !!state.user.entity.events
 				? state.user.entity.events
-				: [];
+				: {};
 
 			//get user location and grab events
 			navigator.geolocation.getCurrentPosition(
@@ -128,55 +129,55 @@ export const LoadQueue = eventType => {
 
 					const query = geocollection.near({
 						center: new firebase.firestore.GeoPoint(latitude, longitude),
-						radius: 20
+						radius: 1000
 					});
 
-					query.onSnapshot(snapshot => {
-						const eventIdsToPresent = [];
-
-						for (let i = 0; i < snapshot.docs.length; i++) {
-							const eventId = snapshot.docs[i].id;
-							if (!alreadySwiped.includes(eventId)) {
-								// user has not swiped on this event
-								eventIdsToPresent.push(eventId);
-							}
-						}
-
-						const getEventPromises = [];
-						for (let i = 0; i < eventIdsToPresent.length; i++) {
-							const eventId = eventIdsToPresent[i];
-							getEventPromises.push(
-								firestore
-									.collection("events")
-									.doc(eventId)
-									.get()
-							);
-						}
-
-						Promise.all(getEventPromises).then(results => {
-							const eventsData = results.map(doc => {
-								return {
-									id: doc.id,
-									...doc.data()
-								};
-							});
-							dispatch(loadQueueSuccess(eventsData));
-							resolve();
-						});
-
+					query.onSnapshot(
 						snapshot => {
-							snapshot.docs.forEach(doc => {
-								firestore.collection("events").doc(doc.id);
+							const eventIdsToPresent = [];
+
+							// filter out events that the user has already swiped on
+							for (let i = 0; i < snapshot.docs.length; i++) {
+								const eventId = snapshot.docs[i].id;
+								if (alreadySwiped[eventId] != true) {
+									// user has not swiped on this event
+									eventIdsToPresent.push(eventId);
+								}
+							}
+
+							// get all new events' data
+							const getEventPromises = [];
+							for (let i = 0; i < eventIdsToPresent.length; i++) {
+								const eventId = eventIdsToPresent[i];
+								getEventPromises.push(
+									firestore
+										.collection("events")
+										.doc(eventId)
+										.get()
+								);
+							}
+
+							//
+							Promise.all(getEventPromises).then(results => {
+								const eventsData = results.map(doc => {
+									return {
+										...doc.data(),
+										id: doc.id
+									};
+								});
+								dispatch(loadQueueSuccess(eventsData));
+								resolve();
 							});
 						},
-							error => {
-								dispatch(loadQueueFailure(error));
-								reject(error);
-							};
-					});
+						error => {
+							dispatch(loadQueueFailure(error));
+							reject(error);
+						}
+					);
 				},
 				error => {
-					result = error;
+					dispatch(loadQueueFailure(error));
+					reject(error);
 				},
 				{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
 			);

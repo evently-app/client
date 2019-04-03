@@ -34,7 +34,17 @@ export const RegisterSwipeRight = (userId, eventId, eventData) => {
 						event: eventId,
 						match: true
 					})
-					.then(() => resolve())
+					.then(() => {
+						// add event to user.events list of swiped events
+						firestore
+							.collection("users")
+							.doc(userId)
+							.update({
+								[`events.${eventId}`]: true
+							})
+							.then(() => resolve())
+							.catch(error => reject(error));
+					})
 					.catch(error => reject(error));
 			})
 			.catch(error => reject(error));
@@ -53,7 +63,16 @@ export const RegisterSwipeLeft = (userId, eventId, eventData) => {
 				event: eventId,
 				match: true
 			})
-			.then(() => resolve())
+			.then(() => {
+				firestore
+					.collection("users")
+					.doc(userId)
+					.update({
+						[`events.${eventId}`]: true
+					})
+					.then(() => resolve())
+					.catch(error => reject(error));
+			})
 			.catch(error => reject(error));
 	});
 };
