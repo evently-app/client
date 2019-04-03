@@ -48,7 +48,7 @@ class Filter extends PureComponent {
 		const { open, onPress, BeginTransition, EndTransition } = this.props;
 
 		if (state === "start") BeginTransition();
-		else EndTransition();
+		// else EndTransition();
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
