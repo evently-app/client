@@ -41,9 +41,12 @@ class App extends Component {
   });
 
   render() {
+    // spring config for navigator
     const spring = { tension: 600, damping: 0.5 };
-    const feedPage = { x: -SCREEN_WIDTH, ...spring };
+
+    // snap points
     const profilePage = { x: 0, ...spring };
+    const feedPage = { x: -SCREEN_WIDTH, ...spring };
     const timelinePage = { x: -2 * SCREEN_WIDTH, ...spring };
 
     const tabIcons = [<ProfileLogo />, <FeedLogo />, <TimelineLogo />];
