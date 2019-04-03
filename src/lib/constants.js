@@ -14,8 +14,8 @@ const CATEGORIES = [
 	{ title: "Art", name: "art" },
 	{ title: "Nightlife", name: "clubs" },
 	{ title: "Free", name: "free" },
-	{ title: "Family Friendly", "family"},
-	{ title: "Professional", "professional"},
+	{ title: "Family Friendly", name: "family" },
+	{ title: "Professional", name: "professional" }
 ];
 
 const PREFERENCES = [

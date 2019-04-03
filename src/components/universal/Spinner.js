@@ -36,9 +36,7 @@ class Spinner extends Component {
           }}
         >
           <LottieView
-            ref={Lottie => {
-              this.animation = Lottie;
-            }}
+            ref={Lottie => (this.animation = Lottie)}
             source={animationSource}
             style={{
               height: animationSize,
