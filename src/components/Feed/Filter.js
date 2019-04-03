@@ -219,12 +219,6 @@ class Filter extends PureComponent {
 			})
 		};
 
-		const TypeBubble = (
-			<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
-				<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
-			</Animated.View>
-		);
-
 		return (
 			<>
 				<Interactable.View
@@ -294,7 +288,11 @@ class Filter extends PureComponent {
 					style={styles.toggleButton}
 					onPress={open ? this.closeFilter : this.openFilter}
 				/>
-				{typeSelection !== 0 && TypeBubble}
+				{typeSelection !== 0 && (
+					<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
+						<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
+					</Animated.View>
+				)}
 				{open && (
 					<TouchableOpacity
 						activeOpacity={1}
@@ -310,7 +308,6 @@ class Filter extends PureComponent {
 const styles = StyleSheet.create({
 	filterContainer: {
 		position: "absolute",
-		// backgroundColor: "rgba(255,0,0,0.5)",
 		top: SB_HEIGHT + (IS_X ? 0 : 10),
 		left: 0,
 		right: 0,
@@ -343,7 +340,6 @@ const styles = StyleSheet.create({
 		left: 30
 	},
 	toggleButton: {
-		// backgroundColor: "rgba(0,255,0,0.5)",
 		position: "absolute",
 		top: SB_HEIGHT - 10,
 		left: 0,
