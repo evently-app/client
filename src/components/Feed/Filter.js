@@ -13,7 +13,7 @@ import {
 	ScrollTypeSelection
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import { SB_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
+import { SB_HEIGHT, SCREEN_WIDTH, IS_X } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
 const CLOSED_POINT = { y: 0 };
@@ -45,7 +45,7 @@ class Filter extends PureComponent {
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
-		const { BeginTransition, EndTransition } = this.props;
+		const { open, onPress, BeginTransition, EndTransition } = this.props;
 
 		if (state === "start") BeginTransition();
 		else EndTransition();
@@ -102,6 +102,7 @@ class Filter extends PureComponent {
 			// 		})
 			// 	}
 			// ],
+			...styles.timeSelection,
 			opacity:
 				!transitioning && open
 					? this.timeXOffset.interpolate({
@@ -125,6 +126,7 @@ class Filter extends PureComponent {
 		const { open, transitioning, typeSelection, filterDrag } = this.props;
 
 		return {
+			...styles.typeSelection,
 			opacity:
 				!transitioning && open
 					? this.typeXOffset.interpolate({
@@ -149,8 +151,16 @@ class Filter extends PureComponent {
 		};
 	};
 
+	openFilter = () => {
+		this.filter.snapTo({ index: 1 });
+	};
+
+	closeFilter = () => {
+		this.filter.snapTo({ index: 0 });
+	};
+
 	render() {
-		const { open, filterDrag, onPress, interactableRef, timeSelection, typeSelection } = this.props;
+		const { open, filterDrag, timeSelection, typeSelection } = this.props;
 
 		const animatedLocation = {
 			transform: [
@@ -168,7 +178,7 @@ class Filter extends PureComponent {
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: FILTER_DRAG_RANGE,
-						outputRange: [-15, -35, -95]
+						outputRange: [-15 - 2, -35 - 2, -95 - 2]
 					})
 				}
 			]
@@ -179,7 +189,7 @@ class Filter extends PureComponent {
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: FILTER_DRAG_RANGE,
-						outputRange: [0, -35, -85]
+						outputRange: [0 - 30, -35 - 30, -85 - 30]
 					})
 				}
 			]
@@ -210,21 +220,17 @@ class Filter extends PureComponent {
 		};
 
 		return (
-			<View style={styles.container}>
-				<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
-					<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
-				</Animated.View>
+			<>
 				<Interactable.View
-					animatedNativeDriver
 					verticalOnly
+					animatedNativeDriver
 					snapPoints={[CLOSED_POINT, OPEN_POINT]}
-					ref={interactableRef}
+					ref={Interactable => (this.filter = Interactable)}
 					onDrag={this.handleOnDrag}
-					// onSnap={this.props.EndTransition}
 					onSnapStart={this.handleOnSnap}
 					boundaries={BOUNDARIES}
 					initialPosition={CLOSED_POINT}
-					style={styles.interactable}
+					style={styles.filterContainer}
 					animatedValueY={filterDrag}
 				>
 					<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
@@ -238,6 +244,8 @@ class Filter extends PureComponent {
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
+						animatedNativeDriver
+						ref={Interactable => (this.timeSelector = Interactable)}
 						dragEnabled={open}
 						snapPoints={TIME_SNAP_POINTS}
 						initialPosition={TIME_SNAP_POINTS[0]}
@@ -246,14 +254,11 @@ class Filter extends PureComponent {
 						animatedValueX={this.timeXOffset}
 					>
 						{TIME_TYPES.map((time, i) => (
-							<SubHeader
-								animated
-								key={i}
-								pointerEvents="none"
-								style={{ ...this.timeSelectionStyle(i), ...styles.timeSelection }}
-							>
-								{time}
-							</SubHeader>
+							<TouchableOpacity key={i} onPress={() => this.timeSelector.snapTo({ index: i })}>
+								<SubHeader animated style={this.timeSelectionStyle(i)}>
+									{time}
+								</SubHeader>
+							</TouchableOpacity>
 						))}
 					</Interactable.View>
 					<Paragraph animated style={{ ...animatedType, ...animatedOpacity }}>
@@ -261,6 +266,8 @@ class Filter extends PureComponent {
 					</Paragraph>
 					<Interactable.View
 						horizontalOnly
+						animatedNativeDriver
+						ref={Interactable => (this.typeSelector = Interactable)}
 						dragEnabled={open}
 						snapPoints={TYPE_SNAP_POINTS}
 						initialPosition={TYPE_SNAP_POINTS[0]}
@@ -269,46 +276,48 @@ class Filter extends PureComponent {
 						animatedValueX={this.typeXOffset}
 					>
 						{EVENT_TYPES.map((type, i) => (
-							<SubHeader
-								animated
-								key={i}
-								pointerEvents="none"
-								style={{ ...this.typeSelectionStyle(i), ...styles.typeSelection }}
-							>
-								{type}
-							</SubHeader>
+							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
+								<SubHeader animated style={this.typeSelectionStyle(i)}>
+									{type}
+								</SubHeader>
+							</TouchableOpacity>
 						))}
 					</Interactable.View>
 				</Interactable.View>
-				{/* {!open && ( */}
-				{/* 	<TouchableOpacity */}
-				{/* 		onPress={onPress} */}
-				{/* 		style={{ position: "absolute", top: 0, left: 0, right: 0, height: 100 }} */}
-				{/* 	/> */}
-				{/* )} */}
-			</View>
+				<TouchableOpacity
+					style={styles.toggleButton}
+					onPress={open ? this.closeFilter : this.openFilter}
+				/>
+				{typeSelection !== 0 && (
+					<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
+						<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
+					</Animated.View>
+				)}
+				{open && (
+					<TouchableOpacity
+						activeOpacity={1}
+						style={styles.closeFilterButton}
+						onPressIn={this.closeFilter}
+					/>
+				)}
+			</>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
-	container: {
+	filterContainer: {
 		position: "absolute",
-		top: SB_HEIGHT,
+		top: SB_HEIGHT + (IS_X ? 0 : 10),
 		left: 0,
 		right: 0,
-		height: 150
-	},
-	interactable: {
-		height: 300,
-		top: -185,
-		padding: 5,
-		paddingTop: 155,
+		height: 150,
 		alignItems: "center",
-		justifyContent: "center"
+		justifyContent: "flex-end"
 	},
 	horizontalSelector: {
 		width: SCREEN_WIDTH,
+		paddingBottom: 25,
 		flexDirection: "row",
 		justifyContent: "space-around",
 		alignItems: "center"
@@ -327,13 +336,27 @@ const styles = StyleSheet.create({
 		paddingVertical: 6,
 		borderRadius: 10,
 		backgroundColor: colors.lightpurple,
-		top: 10,
+		top: SB_HEIGHT + 12,
 		left: 30
+	},
+	toggleButton: {
+		position: "absolute",
+		top: SB_HEIGHT - 10,
+		left: 0,
+		right: 0,
+		height: 80
+	},
+	closeFilterButton: {
+		position: "absolute",
+		top: 250,
+		bottom: 0,
+		left: 0,
+		right: 0
 	}
 });
 
-const mapStateToProps = state => {
-	const { open, transitioning, timeSelection, typeSelection } = state.filter;
+const mapStateToProps = ({ filter }) => {
+	const { open, transitioning, timeSelection, typeSelection } = filter;
 	return {
 		open,
 		transitioning,
