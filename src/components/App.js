@@ -33,39 +33,21 @@ class App extends Component {
       });
   }
 
-  opacityStyle = index => {
-    const inputRange = [-2 * SCREEN_WIDTH, -SCREEN_WIDTH, 0];
-    switch (index) {
-      case 0:
-        return {
-          opacity: this.xOffset.interpolate({
-            inputRange,
-            outputRange: [0.5, 0.5, 1]
-          })
-        };
-      case 1:
-        return {
-          opacity: this.xOffset.interpolate({
-            inputRange,
-            outputRange: [0.5, 1, 0.5]
-          })
-        };
-      case 2:
-        return {
-          opacity: this.xOffset.interpolate({
-            inputRange,
-            outputRange: [1, 0.5, 0.5]
-          })
-        };
-    }
-  };
+  opacityStyle = i => ({
+    opacity: this.xOffset.interpolate({
+      inputRange: [-2 * SCREEN_WIDTH, -SCREEN_WIDTH, 0],
+      outputRange: [i === 2 ? 1 : 0.5, i === 1 ? 1 : 0.5, i === 0 ? 1 : 0.5]
+    })
+  });
 
   render() {
-    const feedPage = { x: -SCREEN_WIDTH };
-    const profilePage = { x: 0 };
-    const timelinePage = { x: -2 * SCREEN_WIDTH };
+    const spring = { tension: 600, damping: 0.5 };
+    const feedPage = { x: -SCREEN_WIDTH, ...spring };
+    const profilePage = { x: 0, ...spring };
+    const timelinePage = { x: -2 * SCREEN_WIDTH, ...spring };
 
     const tabIcons = [<ProfileLogo />, <FeedLogo />, <TimelineLogo />];
+    const tabGradientColors = ["rgba(21,2,24,0)", "rgba(21,2,24,0.95)", "rgba(21,2,24,1)"];
 
     return (
       <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>
@@ -77,7 +59,6 @@ class App extends Component {
           ref={Interactable => (this.tabNavigator = Interactable)}
           style={styles.scrollContainer}
           snapPoints={[profilePage, feedPage, timelinePage]}
-          // boundaries={{ left: 2 * SCREEN_WIDTH, right: 2 * SCREEN_WIDTH }}
           initialPosition={feedPage}
           animatedValueX={this.xOffset}
         >
@@ -87,9 +68,9 @@ class App extends Component {
         </Interactable.View>
         <View style={styles.tabBarContainer}>
           <LinearGradient
-            style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 100 }}
+            style={styles.tabBarGradient}
             locations={[0, 0.8, 1]}
-            colors={["rgba(21,2,24,0)", "rgba(21,2,24,0.95)", "rgba(21,2,24,1)"]}
+            colors={tabGradientColors}
           />
           {tabIcons.map((Icon, i) => (
             <TouchableScale
@@ -132,6 +113,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end"
+  },
+  tabBarGradient: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 100
   },
   tabBarButton: {
     width: 60,
