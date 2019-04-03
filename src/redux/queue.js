@@ -13,8 +13,7 @@ const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
 	errorLoadingQueue: null,
-	queue: [],
-	queueData: {}
+	queue: []
 };
 
 var coordinates = null;
