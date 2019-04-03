@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 	container: {
 		overflow: "hidden",
 		width: SCREEN_WIDTH - 20,
-		height: SCREEN_HEIGHT - 200,
+		height: SCREEN_HEIGHT - SB_HEIGHT - 160,
 		backgroundColor: colors.purple,
 		borderRadius: 20
 	},
