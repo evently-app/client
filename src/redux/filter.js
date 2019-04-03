@@ -30,12 +30,14 @@ export default (state = initialState, action) => {
 		case SNAP_OPEN:
 			return {
 				...state,
+				transitioning: false,
 				open: true
 			};
 
 		case SNAP_CLOSED:
 			return {
 				...state,
+				transitioning: false,
 				open: false
 			};
 

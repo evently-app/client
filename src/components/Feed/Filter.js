@@ -48,7 +48,7 @@ class Filter extends PureComponent {
 		const { open, onPress, BeginTransition, EndTransition } = this.props;
 
 		if (state === "start") BeginTransition();
-		else EndTransition();
+		// else EndTransition();
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
@@ -308,10 +308,10 @@ class Filter extends PureComponent {
 const styles = StyleSheet.create({
 	filterContainer: {
 		position: "absolute",
-		top: SB_HEIGHT + (IS_X ? 0 : 10),
+		top: SB_HEIGHT + (IS_X ? 0 : 10) - 250,
 		left: 0,
 		right: 0,
-		height: 150,
+		height: 400,
 		alignItems: "center",
 		justifyContent: "flex-end"
 	},
