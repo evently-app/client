@@ -1,4 +1,8 @@
 rootProject.name = 'evently'
+include ':react-native-calendar-events'
+project(':react-native-calendar-events').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-calendar-events/android')
+include ':@mapbox_react-native-mapbox-gl'
+project(':@mapbox_react-native-mapbox-gl').projectDir = new File(rootProject.projectDir, '../node_modules/@mapbox/react-native-mapbox-gl/android/rctmgl')
 include ':lottie-react-native'
 project(':lottie-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/lottie-react-native/src/android')
 include ':react-native-svg'

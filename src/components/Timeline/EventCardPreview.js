@@ -9,9 +9,11 @@ import {
 	TouchableWithoutFeedback
 } from "react-native";
 import { Header, SubHeader } from "../universal/Text";
+import CalendarButton from "./CalendarButton";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 import LinearGradient from "react-native-linear-gradient";
 import { VibrancyView } from "react-native-blur";
+
 
 const CARD_HEIGHT = 150;
 
@@ -62,6 +64,11 @@ class EventCardPreview extends Component {
 						{!!this.props.endTime && ` - ${this.props.endTime}`}
 					</SubHeader>
 					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
+					<CalendarButton 
+						eventName={this.props.title} 
+						start={this.props.startTime}
+						end={this.props.endTime}
+					/> 
 					<TouchableWithoutFeedback
 						onPressIn={() => {
 							Animated.timing(this.actionScale, {
