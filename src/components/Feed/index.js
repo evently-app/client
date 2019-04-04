@@ -14,7 +14,6 @@ import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
-		// loading: true,
 		animatedValues: {}
 	};
 
@@ -62,11 +61,11 @@ class Feed extends Component {
 	};
 
 	popCard = ({ id }) => {
-		const { UpdateQueue } = this.props;
+		const { UpdateQueue, filterTime, filterType } = this.props;
 		const { animatedValues } = this.state;
 
 		// if fewer than five events remaining in the queue, reload
-		if (_.size(animatedValues) < 5) UpdateQueue();
+		if (_.size(animatedValues) < 5) UpdateQueue({ filterTime, filterType });
 
 		this.setState({
 			animatedValues: _.omit(animatedValues, id)
@@ -121,20 +120,22 @@ class Feed extends Component {
 		const first = queue.length - 1;
 		const cards = (
 			<Animated.View style={[styles.center, cardContainerStyle]}>
-				{queue.map((card, i) => (
-					<Swipeable
-						key={card.id}
-						id={card.id}
-						index={queue.length - i}
-						swipeAmount={animatedValues[card.id]}
-						scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
-						onStartSwipe={this.handleOnStartSwipe}
-						onSwipeRight={() => this.onSwipeCardRight(card)}
-						onSwipeLeft={() => this.onSwipeCardLeft(card)}
-					>
-						<EventCard userLocation={userLocation} {...card} />
-					</Swipeable>
-				))}
+				{queue
+					// .sort((a, b) => a.score - b.score)
+					.map((card, i) => (
+						<Swipeable
+							key={card.id}
+							id={card.id}
+							index={queue.length - i}
+							swipeAmount={animatedValues[card.id]}
+							scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
+							onStartSwipe={this.handleOnStartSwipe}
+							onSwipeRight={() => this.onSwipeCardRight(card)}
+							onSwipeLeft={() => this.onSwipeCardLeft(card)}
+						>
+							<EventCard userLocation={userLocation} {...card} />
+						</Swipeable>
+					))}
 			</Animated.View>
 		);
 

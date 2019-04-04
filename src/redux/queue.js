@@ -14,11 +14,9 @@ let firestore = firebase.firestore();
 const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
-	errorLoadingQueue: null,
+	errorLoadingQueue: false,
 	queue: []
 };
-
-var coordinates = null;
 
 // define actions against state
 const RESET_QUEUE = "evently/queue/RESET_QUEUE";
@@ -182,8 +180,14 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 			const { uid } = user;
 
 			FetchEvents({ uid, amount: 10 })
-				.then(updateQueueSuccess)
-				.catch(updateQueueFailure);
+				.then(events => {
+					resolve();
+					dispatch(loadQueueSuccess(events));
+				})
+				.catch(error => {
+					reject();
+					dispatch(loadQueueFailure(error));
+				});
 		});
 	};
 };
