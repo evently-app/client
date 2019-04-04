@@ -202,7 +202,7 @@ const FetchEvents = ({ uid, amount }) => {
 
 		const query = userEventsRef
 			.orderBy("score")
-			// .where("swiped", "==", false)
+			// .where("swiped", "==", false) // once the field is added to the queue
 			.limit(amount);
 
 		query
