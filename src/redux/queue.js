@@ -133,13 +133,15 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					// const { latitude, longitude } = coords;
+					const { latitude, longitude } = coords;
 
 					// OVERRIDE FOR DEV
-					const latitude = 41.310726;
-					const longitude = -72.929916;
+					// const latitude = 41.310726;
+					// const longitude = -72.929916;
 
 					dispatch(setLocation({ latitude, longitude }));
+
+					// .post("http://localhost:3000/ping_events_queue", {
 
 					axios
 						.post("https://event-queue-service.herokuapp.com/ping_events_queue", {
@@ -201,8 +203,8 @@ const FetchEvents = ({ uid, amount }) => {
 			.collection("eventQueue");
 
 		const query = userEventsRef
+			.where("swiped", "==", false)
 			.orderBy("score")
-			// .where("swiped", "==", false) // once the field is added to the queue
 			.limit(amount);
 
 		query

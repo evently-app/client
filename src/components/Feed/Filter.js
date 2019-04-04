@@ -160,7 +160,7 @@ class Filter extends PureComponent {
 	};
 
 	render() {
-		const { open, children, filterDrag, timeSelection, typeSelection } = this.props;
+		const { open, filterDrag, timeSelection, typeSelection } = this.props;
 
 		const animatedLocation = {
 			transform: [
@@ -178,7 +178,7 @@ class Filter extends PureComponent {
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: FILTER_DRAG_RANGE,
-						outputRange: [-15 - 2, -35 - 2, -95 - 2]
+						outputRange: [-17, -37, -93]
 					})
 				}
 			]
@@ -189,7 +189,7 @@ class Filter extends PureComponent {
 				{
 					translateY: filterDrag.interpolate({
 						inputRange: FILTER_DRAG_RANGE,
-						outputRange: [0 - 30, -35 - 30, -85 - 30]
+						outputRange: [-30, -65, -115]
 					})
 				}
 			]
