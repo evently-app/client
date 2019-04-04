@@ -9,6 +9,7 @@ let firestore = firebase.firestore();
 const initialState = {
 	uid: null,
 	entity: {},
+	location: { latitude: 0.0, longitude: 0.0 },
 	isAuthenticating: false,
 	errorAuthenticating: null,
 	isWatchingUser: false,
@@ -20,6 +21,7 @@ const RESET_USER = "evently/user/RESET_USER";
 const AUTH_INIT = "evently/user/AUTH_INIT";
 const AUTH_SUCCESS = "evently/user/AUTH_SUCCESS";
 const AUTH_FAILURE = "evently/user/AUTH_FAILURE";
+const SET_LOCATION = "evently/user/SET_LOCATION";
 const WATCH_USER_INIT = "evently/user/WATCH_USER_INIT";
 const WATCH_USER_SUCCESS = "evently/user/WATCH_USER_SUCCESS";
 const WATCH_USER_FAILURE = "evently/user/WATCH_USER_FAILURE";
@@ -52,6 +54,12 @@ export default (state = initialState, action) => {
 				...state,
 				isAuthenticating: false,
 				errorAuthenticating: action.error
+			};
+
+		case SET_LOCATION:
+			return {
+				...state,
+				location: action.location
 			};
 
 		case WATCH_USER_INIT:
@@ -101,6 +109,11 @@ export const authFailure = error => {
 		error
 	};
 };
+
+export const setLocation = location => ({
+	type: SET_LOCATION,
+	location
+});
 
 export const watchUserInit = () => {
 	return {

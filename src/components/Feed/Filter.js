@@ -13,7 +13,7 @@ import {
 	ScrollTypeSelection
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import { SB_HEIGHT, SCREEN_WIDTH, IS_X } from "../../lib/constants";
+import { SB_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
 const CLOSED_POINT = { y: 0 };
@@ -160,7 +160,7 @@ class Filter extends PureComponent {
 	};
 
 	render() {
-		const { open, filterDrag, timeSelection, typeSelection } = this.props;
+		const { open, children, filterDrag, timeSelection, typeSelection } = this.props;
 
 		const animatedLocation = {
 			transform: [
@@ -284,10 +284,6 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 				</Interactable.View>
-				<TouchableOpacity
-					style={styles.toggleButton}
-					onPress={open ? this.closeFilter : this.openFilter}
-				/>
 				{typeSelection !== 0 && (
 					<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
 						<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
@@ -300,12 +296,29 @@ class Filter extends PureComponent {
 						onPressIn={this.closeFilter}
 					/>
 				)}
+				<TouchableOpacity
+					style={styles.toggleButton}
+					onPress={open ? this.closeFilter : this.openFilter}
+				/>
 			</>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		width: SCREEN_WIDTH,
+		height: SCREEN_HEIGHT,
+		overflow: "hidden",
+		alignItems: "center",
+		justifyContent: "center"
+		// backgroundColor: "red"
+	},
+	center: {
+		alignItems: "center",
+		justifyContent: "center"
+	},
 	filterContainer: {
 		position: "absolute",
 		top: SB_HEIGHT + (IS_X ? 0 : 10) - 250,

@@ -1,7 +1,7 @@
 // redux module for timeline
 import axios from "axios";
 import { pop } from "./queue";
-import { RegisterSwipeRight, RegisterSwipeLeft, WatchTimeline } from "../api";
+import { WatchTimeline } from "../api";
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
@@ -103,20 +103,26 @@ export const push = event => {
 export const SwipeRight = event => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
-			// move from redux queue to timeline
+			const state = getState();
+
+			const { uid } = state.user;
+			const { id } = event;
+
+			// move from redux queue to timeline MAKE THIS A SINGLE DISPATCH CALL
 			dispatch(pop());
 			dispatch(push(event));
 
-			const state = getState();
-
-			let eventData = event;
-			const eventId = event.id;
-			delete eventData.id;
-
-			// add to firebase
-			RegisterSwipeRight(state.user.uid, eventId, eventData)
-				.then(() => resolve())
-				.catch(error => reject(error));
+			Promise.all([
+				Swipe({ uid, id, match: true }),
+				firestore
+					.collection("users")
+					.doc(uid)
+					.collection("timeline")
+					.doc(id)
+					.set(event)
+			])
+				.then(resolve)
+				.catch(reject);
 		});
 	};
 };
@@ -124,21 +130,32 @@ export const SwipeRight = event => {
 export const SwipeLeft = event => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
+			const state = getState();
+			const { uid } = state.user;
+			const { id } = event;
+
 			// remove from redux queue
 			dispatch(pop());
 
-			const state = getState();
-
-			let eventData = event;
-			const eventId = event.id;
-			delete eventData.id;
-
-			// add to firebase
-			RegisterSwipeLeft(state.user.uid, eventId, eventData)
-				.then(() => resolve())
-				.catch(error => reject(error));
+			Swipe({ uid, id, match: false })
+				.then(resolve)
+				.catch(reject);
 		});
 	};
+};
+
+const Swipe = ({ uid, id, match }) => {
+	return new Promise((resolve, reject) => {
+		const userRef = firestore.collection("users").doc(uid);
+		const queueRef = userRef.collection("queue").doc(id);
+
+		Promise.all([
+			queueRef.update({ swiped: true }),
+			firestore.collection("swipes").add({ uid, id, match })
+		])
+			.then(resolve)
+			.catch(reject);
+	});
 };
 
 export const LoadTimeline = () => {

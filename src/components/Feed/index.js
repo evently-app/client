@@ -9,47 +9,46 @@ import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, SB_HEIGHT } from "../../lib/constants";
-import { LoadQueue } from "../../redux/queue";
-import { BeginTransition } from "../../redux/filter";
+import { LoadQueue, UpdateQueue } from "../../redux/queue";
 import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
-		loading: true,
-		count: 0,
-		animatedValues: {},
-		userLocation: {}
+		animatedValues: {}
 	};
 
 	animatedEntry = new Animated.Value(1);
 	filterDrag = new Animated.Value(0);
 
-	componentWillMount() {
-		navigator.geolocation.getCurrentPosition(
-			({ coords }) => {
-				this.setState({ userLocation: coords });
-			},
-			error => Alert.alert(error.message),
-			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-		);
+	componentDidMount() {
+		// navigator.geolocation.getCurrentPosition(
+		// 	({ coords }) => {
+		// 		this.setState({ userLocation: coords });
+		// 	},
+		// 	error => Alert.alert(error.message),
+		// 	{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+		// );
 
-		this.props
-			.LoadQueue()
-			.then(() => {
-				const { queue } = this.props;
-				let animatedValues = {};
-				queue.forEach(({ id }) => {
-					animatedValues[id] = new Animated.Value(0);
-				});
-
-				this.setState({ animatedValues, loading: false }, this.entryAnimation);
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		const { LoadQueue, filterTime, filterType } = this.props;
+		LoadQueue({ filterTime, filterType });
 	}
 
-	componentDidMount() {}
+	static getDerivedStateFromProps(props, state) {
+		const { queue } = props;
+		const { animatedValues } = state;
+
+		// if there's a mismatch then new events have been loaded
+		if (queue.length !== _.size(state.animatedValues)) {
+			let newAnimatedValues = {};
+			queue.forEach(({ id }) => {
+				if (!animatedValues[id]) newAnimatedValues[id] = new Animated.Value(0);
+			});
+
+			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
+		}
+
+		return null;
+	}
 
 	entryAnimation = () => {
 		Animated.timing(this.animatedEntry, {
@@ -69,15 +68,14 @@ class Feed extends Component {
 		}).start();
 	};
 
-	// shouldComponentUpdate() {
-	// 	return false;
-	// }
-
 	popCard = ({ id }) => {
-		const { queue, animatedValues } = this.state;
-		// let index = queue.findIndex(c => c.id === id);
+		const { UpdateQueue } = this.props;
+		const { animatedValues } = this.state;
+
+		// if fewer than five events remaining in the queue, reload
+		if (_.size(animatedValues) < 5) UpdateQueue();
+
 		this.setState({
-			// queue: [...queue.slice(0, index), ...queue.slice(index + 1)],
 			animatedValues: _.omit(animatedValues, id)
 		});
 	};
@@ -97,8 +95,8 @@ class Feed extends Component {
 	};
 
 	render() {
-		const { animatedValues, loading, userLocation } = this.state;
-		const { filter, queue } = this.props;
+		const { animatedValues } = this.state;
+		const { queue, loading, userLocation } = this.props;
 
 		const cardContainerStyle = {
 			opacity: this.animatedEntry.interpolate({
@@ -153,6 +151,8 @@ class Feed extends Component {
 				<Filter filterDrag={this.filterDrag} />
 			</View>
 		);
+
+		// return <Filter filterDrag={this.filterDrag}>{loading ? <Spinner /> : cards}</Filter>;
 	}
 }
 
@@ -171,18 +171,21 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ queue, filter, user }) => {
 	return {
-		queue: state.queue.queue,
-		filter: state.filter
+		queue: queue.queue,
+		loading: queue.isLoadingQueue,
+		filterTime: filter.selectedTime,
+		filterType: filter.selectedType,
+		userLocation: user.location
 	};
 };
 
 const mapDispatchToProps = {
 	LoadQueue,
+	UpdateQueue,
 	SwipeRight,
-	SwipeLeft,
-	BeginTransition
+	SwipeLeft
 };
 
 export default connect(
