@@ -16,6 +16,9 @@ import TimelineLogo from "../assets/timeline.svg";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../lib/constants";
 import { WatchUser, Auth } from "../redux/user";
+import codePush from "react-native-code-push";
+
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
 
 class App extends Component {
   xOffset = new Animated.Value(-SCREEN_WIDTH);
@@ -50,10 +53,18 @@ class App extends Component {
     const timelinePage = { x: -2 * SCREEN_WIDTH, ...spring };
 
     const tabIcons = [<ProfileLogo />, <FeedLogo />, <TimelineLogo />];
-    const tabGradientColors = ["rgba(21,2,24,0)", "rgba(21,2,24,0.95)", "rgba(21,2,24,1)"];
+    const tabGradientColors = [
+      "rgba(21,2,24,0)",
+      "rgba(21,2,24,0.95)",
+      "rgba(21,2,24,1)"
+    ];
 
     return (
-      <LinearGradient style={styles.container} locations={[0, 0.9]} colors={["black", "#150218"]}>
+      <LinearGradient
+        style={styles.container}
+        locations={[0, 0.9]}
+        colors={["black", "#150218"]}
+      >
         <StatusBar barStyle="light-content" />
         <Interactable.View
           horizontalOnly
@@ -146,4 +157,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(codePush(codePushOptions)(App));

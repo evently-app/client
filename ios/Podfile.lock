@@ -1,4 +1,5 @@
 PODS:
+  - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
   - BoringSSL (10.0.6):
     - BoringSSL/Implementation (= 10.0.6)
@@ -8,6 +9,11 @@ PODS:
   - BoringSSL/Interface (10.0.6)
   - BVLinearGradient (2.5.4):
     - React
+  - CodePush (5.6.0):
+    - Base64 (~> 1.1)
+    - JWT (~> 3.0.0-beta.7)
+    - React
+    - SSZipArchive (~> 2.1)
   - DoubleConversion (1.1.6)
   - Firebase/Auth (5.15.0):
     - Firebase/CoreOnly
@@ -113,6 +119,8 @@ PODS:
     - nanopb (~> 0.3)
   - gRPC-Core/Interface (1.14.0)
   - GTMSessionFetcher/Core (1.2.1)
+  - JWT (3.0.0-beta.11):
+    - Base64 (~> 1.1.2)
   - leveldb-library (1.20)
   - lottie-ios (2.5.0)
   - lottie-react-native (2.6.1):
@@ -187,10 +195,12 @@ PODS:
     - React/RCTBlob
   - RNSVG (9.3.7):
     - React
+  - SSZipArchive (2.1.4)
   - yoga (0.59.2.React)
 
 DEPENDENCIES:
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
+  - CodePush (from `../node_modules/react-native-code-push`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Firebase/Auth (~> 5.15.0)
   - Firebase/Core (~> 5.15.0)
@@ -221,6 +231,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Base64
     - boost-for-react-native
     - BoringSSL
     - Firebase
@@ -237,13 +248,17 @@ SPEC REPOS:
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
+    - JWT
     - leveldb-library
     - nanopb
     - Protobuf
+    - SSZipArchive
 
 EXTERNAL SOURCES:
   BVLinearGradient:
     :path: "../node_modules/react-native-linear-gradient"
+  CodePush:
+    :path: "../node_modules/react-native-code-push"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   Folly:
@@ -268,9 +283,11 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
 SPEC CHECKSUMS:
+  Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
   BVLinearGradient: 8cbc5155c978f2e43098818c91d206d07aae6d30
+  CodePush: 300e90b3481fa82569090406165b83745de3613a
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
@@ -288,6 +305,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": 19eec1ffd34de29453f5fab5b4697ad0f240ad51
   gRPC-Core: f4836515817c0eb479aeeb9cc27c91c4ba62a9f6
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  JWT: 05028b9624591bba9681bb57df2c5f95fa258bad
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   lottie-ios: d699fdee68d7b63e721d949388b015fef1aaa4ac
   lottie-react-native: 3d8181d43619b1fe804c828bd5a09d20fe8bdea7
@@ -298,8 +316,9 @@ SPEC CHECKSUMS:
   react-native-haptic-feedback: 0e7be9330602573e17f7354c41665b727a5098ee
   react-native-mapbox-gl: d0ac3b81a6cadbd7cadc80891da72e3e85379350
   RNSVG: 2cc66383316fa84d4c672ccfa5e3bac271b6a2af
+  SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   yoga: 3768a3026ade0fb46a68f3a31a917cf86bc34fc4
 
-PODFILE CHECKSUM: 51bf0b1e3839b6b20a2d073794285d7c8dd5362b
+PODFILE CHECKSUM: f8e82bdfdf7fa86839827ec3ebc7e2697df27ac4
 
 COCOAPODS: 1.6.1
