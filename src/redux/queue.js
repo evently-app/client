@@ -5,7 +5,7 @@ import firebase from "react-native-firebase";
 import { setLocation } from "./user";
 // import { GeoFirestore } from "geofirestore";
 
-// let firestore = firebase.firestore();
+let firestore = firebase.firestore();
 // let geofirestore = new GeoFirestore(firestore);
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
@@ -149,10 +149,17 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 							radius: 100,
 							userid: uid
 						})
-						.then(() => {
+						.then(response => {
+							console.log(response);
 							FetchEvents({ uid, amount: 15 })
-								.then(loadQueueSuccess)
-								.catch(loadQueueFailure);
+								.then(events => {
+									resolve();
+									dispatch(loadQueueSuccess(events));
+								})
+								.catch(error => {
+									reject();
+									dispatch(loadQueueFailure(error));
+								});
 						})
 						.catch(loadQueueFailure);
 				},
@@ -188,35 +195,47 @@ const FetchEvents = ({ uid, amount }) => {
 			.collection("users")
 			.doc(uid)
 			.collection("eventQueue");
+
 		const query = userEventsRef
 			.orderBy("score")
-			.where("swiped", "==", false)
+			// .where("swiped", "==", false)
 			.limit(amount);
 
 		query
 			.get()
 			.then(snapshot => {
-				let eventIds = [];
+				let events = [];
+
 				snapshot.forEach(doc => {
-					const { id } = doc;
-					eventIds.push[id];
+					events.push({ id: doc.id, ...doc.data() });
 				});
 
-				let promises = [];
-				eventIds.forEach(id => {
-					promises.push(eventsRef.doc(id).get());
-				});
+				resolve(events);
 
-				Promise.all(promises)
-					.then(data => {
-						const events = data.map(doc => ({
-							...doc.data(),
-							id: doc.id
-						}));
-
-						resolve(eventsData);
-					})
-					.catch(reject);
+				// 				let eventIds = [];
+				// 				snapshot.forEach(doc => {
+				// 					eventIds.push(doc.id);
+				// 				});
+				//
+				// 				console.log(eventIds);
+				//
+				// 				let promises = [];
+				// 				eventIds.forEach(id => {
+				// 					promises.push(eventsRef.doc(id).get());
+				// 				});
+				//
+				// 				Promise.all(promises)
+				// 					.then(data => {
+				// 						const events = data.map(doc => ({
+				// 							...doc.data(),
+				// 							id: doc.id
+				// 						}));
+				//
+				// 						console.log(events);
+				//
+				// 						resolve(events);
+				// 					})
+				// 					.catch(reject);
 			})
 			.catch(reject);
 	});

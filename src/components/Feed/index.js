@@ -14,6 +14,7 @@ import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
+		// loading: true,
 		animatedValues: {}
 	};
 
@@ -21,16 +22,8 @@ class Feed extends Component {
 	filterDrag = new Animated.Value(0);
 
 	componentDidMount() {
-		// navigator.geolocation.getCurrentPosition(
-		// 	({ coords }) => {
-		// 		this.setState({ userLocation: coords });
-		// 	},
-		// 	error => Alert.alert(error.message),
-		// 	{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-		// );
-
 		const { LoadQueue, filterTime, filterType } = this.props;
-		LoadQueue({ filterTime, filterType });
+		LoadQueue({ filterTime, filterType }).then(this.entryAnimation);
 	}
 
 	static getDerivedStateFromProps(props, state) {
@@ -41,7 +34,7 @@ class Feed extends Component {
 		if (queue.length !== _.size(state.animatedValues)) {
 			let newAnimatedValues = {};
 			queue.forEach(({ id }) => {
-				if (!animatedValues[id]) newAnimatedValues[id] = new Animated.Value(0);
+				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
 			});
 
 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
@@ -144,6 +137,8 @@ class Feed extends Component {
 				))}
 			</Animated.View>
 		);
+
+		// console.log(cards);
 
 		return (
 			<View style={styles.container}>

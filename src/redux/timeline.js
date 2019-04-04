@@ -1,7 +1,11 @@
 // redux module for timeline
 import axios from "axios";
+import firebase from "react-native-firebase";
+
 import { pop } from "./queue";
 import { WatchTimeline } from "../api";
+
+let firestore = firebase.firestore();
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
@@ -147,7 +151,7 @@ export const SwipeLeft = event => {
 const Swipe = ({ uid, id, match }) => {
 	return new Promise((resolve, reject) => {
 		const userRef = firestore.collection("users").doc(uid);
-		const queueRef = userRef.collection("queue").doc(id);
+		const queueRef = userRef.collection("eventQueue").doc(id);
 
 		Promise.all([
 			queueRef.update({ swiped: true }),
