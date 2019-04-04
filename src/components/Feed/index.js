@@ -121,7 +121,7 @@ class Feed extends Component {
 		const cards = (
 			<Animated.View style={[styles.center, cardContainerStyle]}>
 				{queue
-					.sort((a, b) => b.score - a.score)
+					.sort((a, b) => a.score - b.score)
 					.map((card, i) => (
 						<Swipeable
 							key={card.id}
