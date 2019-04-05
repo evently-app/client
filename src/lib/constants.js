@@ -2,11 +2,11 @@ import { Dimensions, Platform } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-const SB_HEIGHT =
-	Platform.OS === "ios" && (height === 812 || height === 896) ? 40 : 20;
+const SB_HEIGHT = Platform.OS === "ios" && (height === 812 || height === 896) ? 40 : 20;
 const IS_X = SB_HEIGHT === 40;
 
 const CATEGORIES = [
+	{ title: "Anything", name: "anything" },
 	{ title: "Concerts", name: "concerts" },
 	{ title: "Sports", name: "sports" },
 	{ title: "Shows", name: "shows" },
@@ -14,7 +14,7 @@ const CATEGORIES = [
 	{ title: "Art", name: "art" },
 	{ title: "Nightlife", name: "clubs" },
 	{ title: "Free", name: "free" },
-	{ title: "Family Friendly", name: "family" },
+	{ title: "Family", name: "family" },
 	{ title: "Professional", name: "professional" }
 ];
 
@@ -26,11 +26,18 @@ const PREFERENCES = [
 	{ title: "Cultural", name: "cultural" }
 ];
 
+const TIME_TYPES = [
+	{ title: "Upcoming", name: "upcoming" },
+	{ title: "Next Week", name: "next week" },
+	{ title: "This Month", name: "this month" }
+];
+
 module.exports = {
 	SCREEN_WIDTH: width,
 	SCREEN_HEIGHT: height,
 	SB_HEIGHT,
 	IS_X,
 	CATEGORIES,
+	TIME_TYPES,
 	PREFERENCES
 };
