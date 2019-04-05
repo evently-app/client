@@ -32,25 +32,8 @@ const BOUNDARIES = {
 };
 
 const FILTER_DRAG_RANGE = [0, 50, 150];
-
-// const EVENT_TYPES = ["Anything", "Concerts", "Sports", "Shows"];
-
-const TYPE_SNAP_POINTS = [
-	{ x: (9 * SCREEN_WIDTH) / 8 },
-	{ x: (7 * SCREEN_WIDTH) / 8 },
-	{ x: (5 * SCREEN_WIDTH) / 8 },
-	{ x: (3 * SCREEN_WIDTH) / 8 },
-	{ x: SCREEN_WIDTH / 8 },
-	{ x: (-1 * SCREEN_WIDTH) / 8 },
-	{ x: (-3 * SCREEN_WIDTH) / 8 },
-	{ x: (-5 * SCREEN_WIDTH) / 8 },
-	{ x: (-7 * SCREEN_WIDTH) / 8 },
-	{ x: (-9 * SCREEN_WIDTH) / 8 }
-];
-
-// const TIME_TYPES = ["Upcoming", "Next Week", "This Month"];
-
-const TIME_SNAP_POINTS = [{ x: SCREEN_WIDTH / 3 }, { x: 0 }, { x: -SCREEN_WIDTH / 3 }];
+const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({ x: ((9 - 2 * i) * SCREEN_WIDTH) / 8 }));
+const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({ x: -1 * (((i - 1) * SCREEN_WIDTH) / 3) }));
 
 class Filter extends PureComponent {
 	timeXOffset = new Animated.Value(0);
@@ -84,7 +67,6 @@ class Filter extends PureComponent {
 		const { ScrollTimeSelection } = this.props;
 
 		Haptics.trigger("impactLight");
-
 		ScrollTimeSelection(index);
 	};
 
@@ -94,7 +76,6 @@ class Filter extends PureComponent {
 		const { ScrollTypeSelection } = this.props;
 
 		Haptics.trigger("impactLight");
-
 		ScrollTypeSelection(index);
 	};
 
@@ -115,7 +96,7 @@ class Filter extends PureComponent {
 				!transitioning && open
 					? this.timeXOffset.interpolate({
 							inputRange: TIME_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: [index === 2 ? 1 : 0.5, index === 1 ? 1 : 0.5, index === 0 ? 1 : 0.5],
+							outputRange: TIME_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
