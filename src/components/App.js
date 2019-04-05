@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Interactable from "react-native-interactable";
 import LinearGradient from "react-native-linear-gradient";
 import Haptics from "react-native-haptic-feedback";
+import codePush from "react-native-code-push";
 
 import Profile from "./Profile";
 import Feed from "./Feed";
@@ -16,9 +17,8 @@ import TimelineLogo from "../assets/timeline.svg";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../lib/constants";
 import { WatchUser, Auth } from "../redux/user";
-import codePush from "react-native-code-push";
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+const codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
 
 class App extends Component {
   xOffset = new Animated.Value(-SCREEN_WIDTH);
@@ -46,7 +46,7 @@ class App extends Component {
 
   render() {
     // spring config for navigator
-    const spring = { tension: 600, damping: 0.5 };
+    const spring = { tension: 700, damping: 0.5 };
 
     // snap points
     const profilePage = { x: 0, ...spring };
@@ -150,5 +150,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
-// )(codePush(codePushOptions)(App));
+)(codePush(codePushOptions)(App));

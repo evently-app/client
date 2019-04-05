@@ -60,9 +60,11 @@ export default (state = initialState, action) => {
 
 		case UPDATE_QUEUE_SUCCESS:
 			const { queue } = state;
+			console.log("hi", [...action.data, ...queue]);
+
 			return {
 				...state,
-				queue: [...queue, ...action.data]
+				queue: [...action.data, ...queue]
 			};
 
 		case UPDATE_QUEUE_FAILURE:
@@ -133,11 +135,11 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					const { latitude, longitude } = coords;
+					// const { latitude, longitude } = coords;
 
 					// OVERRIDE FOR DEV
-					// const latitude = 41.310726;
-					// const longitude = -72.929916;
+					const latitude = 41.310726;
+					const longitude = -72.929916;
 
 					dispatch(setLocation({ latitude, longitude }));
 
@@ -178,34 +180,45 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			const state = getState();
-			const { user } = state;
+			const { user, queue } = state;
 			const { uid } = user;
 
-			FetchEvents({ uid, amount: 10 })
+			const last = queue.queue[0];
+
+			console.log("startAt:", last.id);
+
+			FetchEvents({ uid, amount: 10, startAt: last.id })
 				.then(events => {
+					console.log("new events:", events);
 					resolve();
-					dispatch(loadQueueSuccess(events));
+					dispatch(updateQueueSuccess(events));
 				})
 				.catch(error => {
 					reject();
-					dispatch(loadQueueFailure(error));
+					dispatch(updateQueueFailure(error));
 				});
 		});
 	};
 };
 
-const FetchEvents = ({ uid, amount }) => {
+const FetchEvents = ({ uid, amount, startAt }) => {
 	return new Promise((resolve, reject) => {
-		const eventsRef = firestore.collection("events");
+		// const eventsRef = firestore.collection("events");
 		const userEventsRef = firestore
 			.collection("users")
 			.doc(uid)
 			.collection("eventQueue");
 
-		const query = userEventsRef
-			.where("swiped", "==", false)
-			.orderBy("score")
-			.limit(amount);
+		const query = startAt
+			? userEventsRef
+					.where("swiped", "==", false)
+					.orderBy("score")
+					.startAt(startAt)
+					.limit(amount)
+			: userEventsRef
+					.where("swiped", "==", false)
+					.orderBy("score")
+					.limit(amount);
 
 		query
 			.get()
