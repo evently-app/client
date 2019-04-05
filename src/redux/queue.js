@@ -15,7 +15,8 @@ const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
 	errorLoadingQueue: false,
-	queue: []
+	queue: [],
+	lastDoc: null
 };
 
 // define actions against state
@@ -43,33 +44,19 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
-			// console.log("action data", action.data)
+			console.log(action);
 			return {
 				...state,
 				isLoadingQueue: false,
-				queue: action.data,
-				successLoadingQueue: true
+				successLoadingQueue: true,
+				queue: [...action.events, ...state.queue],
+				lastDoc: action.lastDoc
 			};
 
 		case LOAD_QUEUE_FAILURE:
 			return {
 				...state,
 				isLoadingQueue: false,
-				errorLoadingQueue: action.error
-			};
-
-		case UPDATE_QUEUE_SUCCESS:
-			const { queue } = state;
-			console.log("hi", [...action.data, ...queue]);
-
-			return {
-				...state,
-				queue: [...action.data, ...queue]
-			};
-
-		case UPDATE_QUEUE_FAILURE:
-			return {
-				...state,
 				errorLoadingQueue: action.error
 			};
 
@@ -95,23 +82,14 @@ export const loadQueueInit = () => ({
 	type: LOAD_QUEUE_INIT
 });
 
-export const loadQueueSuccess = data => ({
+export const loadQueueSuccess = (events, lastDoc) => ({
 	type: LOAD_QUEUE_SUCCESS,
-	data
+	events,
+	lastDoc
 });
 
 export const loadQueueFailure = error => ({
 	type: LOAD_QUEUE_FAILURE,
-	error
-});
-
-export const updateQueueSuccess = data => ({
-	type: UPDATE_QUEUE_SUCCESS,
-	data
-});
-
-export const updateQueueFailure = error => ({
-	type: UPDATE_QUEUE_FAILURE,
 	error
 });
 
@@ -154,9 +132,9 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 						.then(response => {
 							console.log(response);
 							FetchEvents({ uid, amount: 15 })
-								.then(events => {
+								.then(({ events, lastDoc }) => {
 									resolve();
-									dispatch(loadQueueSuccess(events));
+									dispatch(loadQueueSuccess(events, lastDoc));
 								})
 								.catch(error => {
 									reject();
@@ -183,19 +161,17 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 			const { user, queue } = state;
 			const { uid } = user;
 
-			const last = queue.queue[0];
+			const { lastDoc: startAt } = queue;
 
-			console.log("startAt:", last.id);
-
-			FetchEvents({ uid, amount: 10, startAt: last.id })
-				.then(events => {
+			FetchEvents({ uid, startAt, amount: 10 })
+				.then(({ events, lastDoc }) => {
 					console.log("new events:", events);
 					resolve();
-					dispatch(updateQueueSuccess(events));
+					dispatch(loadQueueSuccess(events, lastDoc));
 				})
 				.catch(error => {
 					reject();
-					dispatch(updateQueueFailure(error));
+					dispatch(loadQueueFailure(error));
 				});
 		});
 	};
@@ -223,13 +199,15 @@ const FetchEvents = ({ uid, amount, startAt }) => {
 		query
 			.get()
 			.then(snapshot => {
+				console.log(snapshot.docs);
+
 				let events = [];
 
 				snapshot.forEach(doc => {
 					events.push({ id: doc.id, ...doc.data() });
 				});
 
-				resolve(events);
+				resolve({ events, lastDoc: snapshot.docs[snapshot.docs.length - 1] });
 
 				// 				let eventIds = [];
 				// 				snapshot.forEach(doc => {
