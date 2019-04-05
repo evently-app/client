@@ -66,8 +66,8 @@ class EventCardPreview extends Component {
 					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
 					<CalendarButton 
 						eventName={this.props.title} 
-						start={this.props.startTime}
-						end={this.props.endTime}
+						start={this.props.momentStartDate}
+						end={this.props.momentEndDate}
 					/> 
 					<TouchableWithoutFeedback
 						onPressIn={() => {

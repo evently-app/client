@@ -204,6 +204,8 @@ class Timeline extends Component {
 										? formatDay(startDate)
 										: null
 								}
+								momentStartDate={item.startTime}
+								momentEndDate={item.endTime}
 								action={section.title != "Past" ? item.action : null}
 								onAction={() => {
 									// Alert.alert(`action for ${item.id}`);

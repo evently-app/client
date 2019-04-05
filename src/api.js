@@ -32,18 +32,21 @@ export const RegisterSwipeRight = (userId, eventId, eventData) => {
 					.add({
 						user: userId,
 						event: eventId,
-						match: true
+						match: true,
 					})
 					.then(() => {
+
+						//TODO - discuss what should be here given new FB structure 
+
 						// add event to user.events list of swiped events
-						firestore
-							.collection("users")
-							.doc(userId)
-							.update({
-								[`events.${eventId}`]: true
-							})
-							.then(() => resolve())
-							.catch(error => reject(error));
+						// firestore
+						// 	.collection("users")
+						// 	.doc(userId)
+						// 	.update({
+						// 		[`events.${eventId}`]: true
+						// 	})
+						// 	.then(() => resolve())
+						// 	.catch(error => reject(error));
 					})
 					.catch(error => reject(error));
 			})
@@ -105,4 +108,11 @@ export const PullCalendarInfo = (startTime, endTime) => {
 export const AddEventToCalendar = eventData => {
 	// adds event to local calendar / pushes to gcal
 	// returns promise
+	return firestore
+		.collection("users")
+		.doc(userId)
+		.collection("timeline")
+		.doc(eventId)
+		.set({isAddedTocalendar: true})
+
 };

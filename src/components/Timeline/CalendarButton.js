@@ -6,17 +6,20 @@ import { BlurView } from "react-native-blur";
 import RNCalendarEvents from "react-native-calendar-events";
 
 
-const CalendarButton = ({ action }) => {
+const CalendarButton = ({ eventName, start, end }) => {
 	const inputRange = [0, 50, 110, 150];
 
 	addToCalendar = (title, start, end) => {
 		var details = {
-			startDate: start,
-			endDate: end
+			startDate: start + ".000Z",
+			endDate: end + ".000Z"
 		}
+
+		console.log("START*******************", start, end)
+
 		RNCalendarEvents.saveEvent(title, {
-			  startDate: '2016-08-19T19:26:00.000Z',
-  				endDate: '2017-08-19T19:26:00.000Z'
+			  startDate: start + ".000Z",
+  				endDate: end + ".000Z"
 		}).then(res => {
 			console.log("sucess!")
 		})
@@ -56,7 +59,7 @@ const CalendarButton = ({ action }) => {
 			style={styles.wrapper}
 			onPressIn={() => {
 				//addToCalendar goes here 
-				calendarAuth();
+				calendarAuth(eventName, start, end);
 			}}
 		>
 
