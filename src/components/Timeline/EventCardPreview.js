@@ -15,6 +15,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { VibrancyView } from "react-native-blur";
 
 
+
 const CARD_HEIGHT = 150;
 
 class EventCardPreview extends Component {
@@ -68,6 +69,8 @@ class EventCardPreview extends Component {
 						eventName={this.props.title} 
 						start={this.props.momentStartDate}
 						end={this.props.momentEndDate}
+						userId={this.props.userId}
+						eventId={this.props.key}
 					/> 
 					<TouchableWithoutFeedback
 						onPressIn={() => {

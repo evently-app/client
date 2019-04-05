@@ -147,7 +147,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 						.post("https://event-queue-service.herokuapp.com/ping_events_queue", {
 							coordinates: { latitude, longitude },
 							radius: 100,
-							userid: uid
+							uid: uid
 						})
 						.then(response => {
 							console.log(response);

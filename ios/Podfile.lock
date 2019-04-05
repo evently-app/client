@@ -292,10 +292,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
   BVLinearGradient: 8cbc5155c978f2e43098818c91d206d07aae6d30
-<<<<<<< HEAD
-=======
   CodePush: 300e90b3481fa82569090406165b83745de3613a
->>>>>>> bb7d4da52ac8019c76cd48420c92165b56d81788
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
@@ -321,22 +318,13 @@ SPEC CHECKSUMS:
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   React: 9d063e2f356c8cd2f54dd550d4507740037cbabe
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-<<<<<<< HEAD
   react-native-calendar-events: 779efcd3db6ec5f703c5ba9e1891c7fe8e699974
-  react-native-haptic-feedback: 0e7be9330602573e17f7354c41665b727a5098ee
-  react-native-mapbox-gl: d0ac3b81a6cadbd7cadc80891da72e3e85379350
-  RNSVG: 2cc66383316fa84d4c672ccfa5e3bac271b6a2af
-  yoga: 3768a3026ade0fb46a68f3a31a917cf86bc34fc4
-
-PODFILE CHECKSUM: 5247b9c1a5b72db1b8a4bd234d8d15f148856218
-=======
   react-native-haptic-feedback: 0e7be9330602573e17f7354c41665b727a5098ee
   react-native-mapbox-gl: d0ac3b81a6cadbd7cadc80891da72e3e85379350
   RNSVG: 2cc66383316fa84d4c672ccfa5e3bac271b6a2af
   SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   yoga: 3768a3026ade0fb46a68f3a31a917cf86bc34fc4
 
-PODFILE CHECKSUM: f8e82bdfdf7fa86839827ec3ebc7e2697df27ac4
->>>>>>> bb7d4da52ac8019c76cd48420c92165b56d81788
+PODFILE CHECKSUM: 58e7eed3ccb6aeab553369a585d7fe4075db35f1
 
 COCOAPODS: 1.6.1

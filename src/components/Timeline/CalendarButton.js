@@ -1,15 +1,19 @@
 import React from "react";
 import { Animated, StyleSheet, View, TouchableOpacity, Linking } from "react-native";
-import { colors } from "../../lib/styles";
-import { Header, SubHeader, Paragraph } from "../universal/Text";
+import { connect } from "react-redux";
 import { BlurView } from "react-native-blur";
 import RNCalendarEvents from "react-native-calendar-events";
 
 
-const CalendarButton = ({ eventName, start, end }) => {
+import { colors } from "../../lib/styles";
+import { Header, SubHeader, Paragraph } from "../universal/Text";
+import { AddEventToCalendar } from "../../api"; 
+
+
+const CalendarButton = ({ eventName, start, end, eventId, userId}) => {
 	const inputRange = [0, 50, 110, 150];
 
-	addToCalendar = (title, start, end) => {
+	addToCalendar = (title, start, end, userId, eventId) => {
 		var details = {
 			startDate: start + ".000Z",
 			endDate: end + ".000Z"
@@ -21,11 +25,17 @@ const CalendarButton = ({ eventName, start, end }) => {
 			  startDate: start + ".000Z",
   				endDate: end + ".000Z"
 		}).then(res => {
+			AddEventToCalendar(userId, eventId).then(res => {
+				console.log("yeah buddy!")
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 			console.log("sucess!")
 		})
 	}
 
-	calendarAuth = (eventName, start, end) => {
+	calendarAuth = (eventName, start, end, userId, eventId) => {
 		//BUG - didn't work (crashed app), but will need this later on to access calendar
 		console.log("Added to calendar")
 		RNCalendarEvents.authorizationStatus().then(res => {
@@ -38,7 +48,7 @@ const CalendarButton = ({ eventName, start, end }) => {
 				console.log("hey")
 				RNCalendarEvents.authorizeEventStore().then( res => {
 					console.log("RES 2", res)
-					addToCalendar(eventName, start, end); 
+					addToCalendar(eventName, start, end, userId); 
 				})
 				.catch((err) =>{
 					console.log(err)
@@ -49,7 +59,7 @@ const CalendarButton = ({ eventName, start, end }) => {
 			console.log(err)
 		})
 
-		addToCalendar(eventName, start, end); 
+		addToCalendar(eventName, start, end, userId, eventId); 
 
 	}
 
@@ -59,7 +69,7 @@ const CalendarButton = ({ eventName, start, end }) => {
 			style={styles.wrapper}
 			onPressIn={() => {
 				//addToCalendar goes here 
-				calendarAuth(eventName, start, end);
+				calendarAuth(eventName, start, end, userId, eventId);
 			}}
 		>
 
@@ -118,4 +128,15 @@ const styles = StyleSheet.create({
 	// }
 });
 
-export default CalendarButton;
+
+const mapStateToProps = ({ user }) => {
+	return {
+		userId: user.uid,
+	};
+};
+
+export default connect(
+	mapStateToProps,
+)(CalendarButton);
+
+// export default CalendarButton;

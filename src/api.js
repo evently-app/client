@@ -40,7 +40,7 @@ export const PullCalendarInfo = (startTime, endTime) => {
 	// returns promise that resolves to array of calendar events within startTime and endTime
 };
 
-export const AddEventToCalendar = eventData => {
+export const AddEventToCalendar = (userId, eventId) => {
 	// adds event to local calendar / pushes to gcal
 	// returns promise
 	return firestore
