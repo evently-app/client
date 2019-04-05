@@ -16,17 +16,21 @@ import TimelineLogo from "../assets/timeline.svg";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../lib/constants";
 import { WatchUser, Auth } from "../redux/user";
+import codePush from "react-native-code-push";
+
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
 
 class App extends Component {
   xOffset = new Animated.Value(-SCREEN_WIDTH);
 
   componentWillMount() {
+    const { Auth, WatchUser } = this.props;
+
     // log in / sign up anonymously
-    this.props
-      .Auth()
+    Auth()
       .then(() => {
         // sync user entity in redux with firestore
-        this.watchUser = this.props.WatchUser();
+        this.watchUser = WatchUser();
       })
       .catch(error => {
         console.log(error);
@@ -147,3 +151,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App);
+// )(codePush(codePushOptions)(App));

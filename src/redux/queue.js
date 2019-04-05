@@ -1,10 +1,12 @@
 import axios from "axios";
 
 import firebase from "react-native-firebase";
-import { GeoFirestore } from "geofirestore";
+
+import { setLocation } from "./user";
+// import { GeoFirestore } from "geofirestore";
 
 let firestore = firebase.firestore();
-let geofirestore = new GeoFirestore(firestore);
+// let geofirestore = new GeoFirestore(firestore);
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
@@ -12,17 +14,17 @@ let geofirestore = new GeoFirestore(firestore);
 const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
-	errorLoadingQueue: null,
+	errorLoadingQueue: false,
 	queue: []
 };
-
-var coordinates = null;
 
 // define actions against state
 const RESET_QUEUE = "evently/queue/RESET_QUEUE";
 const LOAD_QUEUE_INIT = "evently/queue/LOAD_QUEUE_INIT";
 const LOAD_QUEUE_SUCCESS = "evently/queue/LOAD_QUEUE_SUCCESS";
 const LOAD_QUEUE_FAILURE = "evently/queue/LOAD_QUEUE_FAILURE";
+const UPDATE_QUEUE_SUCCESS = "evently/queue/UPDATE_QUEUE_SUCCESS";
+const UPDATE_QUEUE_FAILURE = "evently/queue/UPDATE_QUEUE_FAILURE";
 const POP = "evently/queue/POP";
 
 /* 
@@ -56,6 +58,19 @@ export default (state = initialState, action) => {
 				errorLoadingQueue: action.error
 			};
 
+		case UPDATE_QUEUE_SUCCESS:
+			const { queue } = state;
+			return {
+				...state,
+				queue: [...queue, ...action.data]
+			};
+
+		case UPDATE_QUEUE_FAILURE:
+			return {
+				...state,
+				errorLoadingQueue: action.error
+			};
+
 		case POP:
 			// pop item off queue
 			let newQueue = state.queue;
@@ -74,105 +89,79 @@ export default (state = initialState, action) => {
 
 // functions which return the actions that affects the state
 
-export const loadQueueInit = () => {
-	return {
-		type: LOAD_QUEUE_INIT
-	};
-};
+export const loadQueueInit = () => ({
+	type: LOAD_QUEUE_INIT
+});
 
-export const loadQueueSuccess = data => {
-	return {
-		type: LOAD_QUEUE_SUCCESS,
-		data
-	};
-};
+export const loadQueueSuccess = data => ({
+	type: LOAD_QUEUE_SUCCESS,
+	data
+});
 
-export const loadQueueFailure = error => {
-	return {
-		type: LOAD_QUEUE_FAILURE,
-		error
-	};
-};
+export const loadQueueFailure = error => ({
+	type: LOAD_QUEUE_FAILURE,
+	error
+});
 
-export const resetQueue = () => {
-	return {
-		type: RESET_QUEUE
-	};
-};
+export const updateQueueSuccess = data => ({
+	type: UPDATE_QUEUE_SUCCESS,
+	data
+});
 
-export const pop = () => {
-	return {
-		type: POP
-	};
-};
+export const updateQueueFailure = error => ({
+	type: UPDATE_QUEUE_FAILURE,
+	error
+});
+
+export const resetQueue = () => ({
+	type: RESET_QUEUE
+});
+
+export const pop = () => ({
+	type: POP
+});
 
 // complex functions which dispatch multiple action and can be asynchronous
-
-export const LoadQueue = eventType => {
+export const LoadQueue = ({ filterTime, filterType }) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			dispatch(loadQueueInit());
 
 			const state = getState();
-			const uid = state.user.uid;
-			const alreadySwiped = !!state.user.entity.events
-				? state.user.entity.events
-				: {};
+			const { user } = state;
+			const { uid } = user;
 
-			//get user location and grab events
 			navigator.geolocation.getCurrentPosition(
-				position => {
-					const { latitude, longitude } = position.coords;
+				({ coords }) => {
+					const { latitude, longitude } = coords;
 
-					const geocollection = geofirestore.collection("eventsLocations");
+					// OVERRIDE FOR DEV
+					// const latitude = 41.310726;
+					// const longitude = -72.929916;
 
-					const query = geocollection.near({
-						center: new firebase.firestore.GeoPoint(latitude, longitude),
-						radius: 1000
-					});
+					dispatch(setLocation({ latitude, longitude }));
 
-					query.onSnapshot(
-						snapshot => {
-							const eventIdsToPresent = [];
+					// .post("http://localhost:3000/ping_events_queue", {
 
-							// filter out events that the user has already swiped on
-							for (let i = 0; i < snapshot.docs.length; i++) {
-								const eventId = snapshot.docs[i].id;
-								if (alreadySwiped[eventId] != true) {
-									// user has not swiped on this event
-									eventIdsToPresent.push(eventId);
-								}
-							}
-
-							// get all new events' data
-							const getEventPromises = [];
-							for (let i = 0; i < eventIdsToPresent.length; i++) {
-								const eventId = eventIdsToPresent[i];
-								getEventPromises.push(
-									firestore
-										.collection("events")
-										.doc(eventId)
-										.get()
-								);
-							}
-
-							//
-							Promise.all(getEventPromises).then(results => {
-								const eventsData = results.map(doc => {
-									return {
-										...doc.data(),
-										id: doc.id
-									};
+					axios
+						.post("https://event-queue-service.herokuapp.com/ping_events_queue", {
+							coordinates: { latitude, longitude },
+							radius: 100,
+							userid: uid
+						})
+						.then(response => {
+							console.log(response);
+							FetchEvents({ uid, amount: 15 })
+								.then(events => {
+									resolve();
+									dispatch(loadQueueSuccess(events));
+								})
+								.catch(error => {
+									reject();
+									dispatch(loadQueueFailure(error));
 								});
-								dispatch(loadQueueSuccess(eventsData));
-								resolve();
-							});
-						},
-						error => {
-							dispatch(loadQueueFailure(error));
-							reject(error);
-						}
-					);
+						})
+						.catch(loadQueueFailure);
 				},
 				error => {
 					dispatch(loadQueueFailure(error));
@@ -182,4 +171,78 @@ export const LoadQueue = eventType => {
 			);
 		});
 	};
+};
+
+// fired every 10 swipes
+export const UpdateQueue = ({ filterTime, filterType }) => {
+	return (dispatch, getState) => {
+		return new Promise((resolve, reject) => {
+			const state = getState();
+			const { user } = state;
+			const { uid } = user;
+
+			FetchEvents({ uid, amount: 10 })
+				.then(events => {
+					resolve();
+					dispatch(loadQueueSuccess(events));
+				})
+				.catch(error => {
+					reject();
+					dispatch(loadQueueFailure(error));
+				});
+		});
+	};
+};
+
+const FetchEvents = ({ uid, amount }) => {
+	return new Promise((resolve, reject) => {
+		const eventsRef = firestore.collection("events");
+		const userEventsRef = firestore
+			.collection("users")
+			.doc(uid)
+			.collection("eventQueue");
+
+		const query = userEventsRef
+			.where("swiped", "==", false)
+			.orderBy("score")
+			.limit(amount);
+
+		query
+			.get()
+			.then(snapshot => {
+				let events = [];
+
+				snapshot.forEach(doc => {
+					events.push({ id: doc.id, ...doc.data() });
+				});
+
+				resolve(events);
+
+				// 				let eventIds = [];
+				// 				snapshot.forEach(doc => {
+				// 					eventIds.push(doc.id);
+				// 				});
+				//
+				// 				console.log(eventIds);
+				//
+				// 				let promises = [];
+				// 				eventIds.forEach(id => {
+				// 					promises.push(eventsRef.doc(id).get());
+				// 				});
+				//
+				// 				Promise.all(promises)
+				// 					.then(data => {
+				// 						const events = data.map(doc => ({
+				// 							...doc.data(),
+				// 							id: doc.id
+				// 						}));
+				//
+				// 						console.log(events);
+				//
+				// 						resolve(events);
+				// 					})
+				// 					.catch(reject);
+			})
+			.catch(reject);
+	});
 };
