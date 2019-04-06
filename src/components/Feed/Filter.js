@@ -13,7 +13,14 @@ import {
 	ScrollTypeSelection
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import { SB_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT, IS_X } from "../../lib/constants";
+import {
+	SB_HEIGHT,
+	SCREEN_WIDTH,
+	SCREEN_HEIGHT,
+	IS_X,
+	CATEGORIES,
+	TIME_TYPES
+} from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
 const CLOSED_POINT = { y: 0 };
@@ -25,19 +32,8 @@ const BOUNDARIES = {
 };
 
 const FILTER_DRAG_RANGE = [0, 50, 150];
-
-const EVENT_TYPES = ["Anything", "Concerts", "Sports", "Shows"];
-
-const TYPE_SNAP_POINTS = [
-	{ x: (3 * SCREEN_WIDTH) / 8 },
-	{ x: SCREEN_WIDTH / 8 },
-	{ x: (-1 * SCREEN_WIDTH) / 8 },
-	{ x: (-3 * SCREEN_WIDTH) / 8 }
-];
-
-const TIME_TYPES = ["Upcoming", "Next Week", "This Month"];
-
-const TIME_SNAP_POINTS = [{ x: SCREEN_WIDTH / 3 }, { x: 0 }, { x: -SCREEN_WIDTH / 3 }];
+const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({ x: ((9 - 2 * i) * SCREEN_WIDTH) / 8 }));
+const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({ x: -1 * (((i - 1) * SCREEN_WIDTH) / 3) }));
 
 class Filter extends PureComponent {
 	timeXOffset = new Animated.Value(0);
@@ -59,7 +55,7 @@ class Filter extends PureComponent {
 
 		// weird necessary fix
 		this.timeXOffset.setValue(-1 * (((timeSelection - 1) * SCREEN_WIDTH) / 3));
-		this.typeXOffset.setValue(((3 - typeSelection * 2) * SCREEN_WIDTH) / 8);
+		this.typeXOffset.setValue(((9 - typeSelection * 2) * SCREEN_WIDTH) / 8);
 
 		if (index == 0) SnapClosed();
 		else SnapOpen();
@@ -71,10 +67,7 @@ class Filter extends PureComponent {
 		const { ScrollTimeSelection } = this.props;
 
 		Haptics.trigger("impactLight");
-
-		if (index === 0) ScrollTimeSelection(0);
-		else if (index === 1) ScrollTimeSelection(1);
-		else ScrollTimeSelection(2);
+		ScrollTimeSelection(index);
 	};
 
 	// update type selection in redux
@@ -83,11 +76,7 @@ class Filter extends PureComponent {
 		const { ScrollTypeSelection } = this.props;
 
 		Haptics.trigger("impactLight");
-
-		if (index === 0) ScrollTypeSelection(0);
-		else if (index === 1) ScrollTypeSelection(1);
-		else if (index === 2) ScrollTypeSelection(2);
-		else ScrollTypeSelection(3);
+		ScrollTypeSelection(index);
 	};
 
 	timeSelectionStyle = index => {
@@ -107,7 +96,7 @@ class Filter extends PureComponent {
 				!transitioning && open
 					? this.timeXOffset.interpolate({
 							inputRange: TIME_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: [index === 2 ? 1 : 0.5, index === 1 ? 1 : 0.5, index === 0 ? 1 : 0.5],
+							outputRange: TIME_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -131,12 +120,7 @@ class Filter extends PureComponent {
 				!transitioning && open
 					? this.typeXOffset.interpolate({
 							inputRange: TYPE_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: [
-								index === 3 ? 1 : 0.5,
-								index === 2 ? 1 : 0.5,
-								index === 1 ? 1 : 0.5,
-								index === 0 ? 1 : 0.5
-							],
+							outputRange: TYPE_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -253,10 +237,10 @@ class Filter extends PureComponent {
 						style={[animatedTime, styles.horizontalSelector]}
 						animatedValueX={this.timeXOffset}
 					>
-						{TIME_TYPES.map((time, i) => (
+						{TIME_TYPES.map(({ title }, i) => (
 							<TouchableOpacity key={i} onPress={() => this.timeSelector.snapTo({ index: i })}>
 								<SubHeader animated style={this.timeSelectionStyle(i)}>
-									{time}
+									{title}
 								</SubHeader>
 							</TouchableOpacity>
 						))}
@@ -272,13 +256,18 @@ class Filter extends PureComponent {
 						snapPoints={TYPE_SNAP_POINTS}
 						initialPosition={TYPE_SNAP_POINTS[0]}
 						onSnapStart={this.handleTypeScroll}
-						style={[animatedType, animatedOpacity2, styles.horizontalSelector]}
+						style={[
+							animatedType,
+							animatedOpacity2,
+							styles.horizontalSelector,
+							{ width: 2.5 * SCREEN_WIDTH }
+						]}
 						animatedValueX={this.typeXOffset}
 					>
-						{EVENT_TYPES.map((type, i) => (
+						{CATEGORIES.map(({ title }, i) => (
 							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
 								<SubHeader animated style={this.typeSelectionStyle(i)}>
-									{type}
+									{title}
 								</SubHeader>
 							</TouchableOpacity>
 						))}
@@ -286,7 +275,7 @@ class Filter extends PureComponent {
 				</Interactable.View>
 				{typeSelection !== 0 && (
 					<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
-						<Paragraph>{EVENT_TYPES[typeSelection]}</Paragraph>
+						<Paragraph>{CATEGORIES[typeSelection].title}</Paragraph>
 					</Animated.View>
 				)}
 				{open && (
@@ -306,15 +295,6 @@ class Filter extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		width: SCREEN_WIDTH,
-		height: SCREEN_HEIGHT,
-		overflow: "hidden",
-		alignItems: "center",
-		justifyContent: "center"
-		// backgroundColor: "red"
-	},
 	center: {
 		alignItems: "center",
 		justifyContent: "center"

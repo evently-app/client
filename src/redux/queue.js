@@ -1,12 +1,10 @@
 import axios from "axios";
-
 import firebase from "react-native-firebase";
+import _ from "lodash";
 
 import { setLocation } from "./user";
-// import { GeoFirestore } from "geofirestore";
 
 let firestore = firebase.firestore();
-// let geofirestore = new GeoFirestore(firestore);
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
@@ -15,7 +13,8 @@ const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
 	errorLoadingQueue: false,
-	queue: []
+	queue: [],
+	lastDoc: null
 };
 
 // define actions against state
@@ -23,8 +22,6 @@ const RESET_QUEUE = "evently/queue/RESET_QUEUE";
 const LOAD_QUEUE_INIT = "evently/queue/LOAD_QUEUE_INIT";
 const LOAD_QUEUE_SUCCESS = "evently/queue/LOAD_QUEUE_SUCCESS";
 const LOAD_QUEUE_FAILURE = "evently/queue/LOAD_QUEUE_FAILURE";
-const UPDATE_QUEUE_SUCCESS = "evently/queue/UPDATE_QUEUE_SUCCESS";
-const UPDATE_QUEUE_FAILURE = "evently/queue/UPDATE_QUEUE_FAILURE";
 const POP = "evently/queue/POP";
 
 /* 
@@ -43,31 +40,18 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
-			// console.log("action data", action.data)
 			return {
 				...state,
 				isLoadingQueue: false,
-				queue: action.data,
-				successLoadingQueue: true
+				successLoadingQueue: true,
+				queue: _.unionBy(action.events, state.queue, ({ id }) => id),
+				lastDoc: action.lastDoc
 			};
 
 		case LOAD_QUEUE_FAILURE:
 			return {
 				...state,
 				isLoadingQueue: false,
-				errorLoadingQueue: action.error
-			};
-
-		case UPDATE_QUEUE_SUCCESS:
-			const { queue } = state;
-			return {
-				...state,
-				queue: [...queue, ...action.data]
-			};
-
-		case UPDATE_QUEUE_FAILURE:
-			return {
-				...state,
 				errorLoadingQueue: action.error
 			};
 
@@ -93,23 +77,14 @@ export const loadQueueInit = () => ({
 	type: LOAD_QUEUE_INIT
 });
 
-export const loadQueueSuccess = data => ({
+export const loadQueueSuccess = (events, lastDoc) => ({
 	type: LOAD_QUEUE_SUCCESS,
-	data
+	events,
+	lastDoc
 });
 
 export const loadQueueFailure = error => ({
 	type: LOAD_QUEUE_FAILURE,
-	error
-});
-
-export const updateQueueSuccess = data => ({
-	type: UPDATE_QUEUE_SUCCESS,
-	data
-});
-
-export const updateQueueFailure = error => ({
-	type: UPDATE_QUEUE_FAILURE,
 	error
 });
 
@@ -128,8 +103,10 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 			dispatch(loadQueueInit());
 
 			const state = getState();
-			const { user } = state;
+			const { user, queue } = state;
+
 			const { uid } = user;
+			const { lastDoc: startAt } = queue;
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
@@ -141,27 +118,33 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 					// dispatch(setLocation({ latitude, longitude }));
 
-					// .post("http://localhost:3000/ping_events_queue", {
-
-					axios
-						.post("https://event-queue-service.herokuapp.com/ping_events_queue", {
-							coordinates: { latitude, longitude },
-							radius: 100,
-							uid: uid
-						})
-						.then(response => {
-							console.log(response);
-							FetchEvents({ uid, amount: 15 })
-								.then(events => {
-									resolve();
-									dispatch(loadQueueSuccess(events));
-								})
-								.catch(error => {
-									reject();
-									dispatch(loadQueueFailure(error));
-								});
-						})
-						.catch(loadQueueFailure);
+					if (queue.queue.length < 5) {
+						// .post("http://localhost:3000/ping_events_queue", {
+						axios
+							.post("https://event-queue-service.herokuapp.com/ping_events_queue", {
+								coordinates: { latitude, longitude },
+								radius: 100,
+								uid
+							})
+							.then(response => {
+								FetchEvents({ uid, startAt, amount: 15 })
+									.then(({ events, lastDoc }) => {
+										resolve();
+										dispatch(loadQueueSuccess(events, lastDoc));
+									})
+									.catch(error => {
+										reject();
+										dispatch(loadQueueFailure(error));
+									});
+							})
+							.catch(error => {
+								reject();
+								dispatch(loadQueueFailure(error));
+							});
+					} else {
+						resolve();
+						dispatch(loadQueueSuccess([], queue.lastDoc));
+					}
 				},
 				error => {
 					dispatch(loadQueueFailure(error));
@@ -178,13 +161,15 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			const state = getState();
-			const { user } = state;
-			const { uid } = user;
+			const { user, queue } = state;
 
-			FetchEvents({ uid, amount: 10 })
-				.then(events => {
+			const { uid } = user;
+			const { lastDoc: startAt } = queue;
+
+			FetchEvents({ uid, startAt, amount: 10 })
+				.then(({ events, lastDoc }) => {
 					resolve();
-					dispatch(loadQueueSuccess(events));
+					dispatch(loadQueueSuccess(events, lastDoc));
 				})
 				.catch(error => {
 					reject();
@@ -194,18 +179,26 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 	};
 };
 
-const FetchEvents = ({ uid, amount }) => {
-	return new Promise((resolve, reject) => {
-		const eventsRef = firestore.collection("events");
+const FetchEvents = ({ uid, amount, startAt }) => {
+	return new Promise(async (resolve, reject) => {
+		// const eventsRef = firestore.collection("events");
 		const userEventsRef = firestore
 			.collection("users")
 			.doc(uid)
 			.collection("eventQueue");
 
-		const query = userEventsRef
-			.where("swiped", "==", false)
-			.orderBy("score")
-			.limit(amount);
+		const startAtDoc = await userEventsRef.doc(startAt).get();
+
+		const query = startAtDoc.exists
+			? userEventsRef
+					.where("swiped", "==", false)
+					.orderBy("score")
+					.startAt(startAtDoc)
+					.limit(amount)
+			: userEventsRef
+					.where("swiped", "==", false)
+					.orderBy("score")
+					.limit(amount);
 
 		query
 			.get()
@@ -216,7 +209,9 @@ const FetchEvents = ({ uid, amount }) => {
 					events.push({ id: doc.id, ...doc.data() });
 				});
 
-				resolve(events);
+				const lastDoc = snapshot.docs[snapshot.docs.length - 1].data().id;
+
+				resolve({ events, lastDoc });
 
 				// 				let eventIds = [];
 				// 				snapshot.forEach(doc => {

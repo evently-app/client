@@ -69,18 +69,14 @@ export default (state = initialState, action) => {
 
 // functions which return the actions that affects the state
 
-export const loadTimelineInit = () => {
-	return {
-		type: LOAD_TIMELINE_INIT
-	};
-};
+export const loadTimelineInit = () => ({
+	type: LOAD_TIMELINE_INIT
+});
 
-export const loadTimelineSuccess = data => {
-	return {
-		type: LOAD_TIMELINE_SUCCESS,
-		data
-	};
-};
+export const loadTimelineSuccess = data => ({
+	type: LOAD_TIMELINE_SUCCESS,
+	data
+});
 
 export const loadTimelineFailure = error => {
 	return {
