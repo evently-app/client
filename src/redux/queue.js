@@ -72,7 +72,6 @@ export default (state = initialState, action) => {
 };
 
 // functions which return the actions that affects the state
-
 export const loadQueueInit = () => ({
 	type: LOAD_QUEUE_INIT
 });
