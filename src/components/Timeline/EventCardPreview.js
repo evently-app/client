@@ -10,10 +10,13 @@ import {
 } from "react-native";
 import { Header, SubHeader } from "../universal/Text";
 import CalendarButton from "./CalendarButton";
+import { IsEventInCalendar } from "../../api"; 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 import LinearGradient from "react-native-linear-gradient";
 import { VibrancyView } from "react-native-blur";
 
+
+//change user id to uid everywhere 
 
 
 const CARD_HEIGHT = 150;
@@ -65,13 +68,17 @@ class EventCardPreview extends Component {
 						{!!this.props.endTime && ` - ${this.props.endTime}`}
 					</SubHeader>
 					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
-					<CalendarButton 
-						eventName={this.props.title} 
-						start={this.props.momentStartDate}
-						end={this.props.momentEndDate}
-						userId={this.props.userId}
-						eventId={this.props.key}
-					/> 
+				      {IsEventInCalendar(this.props.userId, this.props.key) != true ? (
+				        <CalendarButton 
+							eventName={this.props.title} 
+							start={this.props.momentStartDate}
+							end={this.props.momentEndDate}
+							userId={this.props.userId}
+							eventId={this.props.key}
+						/> 
+				      ) : (
+				        <Text>cheeese please hahah</Text>
+				      )}
 					<TouchableWithoutFeedback
 						onPressIn={() => {
 							Animated.timing(this.actionScale, {

@@ -36,6 +36,7 @@ const CalendarButton = ({ eventName, start, end, eventId, userId}) => {
 	}
 
 	calendarAuth = (eventName, start, end, userId, eventId) => {
+		console.log("from calendar", eventId, userId)
 		//BUG - didn't work (crashed app), but will need this later on to access calendar
 		console.log("Added to calendar")
 		RNCalendarEvents.authorizationStatus().then(res => {
@@ -48,7 +49,7 @@ const CalendarButton = ({ eventName, start, end, eventId, userId}) => {
 				console.log("hey")
 				RNCalendarEvents.authorizeEventStore().then( res => {
 					console.log("RES 2", res)
-					addToCalendar(eventName, start, end, userId); 
+					addToCalendar(eventName, start, end, userId, eventId); 
 				})
 				.catch((err) =>{
 					console.log(err)

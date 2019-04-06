@@ -56,6 +56,8 @@ function compileSections(data) {
 	for (let i = 0; i < data.length; i++) {
 		const item = data[i];
 
+		console.log("ITEM: ", item)
+
 		let now = new Date();
 		let tomorrow = new Date();
 		tomorrow.setDate(tomorrow.getDate() + 1);
@@ -190,6 +192,7 @@ class Timeline extends Component {
 					style={styles.sectionList}
 					onScroll={this.onScroll}
 					renderItem={({ item, index, section }) => {
+						console.log("ITEM IS: ", item.id)
 						let startDate = new Date(item.startTime);
 						let endDate = new Date(item.endTime);
 						return (

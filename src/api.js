@@ -26,6 +26,7 @@ export const WatchTimeline = (userId, successCallback, errorCallback) => {
 				let results = [];
 				for (let i = 0; i < snap.docs.length; i++) {
 					results.push(snap.docs[i].data());
+					console.log("TIMELINE DATA: ", snap.docs[i].data)
 				}
 				successCallback(results);
 			},
@@ -43,6 +44,9 @@ export const PullCalendarInfo = (startTime, endTime) => {
 export const AddEventToCalendar = (userId, eventId) => {
 	// adds event to local calendar / pushes to gcal
 	// returns promise
+
+	console.log("event id add to cal", eventId)
+
 	return firestore
 		.collection("users")
 		.doc(userId)
@@ -51,3 +55,27 @@ export const AddEventToCalendar = (userId, eventId) => {
 		.set({isAddedTocalendar: true})
 
 };
+
+export const IsEventInCalendar = (userId, eventId) => {
+	// adds event to local calendar / pushes to gcal
+	// returns promise
+
+		console.log(userId)
+		console.log(eventId)
+
+		firestore
+		.collection("users")
+		.doc(userId)
+		.collection("timeline")
+		//.doc(eventId)
+		.get()
+		.then((res) => {
+			//console.log("the thing, ", res)
+			return res 
+		})
+		.catch((err) => {
+			console.log("ERRRROR", err);
+		})
+
+};
+
