@@ -137,7 +137,10 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 										dispatch(loadQueueFailure(error));
 									});
 							})
-							.catch(loadQueueFailure);
+							.catch(error => {
+								reject();
+								dispatch(loadQueueFailure(error));
+							});
 					} else {
 						resolve();
 						dispatch(loadQueueSuccess([], queue.lastDoc));
