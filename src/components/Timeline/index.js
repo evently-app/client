@@ -121,6 +121,11 @@ class Timeline extends Component {
 		if (nextProps.timeline.length > this.props.timeline.length) {
 			return true;
 		} else {
+			for(var i =0; i < this.props.timeline.length; i++){
+				if(this.props.timeline[i].isAddedToCalendar != nextProps.timeline[i].isAddedToCalendar){
+					return true 
+				}
+			}
 			return false;
 		}
 	}
@@ -183,7 +188,7 @@ class Timeline extends Component {
 			]
 		};
 
-		console.log("UIDDDDDDDDD, ", this.props.userId)
+		console.log("UIDDDDDDDDD, ", this.props.timeline)
 
 		const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 		return (
@@ -203,6 +208,7 @@ class Timeline extends Component {
 								id={item.id}
 								title={item.eventName}
 								uid={this.props.userId}
+								isAddedToCalendar={item.isAddedToCalendar}
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}

@@ -12,7 +12,6 @@ import {
 import { BlurView } from "react-native-blur";
 import { Header, SubHeader } from "../universal/Text";
 import CalendarButton from "./CalendarButton";
-import { IsEventInCalendar } from "../../api"; 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 import LinearGradient from "react-native-linear-gradient";
 import { VibrancyView } from "react-native-blur";
@@ -42,26 +41,29 @@ const CARD_HEIGHT = 150;
 
 class EventCardPreview extends Component {
 
-	constructor() {
-    super();
-    this.state = {isEventInCalendar: false};
-  }
+	constructor(props) {
+    	super(props);
+    	this.state = {isAddedToCalendar: this.props.isAddedToCalendar}
+
+    }
+
+    componentDidUpdate(prevProps){
+    if(prevProps.isAddedToCalendar !== this.props.isAddedToCalendar){
+        this.setState({          
+            isAddedToCalendar: this.props.isAddedToCalendar
+        });
+    }
+}
 
 	componentWillMount() {
 		this.scale = new Animated.Value(1);
 		this.actionScale = new Animated.Value(1);
-		IsEventInCalendar(this.props.uid, this.props.id).then(result => {
-				console.log("RETURNED RESULT:::: ", result.data().isAddedToCalendar)
-				this.setState({isEventInCalendar: result.data().isAddedToCalendar})
-			})
 	}
 
 
 
 	render() {
 
-		console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", this.state.isEventInCalendar)
-		console.log("CALENDAR", IsEventInCalendar(this.props.uid, this.props.id))
 		return (
 			<TouchableWithoutFeedback
 				onPressIn={() => {
@@ -102,7 +104,7 @@ class EventCardPreview extends Component {
 						{!!this.props.endTime && ` - ${this.props.endTime}`}
 					</SubHeader>
 					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
-				      {this.state.isEventInCalendar != true ? (
+				      {this.state.isAddedToCalendar != true ? (
 				        <CalendarButton 
 							eventName={this.props.title} 
 							start={this.props.momentStartDate}
