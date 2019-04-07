@@ -30,16 +30,16 @@ class EventCard extends Component {
 	});
 
 	componentDidMount() {
-		const { latitude, longitude, userLocation } = this.props;
-		setTimeout(
-			() =>
-				this.map.fitBounds(
-					[+longitude, +latitude],
-					[userLocation.longitude, userLocation.latitude],
-					5
-				),
-			100
-		);
+		// const { latitude, longitude, userLocation } = this.props;
+		// setTimeout(
+		// 	() =>
+		// 		this.map.fitBounds(
+		// 			[+longitude, +latitude],
+		// 			[userLocation.longitude, userLocation.latitude],
+		// 			5
+		// 		),
+		// 	100
+		// );
 	}
 
 	render() {
@@ -48,7 +48,6 @@ class EventCard extends Component {
 			tags,
 			startTime,
 			endTime,
-			action,
 			imageUrl,
 			backgroundColor,
 			latitude,
@@ -102,7 +101,8 @@ class EventCard extends Component {
 					)}
 					<MapboxGL.MapView
 						showUserLocation
-						ref={map => (this.map = map)}
+						ref={MapView => (this.map = MapView)}
+						centerCoordinate={[+longitude, +latitude]}
 						logoEnabled={false}
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}

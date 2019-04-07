@@ -295,15 +295,6 @@ class Filter extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		width: SCREEN_WIDTH,
-		height: SCREEN_HEIGHT,
-		overflow: "hidden",
-		alignItems: "center",
-		justifyContent: "center"
-		// backgroundColor: "red"
-	},
 	center: {
 		alignItems: "center",
 		justifyContent: "center"
