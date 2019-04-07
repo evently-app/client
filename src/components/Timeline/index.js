@@ -172,6 +172,7 @@ class Timeline extends Component {
 	}
 
 	render() {
+		const {uid} = this.props; 
 		const { sections, SECTION_LIST_HEIGHT } = compileSections(
 			this.props.timeline
 		);
@@ -188,8 +189,6 @@ class Timeline extends Component {
 			]
 		};
 
-		console.log("UIDDDDDDDDD, ", this.props.timeline)
-
 		const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 		return (
 			<View style={styles.wrapper}>
@@ -199,7 +198,6 @@ class Timeline extends Component {
 					style={styles.sectionList}
 					onScroll={this.onScroll}
 					renderItem={({ item, index, section }) => {
-						console.log("ITEM IS: ", item.id)
 						let startDate = new Date(item.startTime);
 						let endDate = new Date(item.endTime);
 						return (
@@ -207,7 +205,7 @@ class Timeline extends Component {
 								key={item.id}
 								id={item.id}
 								title={item.eventName}
-								uid={this.props.userId}
+								uid={this.uid}
 								isAddedToCalendar={item.isAddedToCalendar}
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
@@ -297,7 +295,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
 	return {
 		timeline: state.timeline.timeline,
-		userId: state.user.uid
+		uid: state.user.uid
 	};
 };
 

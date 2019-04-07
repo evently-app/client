@@ -16,26 +16,20 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 import LinearGradient from "react-native-linear-gradient";
 import { VibrancyView } from "react-native-blur";
 
-
-//change user id to uid everywhere 
-
-const AlreadyInCalendar = () => {
+const GoingButton = () => {
 	return (
 		<TouchableOpacity
 			activeOpacity={0.9}
 			style={styles.outline}
 		>
-
 		<BlurView blurType="regular" style={styles.button}>
 			<SubHeader style={{color: "white"}}>
 				Going
 			</SubHeader>
 		</BlurView>
-
 		</TouchableOpacity>
 	);
 };
-
 
 const CARD_HEIGHT = 150;
 
@@ -44,16 +38,7 @@ class EventCardPreview extends Component {
 	constructor(props) {
     	super(props);
     	this.state = {isAddedToCalendar: this.props.isAddedToCalendar}
-
     }
-
-    componentDidUpdate(prevProps){
-    if(prevProps.isAddedToCalendar !== this.props.isAddedToCalendar){
-        this.setState({          
-            isAddedToCalendar: this.props.isAddedToCalendar
-        });
-    }
-}
 
 	componentWillMount() {
 		this.scale = new Animated.Value(1);
@@ -63,6 +48,8 @@ class EventCardPreview extends Component {
 
 
 	render() {
+
+		const { imageUrl, startTime, endTime, date, title, momentStartDate, momentEndDate, uid, id, action, onPress, onAction } = this.props;
 
 		return (
 			<TouchableWithoutFeedback
@@ -78,7 +65,7 @@ class EventCardPreview extends Component {
 						duration: 100
 					}).start();
 				}}
-				onPress={this.props.onPress}
+				onPress={onPress}
 			>
 				<Animated.View
 					style={[
@@ -89,7 +76,7 @@ class EventCardPreview extends Component {
 					]}
 				>
 					<Image
-						source={{ uri: this.props.imageUrl }}
+						source={{ uri: this.imageUrl }}
 						resizeMode="cover"
 						style={styles.image}
 					/>
@@ -98,22 +85,22 @@ class EventCardPreview extends Component {
 						locations={[0, 0.9]}
 						colors={["rgba(0,0,0,0.5)", "rgba(0,0,0,0.7)"]}
 					/>
-					<Header style={styles.header}>{this.props.title}</Header>
+					<Header style={styles.header}>{title}</Header>
 					<SubHeader>
-						{this.props.startTime}
-						{!!this.props.endTime && ` - ${this.props.endTime}`}
+						{startTime}
+						{!!endTime && ` - ${endTime}`}
 					</SubHeader>
-					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
+					{!!date && <SubHeader>{date}</SubHeader>}
 				      {this.state.isAddedToCalendar != true ? (
 				        <CalendarButton 
-							eventName={this.props.title} 
-							start={this.props.momentStartDate}
-							end={this.props.momentEndDate}
-							userId={this.props.uid}
-							eventId={this.props.id}
+							eventName={title} 
+							start={momentStartDate}
+							end={momentEndDate}
+							uid={uid}
+							eventId={id}
 						/> 
 				      ) : (
-				        <AlreadyInCalendar /> 
+				        <GoingButton /> 
 				      )}
 					<TouchableWithoutFeedback
 						onPressIn={() => {
@@ -128,7 +115,7 @@ class EventCardPreview extends Component {
 								duration: 100
 							}).start();
 						}}
-						onPress={this.props.onAction}
+						onPress={onAction}
 					>
 						<Animated.View
 							style={[
@@ -138,9 +125,9 @@ class EventCardPreview extends Component {
 								}
 							]}
 						>
-							{!!this.props.action && (
+							{!!action && (
 								<VibrancyView style={styles.action} blurType="xlight">
-									<Header style={styles.actionText}>{this.props.action}</Header>
+									<Header style={styles.actionText}>{action}</Header>
 								</VibrancyView>
 							)}
 						</Animated.View>

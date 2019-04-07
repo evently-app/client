@@ -10,59 +10,46 @@ import { Header, SubHeader, Paragraph } from "../universal/Text";
 import { AddEventToCalendar } from "../../api"; 
 
 
-const CalendarButton = ({ eventName, start, end, eventId, userId}) => {
+const CalendarButton = ({ eventName, start, end, eventId, uid}) => {
 	const inputRange = [0, 50, 110, 150];
 
-	addToCalendar = (title, start, end, userId, eventId) => {
-		console.log("addToCalendar", userId)
-		var details = {
-			startDate: start + ".000Z",
-			endDate: end + ".000Z"
-		}
+	addToCalendar = (title, start, end, uid, eventId) => {
 
-		console.log("START*******************", start, end)
-
+		console.log("date: ", start, end)
 		RNCalendarEvents.saveEvent(title, {
 			  startDate: start + ".000Z",
   				endDate: end + ".000Z"
 		}).then(res => {
-			AddEventToCalendar(userId, eventId).then(res => {
-				console.log("yeah buddy!")
+			//add event to Firebase 
+			AddEventToCalendar(uid, eventId).then(res => {
 			})
 			.catch((err) => {
 				console.log(err)
 			})
-			console.log("sucess!")
 		})
 	}
 
-	calendarAuth = (eventName, start, end, userId, eventId) => {
-		console.log("from calendar", eventId, userId)
-		//BUG - didn't work (crashed app), but will need this later on to access calendar
-		console.log("Added to calendar")
+	calendarAuth = (eventName, start, end, uid, eventId) => {
 		RNCalendarEvents.authorizationStatus().then(res => {
-			console.log("return val: ", res)
 			if(res == "authorized"){
 				console.log("RES1: ", res)
 				addToCalendar(eventName, start, end); 
 			}
 			else if(res == "undetermined"){
-				console.log("hey")
 				RNCalendarEvents.authorizeEventStore().then( res => {
-					console.log("RES 2", res)
-					addToCalendar(eventName, start, end, userId, eventId); 
+					addToCalendar(eventName, start, end, uid, eventId); 
 				})
 				.catch((err) =>{
 					console.log(err)
 				})
 			}
+			//TODO - make alert here if no access is granted 
 		})
 		.catch((err) =>{
 			console.log(err)
 		})
 
-		addToCalendar(eventName, start, end, userId, eventId); 
-
+		addToCalendar(eventName, start, end, uid, eventId); 
 	}
 
 	return (
@@ -71,7 +58,7 @@ const CalendarButton = ({ eventName, start, end, eventId, userId}) => {
 			style={styles.wrapper}
 			onPressIn={() => {
 				//addToCalendar goes here 
-				calendarAuth(eventName, start, end, userId, eventId);
+				calendarAuth(eventName, start, end, uid, eventId);
 			}}
 		>
 
@@ -86,16 +73,7 @@ const CalendarButton = ({ eventName, start, end, eventId, userId}) => {
 };
 
 const styles = StyleSheet.create({
-	container: {
-		right: 10,
-		bottom: 10,
-		width: 112,
-		height: 30,
-		position: "absolute"
-		// borderRadius: 10
-	},
 	button: {
-		//backgroundColor: "rgba(255,255,255,0.5)",
 		right: 10,
 		bottom: 10,
 		width: 135,
@@ -107,7 +85,6 @@ const styles = StyleSheet.create({
 
 	},
 	wrapper: {
-		//backgroundColor: "rgba(255,255,255,0.5)",
 		right: 10,
 		bottom: 10,
 		width: 135,
@@ -117,27 +94,15 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	 	alignItems: "center"
 	}
-	// text: {
-	// 	position: "absolute",
-	// 	right: 25,
-	// 	bottom: 10,
-	// 	height: 30,
-	// 	// paddingHorizontal: 10,
-	// 	// width: 300,
-	// 	justifyContent: "center",
-	// 	alignItems: "center"
-	// }
 });
 
 
 const mapStateToProps = ({ user }) => {
 	return {
-		userId: user.uid,
+		uid: user.uid,
 	};
 };
 
 export default connect(
 	mapStateToProps,
 )(CalendarButton);
-
-// export default CalendarButton;
