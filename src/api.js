@@ -52,7 +52,7 @@ export const AddEventToCalendar = (userId, eventId) => {
 		.doc(userId)
 		.collection("timeline")
 		.doc(eventId)
-		.set({isAddedTocalendar: true})
+		.update({isAddedToCalendar: true})
 
 };
 
@@ -60,22 +60,34 @@ export const IsEventInCalendar = (userId, eventId) => {
 	// adds event to local calendar / pushes to gcal
 	// returns promise
 
-		console.log(userId)
-		console.log(eventId)
+		console.log("USER ID", userId)
+		console.log("EVENT ID", eventId)
 
-		firestore
+		return firestore
 		.collection("users")
 		.doc(userId)
 		.collection("timeline")
-		//.doc(eventId)
+		.doc(eventId)
 		.get()
-		.then((res) => {
-			//console.log("the thing, ", res)
-			return res 
-		})
-		.catch((err) => {
-			console.log("ERRRROR", err);
-		})
+		// .then((res) => {
+		// 	if(res.exists){
+		// 		console.log("the thing, ", res.data().isAddedToCalendar)
+		// 		if(res.data().isAddedToCalendar == true){
+		// 			console.log("returning true")
+		// 			return true 
+		// 		}
+		// 		else{
+		// 			console.log("returning false")
+		// 			return false 
+		// 		}
+		// 	}
+
+		// 	return false; 
+			
+		// })
+		// .catch((err) => {
+		// 	console.log("ERRRROR", err);
+		// })
 
 };
 

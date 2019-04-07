@@ -8,6 +8,7 @@ import {
 	StyleSheet,
 	TouchableWithoutFeedback
 } from "react-native";
+import { BlurView } from "react-native-blur";
 import { Header, SubHeader } from "../universal/Text";
 import CalendarButton from "./CalendarButton";
 import { IsEventInCalendar } from "../../api"; 
@@ -18,16 +19,47 @@ import { VibrancyView } from "react-native-blur";
 
 //change user id to uid everywhere 
 
+const AlreadyInCalendar = () => {
+	return (
+		<Text
+			activeOpacity={0.9}
+			style={styles.outline}
+		>
+		<BlurView blurType="dark" style={styles.button}>
+			<SubHeader style={{color: "black"}}>
+				Going
+			</SubHeader>
+		</BlurView>
+
+		</Text>
+	);
+};
+
 
 const CARD_HEIGHT = 150;
 
 class EventCardPreview extends Component {
+
+	constructor() {
+    super();
+    this.state = {isEventInCalendar: false};
+  }
+
 	componentWillMount() {
 		this.scale = new Animated.Value(1);
 		this.actionScale = new Animated.Value(1);
+		IsEventInCalendar(this.props.uid, this.props.id).then(result => {
+				console.log("RETURNED RESULT:::: ", result.data().isAddedToCalendar)
+				this.setState({isEventInCalendar: result.data().isAddedToCalendar})
+			})
 	}
 
+
+
 	render() {
+
+		console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", this.state.isEventInCalendar)
+		console.log("CALENDAR", IsEventInCalendar(this.props.uid, this.props.id))
 		return (
 			<TouchableWithoutFeedback
 				onPressIn={() => {
@@ -68,16 +100,16 @@ class EventCardPreview extends Component {
 						{!!this.props.endTime && ` - ${this.props.endTime}`}
 					</SubHeader>
 					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
-				      {IsEventInCalendar(this.props.userId, this.props.key) != true ? (
+				      {this.state.isEventInCalendar != true ? (
 				        <CalendarButton 
 							eventName={this.props.title} 
 							start={this.props.momentStartDate}
 							end={this.props.momentEndDate}
-							userId={this.props.userId}
-							eventId={this.props.key}
+							userId={this.props.uid}
+							eventId={this.props.id}
 						/> 
 				      ) : (
-				        <Text>cheeese please hahah</Text>
+				        <AlreadyInCalendar /> 
 				      )}
 					<TouchableWithoutFeedback
 						onPressIn={() => {
@@ -148,6 +180,19 @@ const styles = StyleSheet.create({
 		bottom: 10,
 		right: 10
 	},
+	button: {
+		//backgroundColor: "black",
+		//color: "white",
+		right: 10,
+		bottom: 10,
+		width: 135,
+		height: 28,
+		position: "absolute",
+		borderRadius: 10,
+		justifyContent: "center",
+	 	alignItems: "center"
+
+	},
 	action: {
 		paddingHorizontal: 12,
 		paddingVertical: 8,
@@ -155,6 +200,19 @@ const styles = StyleSheet.create({
 	},
 	actionText: {
 		// color: "black"
+	},
+	outline: {
+		//backgroundColor: "rgba(255,255,255,0.5)",
+		right: 10,
+		bottom: 15,
+		width: 135,
+		height: 28,
+		//color: "white",
+		position: "absolute",
+		borderRadius: 10,
+		justifyContent: "center",
+	 	alignItems: "center"
+
 	}
 });
 

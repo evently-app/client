@@ -14,6 +14,7 @@ const CalendarButton = ({ eventName, start, end, eventId, userId}) => {
 	const inputRange = [0, 50, 110, 150];
 
 	addToCalendar = (title, start, end, userId, eventId) => {
+		console.log("addToCalendar", userId)
 		var details = {
 			startDate: start + ".000Z",
 			endDate: end + ".000Z"
@@ -115,7 +116,6 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		justifyContent: "center",
 	 	alignItems: "center"
-
 	}
 	// text: {
 	// 	position: "absolute",

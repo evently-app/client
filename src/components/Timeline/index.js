@@ -183,6 +183,8 @@ class Timeline extends Component {
 			]
 		};
 
+		console.log("UIDDDDDDDDD, ", this.props.userId)
+
 		const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 		return (
 			<View style={styles.wrapper}>
@@ -198,7 +200,9 @@ class Timeline extends Component {
 						return (
 							<EventCardPreview
 								key={item.id}
+								id={item.id}
 								title={item.eventName}
+								uid={this.props.userId}
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}
@@ -284,9 +288,10 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return {
-		timeline: state.timeline.timeline
+		timeline: state.timeline.timeline,
+		userId: state.user.uid
 	};
 };
 
