@@ -6,7 +6,8 @@ import {
 	Alert,
 	Animated,
 	StyleSheet,
-	TouchableWithoutFeedback
+	TouchableWithoutFeedback,
+	TouchableOpacity
 } from "react-native";
 import { BlurView } from "react-native-blur";
 import { Header, SubHeader } from "../universal/Text";
@@ -21,17 +22,18 @@ import { VibrancyView } from "react-native-blur";
 
 const AlreadyInCalendar = () => {
 	return (
-		<Text
+		<TouchableOpacity
 			activeOpacity={0.9}
 			style={styles.outline}
 		>
-		<BlurView blurType="dark" style={styles.button}>
-			<SubHeader style={{color: "black"}}>
+
+		<BlurView blurType="regular" style={styles.button}>
+			<SubHeader style={{color: "white"}}>
 				Going
 			</SubHeader>
 		</BlurView>
 
-		</Text>
+		</TouchableOpacity>
 	);
 };
 
@@ -181,9 +183,7 @@ const styles = StyleSheet.create({
 		right: 10
 	},
 	button: {
-		//backgroundColor: "black",
-		//color: "white",
-		right: 10,
+		height: 10,
 		bottom: 10,
 		width: 135,
 		height: 28,
@@ -204,10 +204,9 @@ const styles = StyleSheet.create({
 	outline: {
 		//backgroundColor: "rgba(255,255,255,0.5)",
 		right: 10,
-		bottom: 15,
+		bottom: 10,
 		width: 135,
 		height: 28,
-		//color: "white",
 		position: "absolute",
 		borderRadius: 10,
 		justifyContent: "center",
