@@ -49,42 +49,30 @@ export default (state = initialState, action) => {
 };
 
 // functions which return the actions that affects the state
-export const BeginTransition = () => {
-	return {
-		type: BEGIN_TRANSITION
-	};
-};
+export const BeginTransition = () => ({
+	type: BEGIN_TRANSITION
+});
 
-export const EndTransition = () => {
-	return {
-		type: END_TRANSITION
-	};
-};
+export const EndTransition = () => ({
+	type: END_TRANSITION
+});
 
-export const SnapOpen = () => {
-	return {
-		type: SNAP_OPEN
-	};
-};
+export const SnapOpen = () => ({
+	type: SNAP_OPEN
+});
 
-export const SnapClosed = ({ time, type }) => {
-	return {
-		type: SNAP_CLOSED,
-		timeSelection: time,
-		typeSelection: type
-	};
-};
+export const SnapClosed = ({ time, type }) => ({
+	type: SNAP_CLOSED,
+	timeSelection: time,
+	typeSelection: type
+});
 
-export const ScrollTimeSelection = selection => {
-	return {
-		type: SCROLL_TIME_SELECTION,
-		selection
-	};
-};
+export const ScrollTimeSelection = selection => ({
+	type: SCROLL_TIME_SELECTION,
+	selection
+});
 
-export const ScrollTypeSelection = selection => {
-	return {
-		type: SCROLL_TYPE_SELECTION,
-		selection
-	};
-};
+export const ScrollTypeSelection = selection => ({
+	type: SCROLL_TYPE_SELECTION,
+	selection
+});

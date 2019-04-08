@@ -71,6 +71,7 @@ class Filter extends PureComponent {
 		this.timeXOffset.setValue(-1 * (((timeSelection - 1) * SCREEN_WIDTH) / 3));
 		this.typeXOffset.setValue(((9 - typeSelection * 2) * SCREEN_WIDTH) / 8);
 
+		// snap closed, update the selected time and type filters
 		if (index == 0) SnapClosed({ time, type });
 		else SnapOpen();
 	};
