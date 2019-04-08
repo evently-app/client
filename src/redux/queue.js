@@ -189,6 +189,8 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 
 			const filterChanged = currentTimeFilter !== filterTime || currentTypeFilter !== filterType;
 
+			if (filterChanged) dispatch(loadQueueInit());
+
 			FetchEvents({
 				uid,
 				startAt: filterChanged ? null : startAt, // if the filter has changed we need to start looking from the top of the queue

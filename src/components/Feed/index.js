@@ -26,7 +26,14 @@ class Feed extends Component {
 	}
 
 	static getDerivedStateFromProps(props, state) {
-		const { queue } = props;
+		const {
+			UpdateQueue,
+			queue,
+			currentTypeFilter,
+			currentTimeFilter,
+			selectedType,
+			selectedTime
+		} = props;
 		const { animatedValues } = state;
 
 		// if there's a mismatch then new events have been loaded
@@ -39,7 +46,11 @@ class Feed extends Component {
 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
 		}
 
-		// if ()
+		if (currentTypeFilter !== selectedType || currentTimeFilter != selectedTime) {
+			console.log("updating queue");
+			this.exitAnimation();
+			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
+		}
 
 		return null;
 	}
@@ -170,9 +181,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ queue, filter, user }) => {
 	return {
 		queue: queue.queue,
+		currentTypeFilter: queue.currentTypeFilter,
+		currentTimeFilter: queue.currentTimeFilter,
 		loading: queue.isLoadingQueue,
-		filterTime: filter.selectedTime,
-		filterType: filter.selectedType,
+		selectedTime: filter.selectedTime,
+		selectedType: filter.selectedType,
 		userLocation: user.location
 	};
 };
