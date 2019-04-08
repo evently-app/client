@@ -46,10 +46,14 @@ class Feed extends Component {
 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
 		}
 
+		// if the filter has changed hide the cards and update the queue
 		if (currentTypeFilter !== selectedType || currentTimeFilter != selectedTime) {
 			console.log("updating queue");
+
 			this.exitAnimation();
 			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
+
+			return { animatedValues: {} };
 		}
 
 		return null;
@@ -109,12 +113,6 @@ class Feed extends Component {
 				outputRange: [1, 0]
 			}),
 			transform: [
-				// {
-				// 	translateY: this.animatedEntry.interpolate({
-				// 		inputRange: [0, 1],
-				// 		outputRange: [0, SCREEN_HEIGHT]
-				// 	})
-				// },
 				{
 					translateY: this.filterDrag.interpolate({
 						inputRange: [0, 100],
@@ -150,16 +148,12 @@ class Feed extends Component {
 			</Animated.View>
 		);
 
-		// console.log(cards);
-
 		return (
 			<View style={styles.container}>
 				{loading ? <Spinner /> : cards}
 				<Filter filterDrag={this.filterDrag} />
 			</View>
 		);
-
-		// return <Filter filterDrag={this.filterDrag}>{loading ? <Spinner /> : cards}</Filter>;
 	}
 }
 
