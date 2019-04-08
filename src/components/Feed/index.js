@@ -39,6 +39,8 @@ class Feed extends Component {
 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
 		}
 
+		// if ()
+
 		return null;
 	}
 
@@ -120,22 +122,20 @@ class Feed extends Component {
 		const first = queue.length - 1;
 		const cards = (
 			<Animated.View style={[styles.center, cardContainerStyle]}>
-				{queue
-					// .sort((a, b) => a.score - b.score)
-					.map((card, i) => (
-						<Swipeable
-							key={card.id}
-							id={card.id}
-							index={queue.length - i}
-							swipeAmount={animatedValues[card.id]}
-							scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
-							onStartSwipe={this.handleOnStartSwipe}
-							onSwipeRight={() => this.onSwipeCardRight(card)}
-							onSwipeLeft={() => this.onSwipeCardLeft(card)}
-						>
-							<EventCard userLocation={userLocation} {...card} />
-						</Swipeable>
-					))}
+				{queue.map((card, i) => (
+					<Swipeable
+						key={card.id}
+						id={card.id}
+						index={queue.length - i}
+						swipeAmount={animatedValues[card.id]}
+						scaleAmount={i !== first ? animatedValues[queue[i + 1].id] : null}
+						onStartSwipe={this.handleOnStartSwipe}
+						onSwipeRight={() => this.onSwipeCardRight(card)}
+						onSwipeLeft={() => this.onSwipeCardLeft(card)}
+					>
+						<EventCard userLocation={userLocation} {...card} />
+					</Swipeable>
+				))}
 			</Animated.View>
 		);
 

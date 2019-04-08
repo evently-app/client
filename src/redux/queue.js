@@ -3,6 +3,7 @@ import firebase from "react-native-firebase";
 import _ from "lodash";
 
 import { setLocation } from "./user";
+import { CATEGORIES } from "../lib/constants";
 
 let firestore = firebase.firestore();
 
@@ -13,6 +14,8 @@ const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
 	errorLoadingQueue: false,
+	currentTimeFilter: 0,
+	currentTypeFilter: 0,
 	queue: [],
 	lastDoc: null
 };
@@ -40,13 +43,30 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
-			return {
+			let newState = {
 				...state,
 				isLoadingQueue: false,
 				successLoadingQueue: true,
-				queue: _.unionBy(action.events, state.queue, ({ id }) => id),
-				lastDoc: action.lastDoc
+				currentTypeFilter: action.typeFilter,
+				currentTimeFilter: action.timeFilter,
+				starAt: action.lastDoc
 			};
+
+			// if the filter state has been updated, we need to replace the queue completely
+			// otherwise we merge with the events still in the queue
+			if (
+				state.currentTypeFilter != action.typeFilter ||
+				state.currentTimeFilter != action.timeFilter
+			)
+				return {
+					...newState,
+					queue: action.queue
+				};
+			else
+				return {
+					...newState,
+					queue: _.unionBy(action.events, state.queue, ({ id }) => id)
+				};
 
 		case LOAD_QUEUE_FAILURE:
 			return {
@@ -76,10 +96,12 @@ export const loadQueueInit = () => ({
 	type: LOAD_QUEUE_INIT
 });
 
-export const loadQueueSuccess = (events, lastDoc) => ({
+export const loadQueueSuccess = ({ events, lastDoc, filterTime, filterType }) => ({
 	type: LOAD_QUEUE_SUCCESS,
 	events,
-	lastDoc
+	lastDoc,
+	filterTime,
+	filterType
 });
 
 export const loadQueueFailure = error => ({
@@ -129,7 +151,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 								FetchEvents({ uid, startAt, amount: 15 })
 									.then(({ events, lastDoc }) => {
 										resolve();
-										dispatch(loadQueueSuccess(events, lastDoc));
+										dispatch(loadQueueSuccess({ events, lastDoc, filterTime, filterType }));
 									})
 									.catch(error => {
 										reject();
@@ -163,12 +185,19 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 			const { user, queue } = state;
 
 			const { uid } = user;
-			const { lastDoc: startAt } = queue;
+			const { lastDoc: startAt, currentTimeFilter, currentTypeFilter } = queue;
 
-			FetchEvents({ uid, startAt, amount: 10 })
+			const filterChanged = currentTimeFilter !== filterTime || currentTypeFilter !== filterType;
+
+			FetchEvents({
+				uid,
+				startAt: filterChanged ? null : startAt, // if the filter has changed we need to start looking from the top of the queue
+				filter: { filterTime, filterType },
+				amount: 10
+			})
 				.then(({ events, lastDoc }) => {
 					resolve();
-					dispatch(loadQueueSuccess(events, lastDoc));
+					dispatch(loadQueueSuccess({ events, lastDoc, filterTime, filterType }));
 				})
 				.catch(error => {
 					reject();
@@ -178,7 +207,34 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 	};
 };
 
-const FetchEvents = ({ uid, amount, startAt }) => {
+const generateQuery = ({ ref, startAtDoc, amount, filterType }) => {
+	if (startAtDoc.exists && filterType)
+		return ref
+			.where("swiped", "==", false)
+			.where("tags", "array-contains", CATEGORIES[filterType].title)
+			.orderBy("score")
+			.startAt(startAtDoc)
+			.limit(amount);
+	else if (!startAtDoc.exists && filterType)
+		return ref
+			.where("swiped", "==", false)
+			.where("tags", "array-contains", CATEGORIES[filterType].title)
+			.orderBy("score")
+			.limit(amount);
+	else if (startAtDoc.exists && !filterType)
+		return ref
+			.where("swiped", "==", false)
+			.orderBy("score")
+			.startAt(startAtDoc)
+			.limit(amount);
+	else if (!startAtDoc.exists && !filterType)
+		return ref
+			.where("swiped", "==", false)
+			.orderBy("score")
+			.limit(amount);
+};
+
+const FetchEvents = ({ uid, amount, startAt, filter: { filterType } }) => {
 	return new Promise(async (resolve, reject) => {
 		// const eventsRef = firestore.collection("events");
 		const userEventsRef = firestore
@@ -186,18 +242,10 @@ const FetchEvents = ({ uid, amount, startAt }) => {
 			.doc(uid)
 			.collection("eventQueue");
 
-		const startAtDoc = await userEventsRef.doc(startAt).get();
+		const startAtDoc =
+			startAt !== null ? await userEventsRef.doc(startAt).get() : { exists: false };
 
-		const query = startAtDoc.exists
-			? userEventsRef
-					.where("swiped", "==", false)
-					.orderBy("score")
-					.startAt(startAtDoc)
-					.limit(amount)
-			: userEventsRef
-					.where("swiped", "==", false)
-					.orderBy("score")
-					.limit(amount);
+		const query = generateQuery({ ref: userEventsRef, startAtDoc, amount, filterType });
 
 		query
 			.get()

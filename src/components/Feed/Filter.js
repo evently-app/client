@@ -103,7 +103,7 @@ class Filter extends PureComponent {
 							inputRange: FILTER_DRAG_RANGE,
 							outputRange: [
 								index === timeSelection ? 1 : 0,
-								index === timeSelection ? 1 : 0.25,
+								index === timeSelection ? 1 : 0.1,
 								index === timeSelection ? 1 : 0.3
 							],
 							extrapolate: "clamp"
