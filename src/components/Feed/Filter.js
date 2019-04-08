@@ -36,6 +36,11 @@ const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({ x: ((9 - 2 * i) * SC
 const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({ x: -1 * (((i - 1) * SCREEN_WIDTH) / 3) }));
 
 class Filter extends PureComponent {
+	state = {
+		time: 0,
+		type: 0
+	};
+
 	timeXOffset = new Animated.Value(0);
 	typeXOffset = new Animated.Value(0);
 
@@ -49,7 +54,16 @@ class Filter extends PureComponent {
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const { SnapOpen, SnapClosed, timeSelection, typeSelection } = this.props;
+		const {
+			SnapOpen,
+			SnapClosed,
+			timeSelection,
+			typeSelection,
+			ScrollTimeSelection,
+			ScrollTypeSelection
+		} = this.props;
+
+		const { time, type } = this.state;
 
 		Haptics.trigger("impactLight");
 
@@ -57,30 +71,33 @@ class Filter extends PureComponent {
 		this.timeXOffset.setValue(-1 * (((timeSelection - 1) * SCREEN_WIDTH) / 3));
 		this.typeXOffset.setValue(((9 - typeSelection * 2) * SCREEN_WIDTH) / 8);
 
-		if (index == 0) SnapClosed();
+		if (index == 0) SnapClosed({ time, type });
 		else SnapOpen();
 	};
 
 	// update time selection in redux
 	handleTimeScroll = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const { ScrollTimeSelection } = this.props;
+		// const { ScrollTimeSelection } = this.props;
 
 		Haptics.trigger("impactLight");
-		ScrollTimeSelection(index);
+		this.setState({ time: index });
+		// ScrollTimeSelection(index);
 	};
 
 	// update type selection in redux
 	handleTypeScroll = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const { ScrollTypeSelection } = this.props;
+		// const { ScrollTypeSelection } = this.props;
 
 		Haptics.trigger("impactLight");
-		ScrollTypeSelection(index);
+		this.setState({ type: index });
+		// ScrollTypeSelection(index);
 	};
 
 	timeSelectionStyle = index => {
-		const { open, transitioning, timeSelection, filterDrag } = this.props;
+		const { open, transitioning, filterDrag } = this.props;
+		const { time } = this.state;
 
 		return {
 			// transform: [
@@ -102,9 +119,9 @@ class Filter extends PureComponent {
 					: filterDrag.interpolate({
 							inputRange: FILTER_DRAG_RANGE,
 							outputRange: [
-								index === timeSelection ? 1 : 0,
-								index === timeSelection ? 1 : 0.1,
-								index === timeSelection ? 1 : 0.3
+								index === time ? 1 : 0,
+								index === time ? 1 : 0.1,
+								index === time ? 1 : 0.3
 							],
 							extrapolate: "clamp"
 					  })
@@ -112,7 +129,8 @@ class Filter extends PureComponent {
 	};
 
 	typeSelectionStyle = index => {
-		const { open, transitioning, typeSelection, filterDrag } = this.props;
+		const { open, transitioning, filterDrag } = this.props;
+		const { type } = this.state;
 
 		return {
 			...styles.typeSelection,
@@ -126,9 +144,9 @@ class Filter extends PureComponent {
 					: filterDrag.interpolate({
 							inputRange: FILTER_DRAG_RANGE,
 							outputRange: [
-								index === typeSelection ? 1 : 0,
-								index === typeSelection ? 1 : 0.25,
-								index === typeSelection ? 1 : 0.3
+								index === type ? 1 : 0,
+								index === type ? 1 : 0.25,
+								index === type ? 1 : 0.3
 							],
 							extrapolate: "clamp"
 					  })

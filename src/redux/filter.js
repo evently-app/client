@@ -10,8 +10,8 @@ const BEGIN_TRANSITION = "evently/filter/BEGIN_TRANSITION";
 const END_TRANSITION = "evently/filter/END_TRANSITION";
 const SNAP_OPEN = "evently/filter/SNAP_OPEN";
 const SNAP_CLOSED = "evently/filter/SNAP_CLOSED";
-const SCROLL_TIME_SELECTION = "evently/filter/SCROLL_TIME_SELECTION";
-const SCROLL_TYPE_SELECTION = "evently/filter/SCROLL_TYPE_SELECTION";
+// const SCROLL_TIME_SELECTION = "evently/filter/SCROLL_TIME_SELECTION";
+// const SCROLL_TYPE_SELECTION = "evently/filter/SCROLL_TYPE_SELECTION";
 
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -37,20 +37,10 @@ export default (state = initialState, action) => {
 		case SNAP_CLOSED:
 			return {
 				...state,
+				timeSelection: action.timeSelection,
+				typeSelection: action.typeSelection,
 				transitioning: false,
 				open: false
-			};
-
-		case SCROLL_TIME_SELECTION:
-			return {
-				...state,
-				timeSelection: action.selection
-			};
-
-		case SCROLL_TYPE_SELECTION:
-			return {
-				...state,
-				typeSelection: action.selection
 			};
 
 		default:
@@ -77,9 +67,11 @@ export const SnapOpen = () => {
 	};
 };
 
-export const SnapClosed = () => {
+export const SnapClosed = ({ time, type }) => {
 	return {
-		type: SNAP_CLOSED
+		type: SNAP_CLOSED,
+		timeSelection: time,
+		typeSelection: type
 	};
 };
 

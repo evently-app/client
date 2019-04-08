@@ -21,8 +21,8 @@ class Feed extends Component {
 	filterDrag = new Animated.Value(0);
 
 	componentDidMount() {
-		const { LoadQueue, filterTime, filterType } = this.props;
-		LoadQueue({ filterTime, filterType }).then(this.entryAnimation);
+		const { LoadQueue, selectedTime, selectedType } = this.props;
+		LoadQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
 	}
 
 	static getDerivedStateFromProps(props, state) {
@@ -78,11 +78,12 @@ class Feed extends Component {
 	};
 
 	popCard = ({ id }) => {
-		const { UpdateQueue, filterTime, filterType } = this.props;
+		const { UpdateQueue, selectedTime, selectedType } = this.props;
 		const { animatedValues } = this.state;
 
 		// if fewer than five events remaining in the queue, reload
-		if (_.size(animatedValues) < 5) UpdateQueue({ filterTime, filterType });
+		if (_.size(animatedValues) < 5)
+			UpdateQueue({ filterTime: selectedTime, filterType: selectedType });
 
 		this.setState({
 			animatedValues: _.omit(animatedValues, id)
