@@ -43,30 +43,23 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
-			let newState = {
-				...state,
-				isLoadingQueue: false,
-				successLoadingQueue: true,
-				currentTypeFilter: action.typeFilter,
-				currentTimeFilter: action.timeFilter,
-				starAt: action.lastDoc
-			};
+			console.log("action", action);
 
 			// if the filter state has been updated, we need to replace the queue completely
 			// otherwise we merge with the events still in the queue
-			if (
+			const filterUpdated =
 				state.currentTypeFilter != action.typeFilter ||
-				state.currentTimeFilter != action.timeFilter
-			)
-				return {
-					...newState,
-					queue: action.queue
-				};
-			else
-				return {
-					...newState,
-					queue: _.unionBy(action.events, state.queue, ({ id }) => id)
-				};
+				state.currentTimeFilter != action.timeFilter;
+
+			return {
+				...state,
+				isLoadingQueue: false,
+				successLoadingQueue: true,
+				currentTypeFilter: action.filterType,
+				currentTimeFilter: action.filterTime,
+				lastDoc: action.lastDoc,
+				queue: filterUpdated ? action.events : _.unionBy(action.events, state.queue, ({ id }) => id)
+			};
 
 		case LOAD_QUEUE_FAILURE:
 			return {
@@ -122,6 +115,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			dispatch(loadQueueInit());
+			// console.log("filter time type in load Queue", filterTime, filterType);
 
 			const state = getState();
 			const { user, queue } = state;
@@ -131,11 +125,11 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					const { latitude, longitude } = coords;
+					// const { latitude, longitude } = coords;
 
 					// OVERRIDE FOR DEV
-					// const latitude = 41.310726;
-					// const longitude = -72.929916;
+					const latitude = 41.310726;
+					const longitude = -72.929916;
 
 					dispatch(setLocation({ latitude, longitude }));
 
@@ -148,7 +142,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 								uid
 							})
 							.then(response => {
-								FetchEvents({ uid, startAt, amount: 15 })
+								FetchEvents({ uid, startAt, filter: { filterTime, filterType }, amount: 15 })
 									.then(({ events, lastDoc }) => {
 										resolve();
 										dispatch(loadQueueSuccess({ events, lastDoc, filterTime, filterType }));
@@ -159,6 +153,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 									});
 							})
 							.catch(error => {
+								// console.log("post error", error);
 								reject();
 								dispatch(loadQueueFailure(error));
 							});
@@ -210,19 +205,24 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 };
 
 const generateQuery = ({ ref, startAtDoc, amount, filterType }) => {
+	// console.log(ref, startAtDoc, amount, filterType);
 	if (startAtDoc.exists && filterType)
-		return ref
-			.where("swiped", "==", false)
-			.where("tags", "array-contains", CATEGORIES[filterType].title)
-			.orderBy("score")
-			.startAt(startAtDoc)
-			.limit(amount);
+		return (
+			ref
+				.where("swiped", "==", false)
+				// .where("tags", "array-contains", CATEGORIES[filterType].title)
+				.orderBy("score")
+				.startAt(startAtDoc)
+				.limit(amount)
+		);
 	else if (!startAtDoc.exists && filterType)
-		return ref
-			.where("swiped", "==", false)
-			.where("tags", "array-contains", CATEGORIES[filterType].title)
-			.orderBy("score")
-			.limit(amount);
+		return (
+			ref
+				.where("swiped", "==", false)
+				// .where("tags", "array-contains", CATEGORIES[filterType].title)
+				.orderBy("score")
+				.limit(amount)
+		);
 	else if (startAtDoc.exists && !filterType)
 		return ref
 			.where("swiped", "==", false)
@@ -245,7 +245,7 @@ const FetchEvents = ({ uid, amount, startAt, filter: { filterType } }) => {
 			.collection("eventQueue");
 
 		const startAtDoc =
-			startAt !== null ? await userEventsRef.doc(startAt).get() : { exists: false };
+			startAt === null ? { exists: false } : await userEventsRef.doc(startAt).get();
 
 		const query = generateQuery({ ref: userEventsRef, startAtDoc, amount, filterType });
 
@@ -267,7 +267,7 @@ const FetchEvents = ({ uid, amount, startAt, filter: { filterType } }) => {
 				// 					eventIds.push(doc.id);
 				// 				});
 				//
-				// 				console.log(eventIds);
+				// console.log(eventIds);
 				//
 				// 				let promises = [];
 				// 				eventIds.forEach(id => {

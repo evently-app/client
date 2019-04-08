@@ -11,7 +11,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 export default function configureStore() {
 	const config = {
 		key: "root",
-		blacklist: ["filter"],
+		blacklist: ["filter", "queue"],
 		storage
 	};
 

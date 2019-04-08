@@ -14,7 +14,8 @@ import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
 class Feed extends Component {
 	state = {
-		animatedValues: {}
+		animatedValues: {},
+		newFilterSetting: false
 	};
 
 	animatedEntry = new Animated.Value(1);
@@ -34,29 +35,83 @@ class Feed extends Component {
 			selectedType,
 			selectedTime
 		} = props;
-		const { animatedValues } = state;
+		const { animatedValues, newFilterSetting } = state;
+
+		let derivedState = { newFilterSetting: false };
+
+		// create new animated values
+		let newAnimatedValues = {};
+		queue.forEach(({ id }) => {
+			newAnimatedValues[id] = new Animated.Value(0);
+		});
+
+		// add to derived state
+		derivedState.animatedValues = newAnimatedValues;
+		if (!newFilterSetting)
+			derivedState.animatedValues = { ...derivedState.animatedValues, ...animatedValues };
+
+		// check if the filter has changed
+		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime)
+			derivedState.newFilterSetting = true;
+
+		console.log("derivedState:", derivedState);
+
+		if (derivedState.newFilterSetting || queue.length !== _.size(animatedValues))
+			return derivedState;
+		else return null;
 
 		// if there's a mismatch then new events have been loaded
-		if (queue.length !== _.size(state.animatedValues)) {
-			let newAnimatedValues = {};
-			queue.forEach(({ id }) => {
-				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
-			});
+		// 		if (queue.length !== _.size(state.animatedValues) && !newFilterSetting) {
+		// 			console.log("case 1");
+		//
+		// 			let newAnimatedValues = {};
+		//
+		// 			queue.forEach(({ id }) => {
+		// 				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
+		// 			});
+		//
+		// 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
+		// 		} else if (newFilterSetting) {
+		// 			console.log("case 2");
+		// 			let newAnimatedValues = {};
+		//
+		// 			queue.forEach(({ id }) => {
+		// 				newAnimatedValues[id] = new Animated.Value(0);
+		// 			});
+		//
+		// 			return { animatedValues: newAnimatedValues, newFilterSetting: false };
+		// 		}
+		//
+		// 		// if the filter has changed hide the cards and update the queue
+		// 		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime) {
+		// 			console.log(
+		// 				"updating queue",
+		// 				currentTimeFilter,
+		// 				selectedTime,
+		// 				currentTypeFilter,
+		// 				selectedType
+		// 			);
+		// 			//
+		// 			// 			// return { animatedValues: {} };
+		// 			return { newFilterSetting: true };
+		// 		}
+		//
+		// 		return null;
+	}
 
-			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
-		}
+	componentDidUpdate(prevProps, prevState) {
+		console.log("component did update");
 
-		// if the filter has changed hide the cards and update the queue
-		if (currentTypeFilter !== selectedType || currentTimeFilter != selectedTime) {
-			console.log("updating queue");
+		const { UpdateQueue, selectedTime, selectedType } = this.props;
+		const { newFilterSetting } = this.state;
 
+		console.log(prevState.newFilterSetting, newFilterSetting);
+
+		if (prevState.newFilterSetting !== newFilterSetting) {
+			console.log("UPDATE QUEUE");
 			this.exitAnimation();
 			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
-
-			return { animatedValues: {} };
 		}
-
-		return null;
 	}
 
 	entryAnimation = () => {
@@ -179,8 +234,8 @@ const mapStateToProps = ({ queue, filter, user }) => {
 		currentTypeFilter: queue.currentTypeFilter,
 		currentTimeFilter: queue.currentTimeFilter,
 		loading: queue.isLoadingQueue,
-		selectedTime: filter.selectedTime,
-		selectedType: filter.selectedType,
+		selectedTime: filter.timeSelection,
+		selectedType: filter.typeSelection,
 		userLocation: user.location
 	};
 };
