@@ -76,22 +76,12 @@ class Filter extends PureComponent {
 		else SnapOpen();
 	};
 
-	// update time selection in redux
-	handleTimeScroll = ({ nativeEvent }) => {
+	handleSelectorScroll = ({ nativeEvent }, field) => {
 		const { index } = nativeEvent;
 
 		// update local filter state with new selection
 		Haptics.trigger("impactLight");
-		this.setState({ time: index });
-	};
-
-	// update type selection in redux
-	handleTypeScroll = ({ nativeEvent }) => {
-		const { index } = nativeEvent;
-
-		// update local filter state with new selection
-		Haptics.trigger("impactLight");
-		this.setState({ type: index });
+		this.setState({ [field]: index });
 	};
 
 	timeSelectionStyle = index => {
@@ -251,7 +241,7 @@ class Filter extends PureComponent {
 						dragEnabled={open}
 						snapPoints={TIME_SNAP_POINTS}
 						initialPosition={TIME_SNAP_POINTS[0]}
-						onSnapStart={this.handleTimeScroll}
+						onSnapStart={event => this.handleSelectorScroll(event, "time")}
 						style={[animatedTime, styles.horizontalSelector]}
 						animatedValueX={this.timeXOffset}
 					>
@@ -273,7 +263,7 @@ class Filter extends PureComponent {
 						dragEnabled={open}
 						snapPoints={TYPE_SNAP_POINTS}
 						initialPosition={TYPE_SNAP_POINTS[0]}
-						onSnapStart={this.handleTypeScroll}
+						onSnapStart={event => this.handleSelectorScroll(event, "type")}
 						style={[
 							animatedType,
 							animatedOpacity2,
@@ -293,7 +283,7 @@ class Filter extends PureComponent {
 				</Interactable.View>
 				{type !== 0 && (
 					<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
-						<Paragraph>{CATEGORIES[typeSelection].title}</Paragraph>
+						<Paragraph>{CATEGORIES[type].title}</Paragraph>
 					</Animated.View>
 				)}
 				{open && (
