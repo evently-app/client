@@ -79,21 +79,19 @@ class Filter extends PureComponent {
 	// update time selection in redux
 	handleTimeScroll = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		// const { ScrollTimeSelection } = this.props;
 
+		// update local filter state with new selection
 		Haptics.trigger("impactLight");
 		this.setState({ time: index });
-		// ScrollTimeSelection(index);
 	};
 
 	// update type selection in redux
 	handleTypeScroll = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		// const { ScrollTypeSelection } = this.props;
 
+		// update local filter state with new selection
 		Haptics.trigger("impactLight");
 		this.setState({ type: index });
-		// ScrollTypeSelection(index);
 	};
 
 	timeSelectionStyle = index => {
@@ -163,7 +161,8 @@ class Filter extends PureComponent {
 	};
 
 	render() {
-		const { open, filterDrag, timeSelection, typeSelection } = this.props;
+		const { open, filterDrag } = this.props;
+		const { type } = this.state;
 
 		const animatedLocation = {
 			transform: [
@@ -292,7 +291,7 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 				</Interactable.View>
-				{typeSelection !== 0 && (
+				{type !== 0 && (
 					<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
 						<Paragraph>{CATEGORIES[typeSelection].title}</Paragraph>
 					</Animated.View>
