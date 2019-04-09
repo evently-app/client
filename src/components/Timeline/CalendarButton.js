@@ -2,6 +2,7 @@ import React from "react";
 import { Animated, StyleSheet, View, TouchableOpacity, Linking } from "react-native";
 import { connect } from "react-redux";
 import { BlurView } from "react-native-blur";
+import moment from "moment";
 import RNCalendarEvents from "react-native-calendar-events";
 
 
@@ -13,12 +14,17 @@ import { AddEventToCalendar } from "../../api";
 const CalendarButton = ({ eventName, start, end, eventId, uid}) => {
 	const inputRange = [0, 50, 110, 150];
 
-	addToCalendar = (title, start, end, uid, eventId) => {
+	function formatDay(date) {
+		date = moment(date).format("YYYY-MM-DDThh:mm:ss");
+		console.log("The formatted event is: ", date)
+		return date 
+	}	
 
+	addToCalendar = (title, start, end, uid, eventId) => {
 		console.log("date: ", start, end)
 		RNCalendarEvents.saveEvent(title, {
-			  startDate: start + ".000Z",
-  				endDate: end + ".000Z"
+			  startDate: formatDay(start) + ".000Z",
+  				endDate: formatDay(end) + ".000Z"
 		}).then(res => {
 			//add event to Firebase 
 			AddEventToCalendar(uid, eventId).then(res => {
@@ -26,7 +32,7 @@ const CalendarButton = ({ eventName, start, end, eventId, uid}) => {
 			.catch((err) => {
 				console.log(err)
 			})
-		}).catch((err) ={
+		}).catch((err) => {
 			console.log("Error. Unable to save event: ", err)
 		})
 	}
