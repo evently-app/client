@@ -35,21 +35,14 @@ const CARD_HEIGHT = 150;
 
 class EventCardPreview extends Component {
 
-	constructor(props) {
-    	super(props);
-    	this.state = {isAddedToCalendar: this.props.isAddedToCalendar}
-    }
-
-	componentWillMount() {
-		this.scale = new Animated.Value(1);
-		this.actionScale = new Animated.Value(1);
-	}
+	scale = new Animated.Value(1)
+	actionScale = new Animated.Value(1)
 
 
 
 	render() {
 
-		const { imageUrl, startTime, endTime, date, title, momentStartDate, momentEndDate, uid, id, action, onPress, onAction } = this.props;
+		const { imageUrl, startTime, endTime, date, title, momentStartDate, momentEndDate, uid, id, action, onPress, onAction, isAddedToCalendar } = this.props;
 
 		return (
 			<TouchableWithoutFeedback
@@ -91,7 +84,7 @@ class EventCardPreview extends Component {
 						{!!endTime && ` - ${endTime}`}
 					</SubHeader>
 					{!!date && <SubHeader>{date}</SubHeader>}
-				      {this.state.isAddedToCalendar != true ? (
+				      {!isAddedToCalendar ? (
 				        <CalendarButton 
 							eventName={title} 
 							start={momentStartDate}
