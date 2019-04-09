@@ -8,7 +8,16 @@
     "setup": "yarn; cd ios && rm -rf Pods && pod install && cd ..",
     "clean": "cd ios && rm -rf build && cd ..",
     "android": "react-native run-android",
-    "ios": "react-native run-ios"
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "status": "code-push deployment list evently",
+    "codepush-bundle": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output codepush/main.jsbundle --assets-dest codepush",
+    "stage": "rm -r codepush;mkdir codepush;code-push release-react evently ios -o ./codepush -e index.js -t $npm_package_config_codepushVersion",
+    "promote": "code-push promote evently Staging Production",
+    "rollback-staging": "code-push rollback evently Staging",
+    "rollback-production": "code-push rollback evently Production",
+    "bundle": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios"
   },
   "dependencies": {
     "@mapbox/react-native-mapbox-gl": "^6.1.3",

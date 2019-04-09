@@ -58,7 +58,9 @@ export default (state = initialState, action) => {
 				currentTypeFilter: action.filterType,
 				currentTimeFilter: action.filterTime,
 				lastDoc: action.lastDoc,
-				queue: filterUpdated ? action.events : _.unionBy(action.events, state.queue, ({ id }) => id)
+				queue: filterUpdated
+					? action.events
+					: _.unionBy(action.events, state.queue, ({ id }) => id)
 			};
 
 		case LOAD_QUEUE_FAILURE:
@@ -89,7 +91,12 @@ export const loadQueueInit = () => ({
 	type: LOAD_QUEUE_INIT
 });
 
-export const loadQueueSuccess = ({ events, lastDoc, filterTime, filterType }) => ({
+export const loadQueueSuccess = ({
+	events,
+	lastDoc,
+	filterTime,
+	filterType
+}) => ({
 	type: LOAD_QUEUE_SUCCESS,
 	events,
 	lastDoc,
@@ -125,27 +132,43 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					// const { latitude, longitude } = coords;
+					const { latitude, longitude } = coords;
+					console.log(coords);
 
 					// OVERRIDE FOR DEV
-					const latitude = 41.310726;
-					const longitude = -72.929916;
+					// const latitude = 41.310726;
+					// const longitude = -72.929916;
 
 					// dispatch(setLocation({ latitude, longitude }));
 
 					if (queue.queue.length < 5) {
 						// .post("http://localhost:3000/ping_events_queue", {
 						axios
-							.post("https://event-queue-service.herokuapp.com/ping_events_queue", {
-								coordinates: { latitude, longitude },
-								radius: 100,
-								uid
-							})
+							.post(
+								"https://event-queue-service.herokuapp.com/ping_events_queue",
+								{
+									coordinates: { latitude, longitude },
+									radius: 100,
+									uid
+								}
+							)
 							.then(response => {
-								FetchEvents({ uid, startAt, filter: { filterTime, filterType }, amount: 15 })
+								FetchEvents({
+									uid,
+									startAt,
+									filter: { filterTime, filterType },
+									amount: 15
+								})
 									.then(({ events, lastDoc }) => {
 										resolve();
-										dispatch(loadQueueSuccess({ events, lastDoc, filterTime, filterType }));
+										dispatch(
+											loadQueueSuccess({
+												events,
+												lastDoc,
+												filterTime,
+												filterType
+											})
+										);
 									})
 									.catch(error => {
 										reject();
@@ -166,7 +189,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 					dispatch(loadQueueFailure(error));
 					reject(error);
 				},
-				{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+				{ enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
 			);
 		});
 	};
@@ -182,7 +205,8 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 			const { uid } = user;
 			const { lastDoc: startAt, currentTimeFilter, currentTypeFilter } = queue;
 
-			const filterChanged = currentTimeFilter !== filterTime || currentTypeFilter !== filterType;
+			const filterChanged =
+				currentTimeFilter !== filterTime || currentTypeFilter !== filterType;
 
 			if (filterChanged) dispatch(loadQueueInit());
 
@@ -194,7 +218,9 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 			})
 				.then(({ events, lastDoc }) => {
 					resolve();
-					dispatch(loadQueueSuccess({ events, lastDoc, filterTime, filterType }));
+					dispatch(
+						loadQueueSuccess({ events, lastDoc, filterTime, filterType })
+					);
 				})
 				.catch(error => {
 					reject();
@@ -245,9 +271,16 @@ const FetchEvents = ({ uid, amount, startAt, filter: { filterType } }) => {
 			.collection("eventQueue");
 
 		const startAtDoc =
-			startAt === null ? { exists: false } : await userEventsRef.doc(startAt).get();
+			startAt === null
+				? { exists: false }
+				: await userEventsRef.doc(startAt).get();
 
-		const query = generateQuery({ ref: userEventsRef, startAtDoc, amount, filterType });
+		const query = generateQuery({
+			ref: userEventsRef,
+			startAtDoc,
+			amount,
+			filterType
+		});
 
 		query
 			.get()
