@@ -53,6 +53,10 @@ pod 'lottie-ios', :path => '../node_modules/lottie-ios'
 pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
 pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
+pod 'react-native-calendar-events', :path => '../node_modules/react-native-calendar-events'
+
+pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
+
 #  target 'eventlyTests' do
 #    inherit! :search_paths
 #    # Pods for testing

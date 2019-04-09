@@ -6,22 +6,49 @@ import {
 	Alert,
 	Animated,
 	StyleSheet,
-	TouchableWithoutFeedback
+	TouchableWithoutFeedback,
+	TouchableOpacity
 } from "react-native";
+import { BlurView } from "react-native-blur";
 import { Header, SubHeader } from "../universal/Text";
+import CalendarButton from "./CalendarButton";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 import LinearGradient from "react-native-linear-gradient";
 import { VibrancyView } from "react-native-blur";
 
+const GoingButton = () => {
+	return (
+		<TouchableOpacity activeOpacity={0.9} style={styles.outline}>
+			<BlurView blurType="regular" style={styles.button}>
+				<SubHeader style={{ color: "white" }}>Going</SubHeader>
+			</BlurView>
+		</TouchableOpacity>
+	);
+};
+
 const CARD_HEIGHT = 150;
 
 class EventCardPreview extends Component {
-	componentWillMount() {
-		this.scale = new Animated.Value(1);
-		this.actionScale = new Animated.Value(1);
-	}
+	scale = new Animated.Value(1);
+	actionScale = new Animated.Value(1);
 
 	render() {
+		const {
+			imageUrl,
+			startTime,
+			endTime,
+			date,
+			title,
+			momentStartDate,
+			momentEndDate,
+			uid,
+			id,
+			action,
+			onPress,
+			onAction,
+			isAddedToCalendar
+		} = this.props;
+
 		return (
 			<TouchableWithoutFeedback
 				onPressIn={() => {
@@ -36,7 +63,7 @@ class EventCardPreview extends Component {
 						duration: 100
 					}).start();
 				}}
-				onPress={this.props.onPress}
+				onPress={onPress}
 			>
 				<Animated.View
 					style={[
@@ -47,7 +74,7 @@ class EventCardPreview extends Component {
 					]}
 				>
 					<Image
-						source={{ uri: this.props.imageUrl }}
+						source={{ uri: imageUrl }}
 						resizeMode="cover"
 						style={styles.image}
 					/>
@@ -56,12 +83,23 @@ class EventCardPreview extends Component {
 						locations={[0, 0.9]}
 						colors={["rgba(0,0,0,0.5)", "rgba(0,0,0,0.7)"]}
 					/>
-					<Header style={styles.header}>{this.props.title}</Header>
+					<Header style={styles.header}>{title}</Header>
 					<SubHeader>
-						{this.props.startTime}
-						{!!this.props.endTime && ` - ${this.props.endTime}`}
+						{startTime}
+						{!!endTime && ` - ${endTime}`}
 					</SubHeader>
-					{!!this.props.date && <SubHeader>{this.props.date}</SubHeader>}
+					{!!date && <SubHeader>{date}</SubHeader>}
+					{/* {!isAddedToCalendar ? ( */}
+					{/* 	<CalendarButton */}
+					{/* 		eventName={title} */}
+					{/* 		start={momentStartDate} */}
+					{/* 		end={momentEndDate} */}
+					{/* 		uid={uid} */}
+					{/* 		eventId={id} */}
+					{/* 	/> */}
+					{/* ) : ( */}
+					{/* 	<GoingButton /> */}
+					{/* )} */}
 					<TouchableWithoutFeedback
 						onPressIn={() => {
 							Animated.timing(this.actionScale, {
@@ -75,7 +113,7 @@ class EventCardPreview extends Component {
 								duration: 100
 							}).start();
 						}}
-						onPress={this.props.onAction}
+						onPress={onAction}
 					>
 						<Animated.View
 							style={[
@@ -85,9 +123,9 @@ class EventCardPreview extends Component {
 								}
 							]}
 						>
-							{!!this.props.action && (
+							{!!action && (
 								<VibrancyView style={styles.action} blurType="xlight">
-									<Header style={styles.actionText}>{this.props.action}</Header>
+									<Header style={styles.actionText}>{action}</Header>
 								</VibrancyView>
 							)}
 						</Animated.View>
@@ -131,6 +169,16 @@ const styles = StyleSheet.create({
 		bottom: 10,
 		right: 10
 	},
+	button: {
+		height: 10,
+		bottom: 10,
+		width: 135,
+		height: 28,
+		position: "absolute",
+		borderRadius: 10,
+		justifyContent: "center",
+		alignItems: "center"
+	},
 	action: {
 		paddingHorizontal: 12,
 		paddingVertical: 8,
@@ -138,6 +186,17 @@ const styles = StyleSheet.create({
 	},
 	actionText: {
 		// color: "black"
+	},
+	outline: {
+		//backgroundColor: "rgba(255,255,255,0.5)",
+		right: 10,
+		bottom: 10,
+		width: 135,
+		height: 28,
+		position: "absolute",
+		borderRadius: 10,
+		justifyContent: "center",
+		alignItems: "center"
 	}
 });
 

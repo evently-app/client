@@ -134,6 +134,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-calendar-events')
+    implementation project(':@mapbox_react-native-mapbox-gl')
     implementation project(':lottie-react-native')
     implementation project(':react-native-svg')
     implementation project(':react-native-blur')

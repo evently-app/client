@@ -5889,6 +5889,11 @@ react-native-blur@^3.2.2:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-calendar-events@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-calendar-events/-/react-native-calendar-events-1.7.0.tgz#6cd62c7d03e8884dc5c14ba05ef58e802ec68792"
+  integrity sha512-ePpAJ0MkqNVVcIdiFZinnaqRC+BSqT8GA1/hlSFUe+NIsct25eLGBXasJnUGLoyYmYeRCWjKoSzW127pS10SYw==
+
 react-native-circular-progress@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-circular-progress/-/react-native-circular-progress-1.1.0.tgz#5cb3efe570796226c59bf15a35250fb8b0d45025"
@@ -5928,6 +5933,11 @@ react-native-interactable@1.0.0-alpha.1:
 react-native-linear-gradient@^2.5.4:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.4.tgz#dce133526f5a5510a639af94544f1ed0c984bd1e"
+
+react-native-permissions@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-1.1.1.tgz#4876004681ff8556454613d85249b01baff9b35b"
+  integrity sha512-t0Ujm177bagjUOSzhpmkSz+LqFW04HnY9TeZFavDCmV521fQvFz82aD+POXqWsAdsJVOK3umJYBNNqCjC3g0hQ==
 
 react-native-safe-module@^1.1.0:
   version "1.2.0"
