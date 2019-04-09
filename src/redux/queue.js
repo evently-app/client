@@ -43,8 +43,6 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
-			console.log("action", action);
-
 			// if the filter state has been updated, we need to replace the queue completely
 			// otherwise we merge with the events still in the queue
 			const filterUpdated =
@@ -58,9 +56,7 @@ export default (state = initialState, action) => {
 				currentTypeFilter: action.filterType,
 				currentTimeFilter: action.filterTime,
 				lastDoc: action.lastDoc,
-				queue: filterUpdated
-					? action.events
-					: _.unionBy(action.events, state.queue, ({ id }) => id)
+				queue: filterUpdated ? action.events : _.unionBy(action.events, state.queue, ({ id }) => id)
 			};
 
 		case LOAD_QUEUE_FAILURE:
@@ -91,12 +87,7 @@ export const loadQueueInit = () => ({
 	type: LOAD_QUEUE_INIT
 });
 
-export const loadQueueSuccess = ({
-	events,
-	lastDoc,
-	filterTime,
-	filterType
-}) => ({
+export const loadQueueSuccess = ({ events, lastDoc, filterTime, filterType }) => ({
 	type: LOAD_QUEUE_SUCCESS,
 	events,
 	lastDoc,
@@ -138,25 +129,22 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 					// const latitude = 41.310726;
 					// const longitude = -72.929916;
 
-					// dispatch(setLocation({ latitude, longitude }));
+					dispatch(setLocation({ latitude, longitude }));
 
 					if (queue.queue.length < 5) {
 						// .post("http://localhost:3000/ping_events_queue", {
 						axios
-							.post(
-								"https://event-queue-service.herokuapp.com/ping_events_queue",
-								{
-									coordinates: { latitude, longitude },
-									radius: 100,
-									uid
-								}
-							)
+							.post("https://event-queue-service.herokuapp.com/ping_events_queue", {
+								coordinates: { latitude, longitude },
+								radius: 100,
+								uid
+							})
 							.then(response => {
 								FetchEvents({
 									uid,
 									startAt,
 									filter: { filterTime, filterType },
-									amount: 15
+									amount: 25
 								})
 									.then(({ events, lastDoc }) => {
 										resolve();
@@ -180,8 +168,22 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 								dispatch(loadQueueFailure(error));
 							});
 					} else {
+						const {
+							queue: events,
+							currentTimeFilter: filterTime,
+							currentTypeFilter: filterType,
+							lastDoc
+						} = queue;
+
 						resolve();
-						dispatch(loadQueueSuccess([], queue.lastDoc));
+						dispatch(
+							loadQueueSuccess({
+								events,
+								lastDoc,
+								filterTime,
+								filterType
+							})
+						);
 					}
 				},
 				error => {
@@ -204,8 +206,7 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 			const { uid } = user;
 			const { lastDoc: startAt, currentTimeFilter, currentTypeFilter } = queue;
 
-			const filterChanged =
-				currentTimeFilter !== filterTime || currentTypeFilter !== filterType;
+			const filterChanged = currentTimeFilter !== filterTime || currentTypeFilter !== filterType;
 
 			if (filterChanged) dispatch(loadQueueInit());
 
@@ -213,13 +214,11 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 				uid,
 				startAt: filterChanged ? null : startAt, // if the filter has changed we need to start looking from the top of the queue
 				filter: { filterTime, filterType },
-				amount: 10
+				amount: 15
 			})
 				.then(({ events, lastDoc }) => {
 					resolve();
-					dispatch(
-						loadQueueSuccess({ events, lastDoc, filterTime, filterType })
-					);
+					dispatch(loadQueueSuccess({ events, lastDoc, filterTime, filterType }));
 				})
 				.catch(error => {
 					reject();
@@ -270,9 +269,7 @@ const FetchEvents = ({ uid, amount, startAt, filter: { filterType } }) => {
 			.collection("eventQueue");
 
 		const startAtDoc =
-			startAt === null
-				? { exists: false }
-				: await userEventsRef.doc(startAt).get();
+			startAt === null ? { exists: false } : await userEventsRef.doc(startAt).get();
 
 		const query = generateQuery({
 			ref: userEventsRef,

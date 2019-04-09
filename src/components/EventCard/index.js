@@ -29,18 +29,10 @@ class EventCard extends Component {
 		useNativeDriver: true
 	});
 
-	componentDidMount() {
-		// const { latitude, longitude, userLocation } = this.props;
-		// setTimeout(
-		// 	() =>
-		// 		this.map.fitBounds(
-		// 			[+longitude, +latitude],
-		// 			[userLocation.longitude, userLocation.latitude],
-		// 			5
-		// 		),
-		// 	100
-		// );
-	}
+	fitMapBounds = () => {
+		const { latitude, longitude, userLocation } = this.props;
+		this.map.fitBounds([+longitude, +latitude], [userLocation.longitude, userLocation.latitude], 5);
+	};
 
 	render() {
 		const {
@@ -102,7 +94,7 @@ class EventCard extends Component {
 					<MapboxGL.MapView
 						showUserLocation
 						ref={MapView => (this.map = MapView)}
-						centerCoordinate={[+longitude, +latitude]}
+						onDidFinishLoadingMap={this.fitMapBounds}
 						logoEnabled={false}
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}

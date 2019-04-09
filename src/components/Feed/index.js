@@ -114,7 +114,7 @@ class Feed extends Component {
 		const { animatedValues } = this.state;
 
 		// if fewer than five events remaining in the queue, reload
-		if (_.size(animatedValues) < 5)
+		if (_.size(animatedValues) < 10)
 			UpdateQueue({ filterTime: selectedTime, filterType: selectedType });
 
 		this.setState({
