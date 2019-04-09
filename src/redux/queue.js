@@ -109,13 +109,13 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					const { latitude, longitude } = coords;
+					// const { latitude, longitude } = coords;
 
 					// OVERRIDE FOR DEV
-					// const latitude = 41.310726;
-					// const longitude = -72.929916;
+					const latitude = 41.310726;
+					const longitude = -72.929916;
 
-					dispatch(setLocation({ latitude, longitude }));
+					// dispatch(setLocation({ latitude, longitude }));
 
 					if (queue.queue.length < 5) {
 						// .post("http://localhost:3000/ping_events_queue", {

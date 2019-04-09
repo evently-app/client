@@ -3,6 +3,8 @@ package com.evently;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.calendarevents.CalendarEventsPackage;
+import com.mapbox.rctmgl.RCTMGLPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.horcrux.svg.SvgPackage;
 import com.cmcewen.blurview.BlurViewPackage;
@@ -30,6 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new CalendarEventsPackage(),
+            new RCTMGLPackage(),
             new LottiePackage(),
             new SvgPackage(),
             new BlurViewPackage(),

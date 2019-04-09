@@ -56,6 +56,8 @@ function compileSections(data) {
 	for (let i = 0; i < data.length; i++) {
 		const item = data[i];
 
+		console.log("ITEM: ", item)
+
 		let now = new Date();
 		let tomorrow = new Date();
 		tomorrow.setDate(tomorrow.getDate() + 1);
@@ -119,6 +121,11 @@ class Timeline extends Component {
 		if (nextProps.timeline.length > this.props.timeline.length) {
 			return true;
 		} else {
+			for(var i =0; i < this.props.timeline.length; i++){
+				if(this.props.timeline[i].isAddedToCalendar != nextProps.timeline[i].isAddedToCalendar){
+					return true 
+				}
+			}
 			return false;
 		}
 	}
@@ -165,6 +172,7 @@ class Timeline extends Component {
 	}
 
 	render() {
+		const {uid} = this.props; 
 		const { sections, SECTION_LIST_HEIGHT } = compileSections(
 			this.props.timeline
 		);
@@ -195,7 +203,10 @@ class Timeline extends Component {
 						return (
 							<EventCardPreview
 								key={item.id}
+								id={item.id}
 								title={item.eventName}
+								uid={this.uid}
+								isAddedToCalendar={item.isAddedToCalendar}
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}
@@ -204,6 +215,8 @@ class Timeline extends Component {
 										? formatDay(startDate)
 										: null
 								}
+								momentStartDate={item.startTime}
+								momentEndDate={item.endTime}
 								action={section.title != "Past" ? item.action : null}
 								onAction={() => {
 									// Alert.alert(`action for ${item.id}`);
@@ -279,9 +292,10 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
 	return {
-		timeline: state.timeline.timeline
+		timeline: state.timeline.timeline,
+		uid: state.user.uid
 	};
 };
 

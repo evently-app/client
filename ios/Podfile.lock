@@ -136,6 +136,8 @@ PODS:
     - React/Core (= 0.59.2)
   - react-native-blur (0.8.0):
     - React
+  - react-native-calendar-events (1.7.0):
+    - React
   - react-native-haptic-feedback (1.6.0):
     - React
   - react-native-mapbox-gl (6.1.3):
@@ -211,6 +213,7 @@ DEPENDENCIES:
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - react-native-blur (from `../node_modules/react-native-blur`)
+  - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
   - react-native-haptic-feedback (from `../node_modules/react-native-haptic-feedback`)
   - "react-native-mapbox-gl (from `../node_modules/@mapbox/react-native-mapbox-gl`)"
   - React/Core (from `../node_modules/react-native`)
@@ -273,6 +276,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-blur:
     :path: "../node_modules/react-native-blur"
+  react-native-calendar-events:
+    :path: "../node_modules/react-native-calendar-events"
   react-native-haptic-feedback:
     :path: "../node_modules/react-native-haptic-feedback"
   react-native-mapbox-gl:
@@ -313,12 +318,13 @@ SPEC CHECKSUMS:
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   React: 9d063e2f356c8cd2f54dd550d4507740037cbabe
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
+  react-native-calendar-events: 779efcd3db6ec5f703c5ba9e1891c7fe8e699974
   react-native-haptic-feedback: 0e7be9330602573e17f7354c41665b727a5098ee
   react-native-mapbox-gl: d0ac3b81a6cadbd7cadc80891da72e3e85379350
   RNSVG: 2cc66383316fa84d4c672ccfa5e3bac271b6a2af
   SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   yoga: 3768a3026ade0fb46a68f3a31a917cf86bc34fc4
 
-PODFILE CHECKSUM: f8e82bdfdf7fa86839827ec3ebc7e2697df27ac4
+PODFILE CHECKSUM: 58e7eed3ccb6aeab553369a585d7fe4075db35f1
 
 COCOAPODS: 1.6.1
