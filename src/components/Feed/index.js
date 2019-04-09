@@ -37,66 +37,25 @@ class Feed extends Component {
 		} = props;
 		const { animatedValues, newFilterSetting } = state;
 
-		let derivedState = { newFilterSetting: false };
+		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime) {
+			console.log("filter has been updated");
+			return { newFilterSetting: true };
+		} else if (queue.length !== _.size(state.animatedValues) && !newFilterSetting) {
+			console.log("new events pulled");
 
-		// create new animated values
-		let newAnimatedValues = {};
-		queue.forEach(({ id }) => {
-			newAnimatedValues[id] = new Animated.Value(0);
-		});
+			let newAnimatedValues = {};
+			queue.forEach(({ id }) => {
+				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
+			});
 
-		// add to derived state
-		derivedState.animatedValues = newAnimatedValues;
-		if (!newFilterSetting)
-			derivedState.animatedValues = { ...derivedState.animatedValues, ...animatedValues };
-
-		// check if the filter has changed
-		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime)
-			derivedState.newFilterSetting = true;
-
-		console.log("derivedState:", derivedState);
-
-		if (derivedState.newFilterSetting || queue.length !== _.size(animatedValues))
-			return derivedState;
-		else return null;
-
-		// if there's a mismatch then new events have been loaded
-		// 		if (queue.length !== _.size(state.animatedValues) && !newFilterSetting) {
-		// 			console.log("case 1");
-		//
-		// 			let newAnimatedValues = {};
-		//
-		// 			queue.forEach(({ id }) => {
-		// 				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
-		// 			});
-		//
-		// 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
-		// 		} else if (newFilterSetting) {
-		// 			console.log("case 2");
-		// 			let newAnimatedValues = {};
-		//
-		// 			queue.forEach(({ id }) => {
-		// 				newAnimatedValues[id] = new Animated.Value(0);
-		// 			});
-		//
-		// 			return { animatedValues: newAnimatedValues, newFilterSetting: false };
-		// 		}
-		//
-		// 		// if the filter has changed hide the cards and update the queue
-		// 		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime) {
-		// 			console.log(
-		// 				"updating queue",
-		// 				currentTimeFilter,
-		// 				selectedTime,
-		// 				currentTypeFilter,
-		// 				selectedType
-		// 			);
-		// 			//
-		// 			// 			// return { animatedValues: {} };
-		// 			return { newFilterSetting: true };
-		// 		}
-		//
-		// 		return null;
+			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
+		} else if (newFilterSetting) {
+			let newAnimatedValues = {};
+			queue.forEach(({ id }) => (newAnimatedValues[id] = new Animated.Value(0)));
+			return { animatedValues: newAnimatedValues, newFilterSetting: false };
+		} else {
+			return null;
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
