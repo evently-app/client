@@ -7,13 +7,11 @@ const IS_X = SB_HEIGHT === 40;
 
 const CATEGORIES = [
 	{ title: "Anything", name: "anything" },
-	{ title: "Concerts", name: "concerts" },
-	{ title: "Sports", name: "sports" },
+	{ title: "Free", name: "free" },
 	{ title: "Shows", name: "shows" },
-	{ title: "Comedy", name: "comedy" },
+	{ title: "Sports", name: "sports" },
 	{ title: "Art", name: "art" },
 	{ title: "Nightlife", name: "clubs" },
-	{ title: "Free", name: "free" },
 	{ title: "Family", name: "family" },
 	{ title: "Professional", name: "professional" }
 ];
@@ -22,7 +20,6 @@ const PREFERENCES = [
 	{ title: "Lit", name: "lit" },
 	{ title: "Active", name: "active" },
 	{ title: "Relaxing", name: "relaxing" },
-	{ title: "Outdoor", name: "outdoor" },
 	{ title: "Cultural", name: "cultural" }
 ];
 

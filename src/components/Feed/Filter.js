@@ -32,12 +32,10 @@ const BOUNDARIES = {
 };
 
 const FILTER_DRAG_RANGE = [0, 50, 150];
-const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({
-	x: ((9 - 2 * i) * SCREEN_WIDTH) / 8
-}));
-const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({
-	x: -1 * (((i - 1) * SCREEN_WIDTH) / 3)
-}));
+const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({ x: ((7 - 2 * i) * SCREEN_WIDTH) / 8 }));
+const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({ x: -1 * (((i - 1) * SCREEN_WIDTH) / 3) }));
+
+console.log(TYPE_SNAP_POINTS);
 
 class Filter extends PureComponent {
 	state = {
@@ -53,7 +51,6 @@ class Filter extends PureComponent {
 		const { open, onPress, BeginTransition, EndTransition } = this.props;
 
 		if (state === "start") BeginTransition();
-		// else EndTransition();
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
@@ -73,7 +70,7 @@ class Filter extends PureComponent {
 
 		// weird necessary fix
 		this.timeXOffset.setValue(-1 * (((timeSelection - 1) * SCREEN_WIDTH) / 3));
-		this.typeXOffset.setValue(((9 - typeSelection * 2) * SCREEN_WIDTH) / 8);
+		this.typeXOffset.setValue(((7 - 2 * typeSelection) * SCREEN_WIDTH) / 8);
 
 		// snap closed, update the selected time and type filters
 		if (index == 0) SnapClosed({ time, type });
@@ -106,9 +103,7 @@ class Filter extends PureComponent {
 				!transitioning && open
 					? this.timeXOffset.interpolate({
 							inputRange: TIME_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: TIME_SNAP_POINTS.map((point, i) =>
-								index === i ? 1 : 0.5
-							).reverse(),
+							outputRange: TIME_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -133,9 +128,7 @@ class Filter extends PureComponent {
 				!transitioning && open
 					? this.typeXOffset.interpolate({
 							inputRange: TYPE_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: TYPE_SNAP_POINTS.map((point, i) =>
-								index === i ? 1 : 0.5
-							).reverse(),
+							outputRange: TYPE_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -233,10 +226,7 @@ class Filter extends PureComponent {
 					style={styles.filterContainer}
 					animatedValueY={filterDrag}
 				>
-					<Paragraph
-						animated
-						style={{ ...animatedLocation, ...animatedOpacity }}
-					>
+					<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
 						I want events
 					</Paragraph>
 					<Header animated style={animatedLocation}>
@@ -257,10 +247,7 @@ class Filter extends PureComponent {
 						animatedValueX={this.timeXOffset}
 					>
 						{TIME_TYPES.map(({ title }, i) => (
-							<TouchableOpacity
-								key={i}
-								onPress={() => this.timeSelector.snapTo({ index: i })}
-							>
+							<TouchableOpacity key={i} onPress={() => this.timeSelector.snapTo({ index: i })}>
 								<SubHeader animated style={this.timeSelectionStyle(i)}>
 									{title}
 								</SubHeader>
@@ -282,15 +269,12 @@ class Filter extends PureComponent {
 							animatedType,
 							animatedOpacity2,
 							styles.horizontalSelector,
-							{ width: 2.5 * SCREEN_WIDTH }
+							{ width: 2 * SCREEN_WIDTH }
 						]}
 						animatedValueX={this.typeXOffset}
 					>
 						{CATEGORIES.map(({ title }, i) => (
-							<TouchableOpacity
-								key={i}
-								onPress={() => this.typeSelector.snapTo({ index: i })}
-							>
+							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
 								<SubHeader animated style={this.typeSelectionStyle(i)}>
 									{title}
 								</SubHeader>
