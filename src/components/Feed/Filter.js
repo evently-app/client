@@ -35,8 +35,6 @@ const FILTER_DRAG_RANGE = [0, 50, 150];
 const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({ x: ((7 - 2 * i) * SCREEN_WIDTH) / 8 }));
 const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({ x: -1 * (((i - 1) * SCREEN_WIDTH) / 3) }));
 
-console.log(TYPE_SNAP_POINTS);
-
 class Filter extends PureComponent {
 	state = {
 		time: 0,
