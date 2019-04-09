@@ -55,6 +55,8 @@ pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
 pod 'react-native-calendar-events', :path => '../node_modules/react-native-calendar-events'
 
+pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
+
 #  target 'eventlyTests' do
 #    inherit! :search_paths
 #    # Pods for testing

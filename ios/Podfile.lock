@@ -195,6 +195,8 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - ReactNativePermissions (1.1.1):
+    - React
   - RNSVG (9.3.7):
     - React
   - SSZipArchive (2.1.4)
@@ -229,6 +231,7 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
@@ -282,6 +285,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-haptic-feedback"
   react-native-mapbox-gl:
     :path: "../node_modules/@mapbox/react-native-mapbox-gl"
+  ReactNativePermissions:
+    :path: "../node_modules/react-native-permissions"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   yoga:
@@ -291,8 +296,8 @@ SPEC CHECKSUMS:
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
-  BVLinearGradient: 8cbc5155c978f2e43098818c91d206d07aae6d30
-  CodePush: 300e90b3481fa82569090406165b83745de3613a
+  BVLinearGradient: b0b70acf63ee888829b7c2ebbf6b50e227396e55
+  CodePush: f6b348759cdc42c734d9c3a46ceb2997c270b12e
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
@@ -312,19 +317,20 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   JWT: 05028b9624591bba9681bb57df2c5f95fa258bad
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
-  lottie-ios: d699fdee68d7b63e721d949388b015fef1aaa4ac
-  lottie-react-native: 3d8181d43619b1fe804c828bd5a09d20fe8bdea7
+  lottie-ios: 9f24be3ecb13412223b6ac70d97437742b0e3de1
+  lottie-react-native: fc1fe3ee36ef1e19e56e9a4f90a3c50af6f3553e
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
-  React: 9d063e2f356c8cd2f54dd550d4507740037cbabe
-  react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-  react-native-calendar-events: 779efcd3db6ec5f703c5ba9e1891c7fe8e699974
-  react-native-haptic-feedback: 0e7be9330602573e17f7354c41665b727a5098ee
-  react-native-mapbox-gl: d0ac3b81a6cadbd7cadc80891da72e3e85379350
-  RNSVG: 2cc66383316fa84d4c672ccfa5e3bac271b6a2af
+  React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
+  react-native-blur: c35c1f6c2c76db7108bde7ed343bd2b01d64e0c0
+  react-native-calendar-events: fe6fbc8ed337a7423c98f2c9012b25f20444de09
+  react-native-haptic-feedback: f675486e3889e3229272158943c1e9e075247e5a
+  react-native-mapbox-gl: b42480060cdcc515dfa3d8e403fb4dd32466a1b9
+  ReactNativePermissions: 9f2d9c45c98800795e6c2ed330e25d11a66a8169
+  RNSVG: 4834be1d644eb77f0e3f6de851881b83758a3124
   SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
-  yoga: 3768a3026ade0fb46a68f3a31a917cf86bc34fc4
+  yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: 58e7eed3ccb6aeab553369a585d7fe4075db35f1
+PODFILE CHECKSUM: bb9e2468e4d9cfb1b099a583f3b7da66b7578911
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.5.3
