@@ -30,7 +30,6 @@ class EventCard extends Component {
 	});
 
 	componentDidMount() {
-		// const { latitude, longitude, userLocation } = this.props;
 		// setTimeout(
 		// 	() =>
 		// 		this.map.fitBounds(
@@ -41,6 +40,11 @@ class EventCard extends Component {
 		// 	100
 		// );
 	}
+
+	fitMapBounds = () => {
+		const { latitude, longitude, userLocation } = this.props;
+		this.map.fitBounds([+longitude, +latitude], [userLocation.longitude, userLocation.latitude], 5);
+	};
 
 	render() {
 		const {
@@ -53,7 +57,8 @@ class EventCard extends Component {
 			latitude,
 			longitude,
 			ticketUrl,
-			description
+			description,
+			userLocation
 		} = this.props;
 
 		const animatedScrollIndicator = {
@@ -102,7 +107,12 @@ class EventCard extends Component {
 					<MapboxGL.MapView
 						showUserLocation
 						ref={MapView => (this.map = MapView)}
-						centerCoordinate={[+longitude, +latitude]}
+						onDidFinishLoadingMap={this.fitMapBounds}
+						// centerCoordinate={[+longitude, +latitude]}
+						// visibleCoordinateBounds={[
+						// 	[+longitude, +latitude],
+						// 	[userLocation.longitude, userLocation.latitude]
+						// ]}
 						logoEnabled={false}
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}
