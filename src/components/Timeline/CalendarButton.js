@@ -26,6 +26,8 @@ const CalendarButton = ({ eventName, start, end, eventId, uid}) => {
 			.catch((err) => {
 				console.log(err)
 			})
+		}).catch((err) ={
+			console.log("Error. Unable to save event: ", err)
 		})
 	}
 
