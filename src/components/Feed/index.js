@@ -1,5 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { Animated, Easing, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+	Animated,
+	Easing,
+	View,
+	Text,
+	TouchableOpacity,
+	StyleSheet
+} from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -23,7 +30,9 @@ class Feed extends Component {
 
 	componentDidMount() {
 		const { LoadQueue, selectedTime, selectedType } = this.props;
-		LoadQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
+		LoadQueue({ filterTime: selectedTime, filterType: selectedType }).then(
+			this.entryAnimation
+		);
 	}
 
 	static getDerivedStateFromProps(props, state) {
@@ -48,15 +57,24 @@ class Feed extends Component {
 		// add to derived state
 		derivedState.animatedValues = newAnimatedValues;
 		if (!newFilterSetting)
-			derivedState.animatedValues = { ...derivedState.animatedValues, ...animatedValues };
+			derivedState.animatedValues = {
+				...derivedState.animatedValues,
+				...animatedValues
+			};
 
 		// check if the filter has changed
-		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime)
+		if (
+			currentTypeFilter !== selectedType ||
+			currentTimeFilter !== selectedTime
+		)
 			derivedState.newFilterSetting = true;
 
 		console.log("derivedState:", derivedState);
 
-		if (derivedState.newFilterSetting || queue.length !== _.size(animatedValues))
+		if (
+			derivedState.newFilterSetting ||
+			queue.length !== _.size(animatedValues)
+		)
 			return derivedState;
 		else return null;
 
@@ -107,11 +125,11 @@ class Feed extends Component {
 
 		console.log(prevState.newFilterSetting, newFilterSetting);
 
-		if (prevState.newFilterSetting !== newFilterSetting) {
-			console.log("UPDATE QUEUE");
-			this.exitAnimation();
-			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
-		}
+		// if (prevState.newFilterSetting !== newFilterSetting) {
+		// 	console.log("UPDATE QUEUE");
+		// 	this.exitAnimation();
+		// 	UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
+		// }
 	}
 
 	entryAnimation = () => {
