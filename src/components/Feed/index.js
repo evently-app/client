@@ -38,11 +38,8 @@ class Feed extends Component {
 		const { animatedValues, newFilterSetting } = state;
 
 		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime) {
-			console.log("filter has been updated");
 			return { newFilterSetting: true };
 		} else if (queue.length !== _.size(state.animatedValues) && !newFilterSetting) {
-			console.log("new events pulled");
-
 			let newAnimatedValues = {};
 			queue.forEach(({ id }) => {
 				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
@@ -59,15 +56,10 @@ class Feed extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		console.log("component did update");
-
 		const { UpdateQueue, selectedTime, selectedType } = this.props;
 		const { newFilterSetting } = this.state;
 
-		console.log(prevState.newFilterSetting, newFilterSetting);
-
 		if (prevState.newFilterSetting !== newFilterSetting) {
-			console.log("UPDATE QUEUE");
 			this.exitAnimation();
 			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
 		}
@@ -76,7 +68,7 @@ class Feed extends Component {
 	entryAnimation = () => {
 		Animated.timing(this.animatedEntry, {
 			toValue: 0,
-			duration: 300,
+			duration: 500,
 			easing: Easing.quad,
 			useNativeDriver: true
 		}).start();
@@ -85,7 +77,7 @@ class Feed extends Component {
 	exitAnimation = () => {
 		Animated.timing(this.animatedEntry, {
 			toValue: 1,
-			duration: 300,
+			duration: 500,
 			easing: Easing.quad,
 			useNativeDriver: true
 		}).start();
