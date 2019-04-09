@@ -29,18 +29,6 @@ class EventCard extends Component {
 		useNativeDriver: true
 	});
 
-	componentDidMount() {
-		// setTimeout(
-		// 	() =>
-		// 		this.map.fitBounds(
-		// 			[+longitude, +latitude],
-		// 			[userLocation.longitude, userLocation.latitude],
-		// 			5
-		// 		),
-		// 	100
-		// );
-	}
-
 	fitMapBounds = () => {
 		const { latitude, longitude, userLocation } = this.props;
 		this.map.fitBounds([+longitude, +latitude], [userLocation.longitude, userLocation.latitude], 5);
@@ -57,8 +45,7 @@ class EventCard extends Component {
 			latitude,
 			longitude,
 			ticketUrl,
-			description,
-			userLocation
+			description
 		} = this.props;
 
 		const animatedScrollIndicator = {
@@ -108,11 +95,6 @@ class EventCard extends Component {
 						showUserLocation
 						ref={MapView => (this.map = MapView)}
 						onDidFinishLoadingMap={this.fitMapBounds}
-						// centerCoordinate={[+longitude, +latitude]}
-						// visibleCoordinateBounds={[
-						// 	[+longitude, +latitude],
-						// 	[userLocation.longitude, userLocation.latitude]
-						// ]}
 						logoEnabled={false}
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}
