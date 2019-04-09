@@ -5889,6 +5889,11 @@ react-native-blur@^3.2.2:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-calendar-events@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-calendar-events/-/react-native-calendar-events-1.7.0.tgz#6cd62c7d03e8884dc5c14ba05ef58e802ec68792"
+  integrity sha512-ePpAJ0MkqNVVcIdiFZinnaqRC+BSqT8GA1/hlSFUe+NIsct25eLGBXasJnUGLoyYmYeRCWjKoSzW127pS10SYw==
+
 react-native-circular-progress@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-circular-progress/-/react-native-circular-progress-1.1.0.tgz#5cb3efe570796226c59bf15a35250fb8b0d45025"
