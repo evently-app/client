@@ -5,6 +5,7 @@ import {
 	View,
 	Text,
 	TouchableOpacity,
+	Alert,
 	StyleSheet
 } from "react-native";
 import { connect } from "react-redux";
@@ -14,6 +15,7 @@ import Spinner from "../universal/Spinner";
 import Filter from "./Filter";
 import EventCard from "../EventCard";
 import Swipeable from "../EventCard/Swipeable";
+import Permissions from "react-native-permissions";
 
 import { SCREEN_WIDTH, SCREEN_HEIGHT, SB_HEIGHT } from "../../lib/constants";
 import { LoadQueue, UpdateQueue } from "../../redux/queue";
@@ -30,9 +32,32 @@ class Feed extends Component {
 
 	componentDidMount() {
 		const { LoadQueue, selectedTime, selectedType } = this.props;
-		LoadQueue({ filterTime: selectedTime, filterType: selectedType }).then(
-			this.entryAnimation
-		);
+
+		Permissions.request("location", { type: "whenInUse" })
+			.then(status => {
+				if (status == "authorized") {
+					LoadQueue({
+						filterTime: selectedTime,
+						filterType: selectedType
+					}).then(this.entryAnimation);
+				} else {
+					Alert.alert(
+						"You must enable location in order to discover nearby events",
+						[
+							{
+								text: "Open Settings",
+								onPress: () => {
+									Permissions.openSettings();
+								}
+							}
+						],
+						{ cancelable: false }
+					);
+				}
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 
 	static getDerivedStateFromProps(props, state) {

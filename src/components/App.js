@@ -39,10 +39,6 @@ class App extends Component {
       });
   }
 
-  componentDidMount() {
-    navigator.geolocation.requestAuthorization();
-  }
-
   opacityStyle = i => ({
     opacity: this.xOffset.interpolate({
       inputRange: [-2 * SCREEN_WIDTH, -SCREEN_WIDTH, 0],

@@ -133,7 +133,6 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
 					const { latitude, longitude } = coords;
-					console.log(coords);
 
 					// OVERRIDE FOR DEV
 					// const latitude = 41.310726;
