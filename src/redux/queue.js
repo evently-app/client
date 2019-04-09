@@ -144,7 +144,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 									uid,
 									startAt,
 									filter: { filterTime, filterType },
-									amount: 15
+									amount: 25
 								})
 									.then(({ events, lastDoc }) => {
 										resolve();
@@ -214,7 +214,7 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 				uid,
 				startAt: filterChanged ? null : startAt, // if the filter has changed we need to start looking from the top of the queue
 				filter: { filterTime, filterType },
-				amount: 10
+				amount: 15
 			})
 				.then(({ events, lastDoc }) => {
 					resolve();
