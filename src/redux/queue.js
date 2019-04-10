@@ -235,7 +235,7 @@ const generateQuery = ({ ref, startAtDoc, amount, filterType }) => {
 			ref
 				.where("swiped", "==", false)
 				// .where("tags", "array-contains", CATEGORIES[filterType].title)
-				.orderBy("score")
+				.orderBy("score", "desc")
 				.startAt(startAtDoc)
 				.limit(amount)
 		);
@@ -244,19 +244,19 @@ const generateQuery = ({ ref, startAtDoc, amount, filterType }) => {
 			ref
 				.where("swiped", "==", false)
 				// .where("tags", "array-contains", CATEGORIES[filterType].title)
-				.orderBy("score")
+				.orderBy("score", "desc")
 				.limit(amount)
 		);
 	else if (startAtDoc.exists && !filterType)
 		return ref
 			.where("swiped", "==", false)
-			.orderBy("score")
+			.orderBy("score", "desc")
 			.startAt(startAtDoc)
 			.limit(amount);
 	else if (!startAtDoc.exists && !filterType)
 		return ref
 			.where("swiped", "==", false)
-			.orderBy("score")
+			.orderBy("score", "desc")
 			.limit(amount);
 };
 
