@@ -1,73 +1,87 @@
 import React from "react";
-import { Animated, StyleSheet, View, TouchableOpacity, Linking } from "react-native";
+import {
+	Animated,
+	StyleSheet,
+	View,
+	TouchableOpacity,
+	Linking
+} from "react-native";
 import { connect } from "react-redux";
 import { BlurView } from "react-native-blur";
 import RNCalendarEvents from "react-native-calendar-events";
-
+import moment from "moment";
 
 import { colors } from "../../lib/styles";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import { AddEventToCalendar } from "../../api"; 
+import { AddEventToCalendar } from "../../api";
 
-
-const CalendarButton = ({ eventName, start, end, eventId, uid}) => {
+const CalendarButton = ({ eventName, start, end, eventId, uid }) => {
 	const inputRange = [0, 50, 110, 150];
 
-	addToCalendar = (title, start, end, uid, eventId) => {
+	formatDay = date => {
+		console.log("**********", date);
+		var end = moment(date).format("YYYY-MM-DDTHH:mm:ss.000Z");
+		var start = moment(date).format("YYYY-MM-DDTHH:mm:ss.000Z");
+		return [start, end];
+	};
 
-		console.log("date: ", start, end)
+	addToCalendar = (title, start, end, uid, eventId) => {
+		console.log("date: ", start, end);
 		RNCalendarEvents.saveEvent(title, {
-			  startDate: start + ".000Z",
-  				endDate: end + ".000Z"
-		}).then(res => {
-			//add event to Firebase 
-			AddEventToCalendar(uid, eventId).then(res => {
-			})
-			.catch((err) => {
-				console.log(err)
-			})
+			startDate: formatDay(start)[0],
+			endDate: formatDay(start)[1]
 		})
-	}
+			.then(res => {
+				//add event to Firebase
+				AddEventToCalendar(uid, eventId)
+					.then(res => {})
+					.catch(err => {
+						console.log(err);
+					});
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	};
 
 	calendarAuth = (eventName, start, end, uid, eventId) => {
-		RNCalendarEvents.authorizationStatus().then(res => {
-			if(res == "authorized"){
-				console.log("RES1: ", res)
-				addToCalendar(eventName, start, end); 
-			}
-			else if(res == "undetermined"){
-				RNCalendarEvents.authorizeEventStore().then( res => {
-					addToCalendar(eventName, start, end, uid, eventId); 
-				})
-				.catch((err) =>{
-					console.log(err)
-				})
-			}
-			//TODO - make alert here if no access is granted 
-		})
-		.catch((err) =>{
-			console.log(err)
-		})
+		RNCalendarEvents.authorizationStatus()
+			.then(res => {
+				if (res == "authorized") {
+					console.log("RES1: ", res);
+					addToCalendar(eventName, start, end);
+				} else if (res == "undetermined") {
+					RNCalendarEvents.authorizeEventStore()
+						.then(res => {
+							addToCalendar(eventName, start, end, uid, eventId);
+						})
+						.catch(err => {
+							console.log(err);
+						});
+				}
+				//TODO - make alert here if no access is granted
+			})
+			.catch(err => {
+				console.log(err);
+			});
 
-		addToCalendar(eventName, start, end, uid, eventId); 
-	}
+		addToCalendar(eventName, start, end, uid, eventId);
+	};
 
 	return (
 		<TouchableOpacity
 			activeOpacity={0.9}
 			style={styles.wrapper}
 			onPressIn={() => {
-				//addToCalendar goes here 
+				//addToCalendar goes here
 				calendarAuth(eventName, start, end, uid, eventId);
 			}}
 		>
-
-		<BlurView blurType="xlight" style={styles.button}>
-			<SubHeader style={{color: "black"}}>
-				Add to Calendar
-			</SubHeader>
-		</BlurView>
-
+			<BlurView blurType="xlight" style={styles.button}>
+				<SubHeader style={{ color: "black" }}>
+					Add to Calendar
+				</SubHeader>
+			</BlurView>
 		</TouchableOpacity>
 	);
 };
@@ -81,8 +95,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		borderRadius: 10,
 		justifyContent: "center",
-	 	alignItems: "center"
-
+		alignItems: "center"
 	},
 	wrapper: {
 		right: 10,
@@ -92,17 +105,14 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		borderRadius: 10,
 		justifyContent: "center",
-	 	alignItems: "center"
+		alignItems: "center"
 	}
 });
 
-
 const mapStateToProps = ({ user }) => {
 	return {
-		uid: user.uid,
+		uid: user.uid
 	};
 };
 
-export default connect(
-	mapStateToProps,
-)(CalendarButton);
+export default connect(mapStateToProps)(CalendarButton);
