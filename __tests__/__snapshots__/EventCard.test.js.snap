@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Action Button renders correctly 1`] = `
+<TouchableOpacity
+  activeOpacity={0.9}
+  onPressIn={[Function]}
+>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "bottom": 10,
+          "height": 30,
+          "position": "absolute",
+          "right": 10,
+          "width": 112,
+        },
+        Object {
+          "borderRadius": undefined,
+          "overflow": "hidden",
+          "transform": Array [
+            Object {
+              "translateX": undefined,
+            },
+            Object {
+              "translateY": undefined,
+            },
+            Object {
+              "scaleX": undefined,
+            },
+            Object {
+              "scaleY": undefined,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <BlurView
+      blurAmount={10}
+      blurType="xlight"
+      style={
+        Object {
+          "bottom": 0,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "top": 0,
+        }
+      }
+    />
+  </AnimatedComponent>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "bottom": 10,
+        "height": 30,
+        "justifyContent": "center",
+        "position": "absolute",
+        "right": 25,
+      }
+    }
+  >
+    <SubHeader
+      animated={true}
+      style={
+        Object {
+          "color": "black",
+          "transform": Array [
+            Object {
+              "translateX": undefined,
+            },
+            Object {
+              "translateY": undefined,
+            },
+          ],
+        }
+      }
+    />
+  </View>
+</TouchableOpacity>
+`;
+
+exports[`Description renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "rgba(52, 33, 79, 0.95)",
+      "height": 1134,
+      "padding": 20,
+      "width": 730,
+    }
+  }
+>
+  <Paragraph />
+</View>
+`;
