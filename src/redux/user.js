@@ -17,7 +17,7 @@ const initialState = {
 };
 
 // define actions against state
-const RESET_USER = "evently/user/RESET_USER";
+export const RESET_USER = "evently/user/RESET_USER";
 const AUTH_INIT = "evently/user/AUTH_INIT";
 const AUTH_SUCCESS = "evently/user/AUTH_SUCCESS";
 const AUTH_FAILURE = "evently/user/AUTH_FAILURE";
@@ -173,7 +173,9 @@ export const Auth = () => {
 									.set(userData)
 									.then(() => {
 										// user created!
-										dispatch(authSuccess(user.uid, userData));
+										dispatch(
+											authSuccess(user.uid, userData)
+										);
 										resolve();
 									})
 									.catch(error => {
