@@ -18,11 +18,11 @@ const initialState = {
 };
 
 // define actions against state
-const RESET_TIMELINE = "evently/timeline/RESET_TIMELINE";
-const LOAD_TIMELINE_INIT = "evently/timeline/LOAD_TIMELINE_INIT";
-const LOAD_TIMELINE_SUCCESS = "evently/timeline/LOAD_TIMELINE_SUCCESS";
-const LOAD_TIMELINE_FAILURE = "evently/timeline/LOAD_TIMELINE_FAILURE";
-const PUSH = "evently/timeline/PUSH";
+export const RESET_TIMELINE = "evently/timeline/RESET_TIMELINE";
+export const LOAD_TIMELINE_INIT = "evently/timeline/LOAD_TIMELINE_INIT";
+export const LOAD_TIMELINE_SUCCESS = "evently/timeline/LOAD_TIMELINE_SUCCESS";
+export const LOAD_TIMELINE_FAILURE = "evently/timeline/LOAD_TIMELINE_FAILURE";
+export const PUSH = "evently/timeline/PUSH";
 
 /* 
 function that takes initial state and an action and returns next state

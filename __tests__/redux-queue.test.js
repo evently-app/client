@@ -33,11 +33,11 @@ describe("actions", () => {
 			type: LOAD_QUEUE_SUCCESS
 			// events,
 			// lastDoc,
-			//filterTime,
-			//filterType
+			// filterTime,
+			// filterType
 		};
 		expect(
-			loadQueueSuccess(events, lastDoc, filterType, filterType)
+			loadQueueSuccess(events, lastDoc, filterTime, filterType)
 		).toEqual(expectedAction);
 	});
 	it("Test load queue failure ", () => {
