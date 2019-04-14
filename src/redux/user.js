@@ -18,13 +18,13 @@ const initialState = {
 
 // define actions against state
 export const RESET_USER = "evently/user/RESET_USER";
-const AUTH_INIT = "evently/user/AUTH_INIT";
-const AUTH_SUCCESS = "evently/user/AUTH_SUCCESS";
-const AUTH_FAILURE = "evently/user/AUTH_FAILURE";
-const SET_LOCATION = "evently/user/SET_LOCATION";
-const WATCH_USER_INIT = "evently/user/WATCH_USER_INIT";
-const WATCH_USER_SUCCESS = "evently/user/WATCH_USER_SUCCESS";
-const WATCH_USER_FAILURE = "evently/user/WATCH_USER_FAILURE";
+export const AUTH_INIT = "evently/user/AUTH_INIT";
+export const AUTH_SUCCESS = "evently/user/AUTH_SUCCESS";
+export const AUTH_FAILURE = "evently/user/AUTH_FAILURE";
+export const SET_LOCATION = "evently/user/SET_LOCATION";
+export const WATCH_USER_INIT = "evently/user/WATCH_USER_INIT";
+export const WATCH_USER_SUCCESS = "evently/user/WATCH_USER_SUCCESS";
+export const WATCH_USER_FAILURE = "evently/user/WATCH_USER_FAILURE";
 
 /* 
 function that takes initial state and an action and returns next state
