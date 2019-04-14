@@ -1,6 +1,6 @@
 // firestore mocks
 
-const MapView = () => {
+export const MapView = () => {
 	return null;
 };
 
@@ -12,4 +12,8 @@ export const StyleURL = {
 	Dark: null
 };
 
-export default MapView;
+export default {
+	PointAnnotation,
+	StyleURL,
+	MapView
+};
