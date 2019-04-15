@@ -38,7 +38,7 @@ export class Collection {
   });
 
   onSnapshot = (successCallback, errorCallback) => {
-    successCallback([]);
+    successCallback({ docs: [] });
     return jest.fn();
   };
 
@@ -86,6 +86,10 @@ export class Doc {
 
   remove = jest.fn(() => {
     return Promise.resolve();
+  });
+
+  collection = jest.fn(() => {
+    return new Collection();
   });
 }
 

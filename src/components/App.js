@@ -22,7 +22,7 @@ const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
 };
 
-class App extends Component {
+export class App extends Component {
   xOffset = new Animated.Value(-SCREEN_WIDTH);
 
   componentWillMount() {

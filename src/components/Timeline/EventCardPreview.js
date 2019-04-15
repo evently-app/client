@@ -89,17 +89,17 @@ class EventCardPreview extends Component {
 						{!!endTime && ` - ${endTime}`}
 					</SubHeader>
 					{!!date && <SubHeader>{date}</SubHeader>}
-					{/* {!isAddedToCalendar ? ( */}
-					{/* 	<CalendarButton */}
-					{/* 		eventName={title} */}
-					{/* 		start={momentStartDate} */}
-					{/* 		end={momentEndDate} */}
-					{/* 		uid={uid} */}
-					{/* 		eventId={id} */}
-					{/* 	/> */}
-					{/* ) : ( */}
-					{/* 	<GoingButton /> */}
-					{/* )} */}
+					{!isAddedToCalendar ? (
+						<CalendarButton
+							eventName={title}
+							start={momentStartDate}
+							end={momentEndDate}
+							uid={uid}
+							eventId={id}
+						/>
+					) : (
+						<GoingButton />
+					)}
 					<TouchableWithoutFeedback
 						onPressIn={() => {
 							Animated.timing(this.actionScale, {

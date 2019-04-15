@@ -1,5 +1,13 @@
 import React, { Component, Fragment } from "react";
-import { Animated, Easing, View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import {
+	Animated,
+	Easing,
+	View,
+	Text,
+	TouchableOpacity,
+	Alert,
+	StyleSheet
+} from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -13,7 +21,7 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT, SB_HEIGHT } from "../../lib/constants";
 import { LoadQueue, UpdateQueue } from "../../redux/queue";
 import { SwipeRight, SwipeLeft } from "../../redux/timeline";
 
-class Feed extends Component {
+export class Feed extends Component {
 	state = {
 		animatedValues: {},
 		newFilterSetting: false
@@ -63,18 +71,27 @@ class Feed extends Component {
 		} = props;
 		const { animatedValues, newFilterSetting } = state;
 
-		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime) {
+		if (
+			currentTypeFilter !== selectedType ||
+			currentTimeFilter !== selectedTime
+		) {
 			return { newFilterSetting: true };
-		} else if (queue.length !== _.size(state.animatedValues) && !newFilterSetting) {
+		} else if (
+			queue.length !== _.size(state.animatedValues) &&
+			!newFilterSetting
+		) {
 			let newAnimatedValues = {};
 			queue.forEach(({ id }) => {
-				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
+				if (animatedValues[id] == undefined)
+					newAnimatedValues[id] = new Animated.Value(0);
 			});
 
 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
 		} else if (newFilterSetting) {
 			let newAnimatedValues = {};
-			queue.forEach(({ id }) => (newAnimatedValues[id] = new Animated.Value(0)));
+			queue.forEach(
+				({ id }) => (newAnimatedValues[id] = new Animated.Value(0))
+			);
 			return { animatedValues: newAnimatedValues, newFilterSetting: false };
 		} else {
 			return null;
@@ -87,7 +104,9 @@ class Feed extends Component {
 
 		if (prevState.newFilterSetting !== newFilterSetting) {
 			this.exitAnimation();
-			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
+			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(
+				this.entryAnimation
+			);
 		}
 	}
 

@@ -32,10 +32,14 @@ const BOUNDARIES = {
 };
 
 const FILTER_DRAG_RANGE = [0, 50, 150];
-const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({ x: ((7 - 2 * i) * SCREEN_WIDTH) / 8 }));
-const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({ x: -1 * (((i - 1) * SCREEN_WIDTH) / 3) }));
+const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({
+	x: ((7 - 2 * i) * SCREEN_WIDTH) / 8
+}));
+const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({
+	x: -1 * (((i - 1) * SCREEN_WIDTH) / 3)
+}));
 
-class Filter extends PureComponent {
+export class Filter extends PureComponent {
 	state = {
 		time: 0,
 		type: 0
@@ -101,7 +105,9 @@ class Filter extends PureComponent {
 				!transitioning && open
 					? this.timeXOffset.interpolate({
 							inputRange: TIME_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: TIME_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
+							outputRange: TIME_SNAP_POINTS.map((point, i) =>
+								index === i ? 1 : 0.5
+							).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -126,7 +132,9 @@ class Filter extends PureComponent {
 				!transitioning && open
 					? this.typeXOffset.interpolate({
 							inputRange: TYPE_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: TYPE_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
+							outputRange: TYPE_SNAP_POINTS.map((point, i) =>
+								index === i ? 1 : 0.5
+							).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -224,7 +232,10 @@ class Filter extends PureComponent {
 					style={styles.filterContainer}
 					animatedValueY={filterDrag}
 				>
-					<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
+					<Paragraph
+						animated
+						style={{ ...animatedLocation, ...animatedOpacity }}
+					>
 						I want events
 					</Paragraph>
 					<Header animated style={animatedLocation}>
@@ -245,7 +256,10 @@ class Filter extends PureComponent {
 						animatedValueX={this.timeXOffset}
 					>
 						{TIME_TYPES.map(({ title }, i) => (
-							<TouchableOpacity key={i} onPress={() => this.timeSelector.snapTo({ index: i })}>
+							<TouchableOpacity
+								key={i}
+								onPress={() => this.timeSelector.snapTo({ index: i })}
+							>
 								<SubHeader animated style={this.timeSelectionStyle(i)}>
 									{title}
 								</SubHeader>
@@ -272,7 +286,10 @@ class Filter extends PureComponent {
 						animatedValueX={this.typeXOffset}
 					>
 						{CATEGORIES.map(({ title }, i) => (
-							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
+							<TouchableOpacity
+								key={i}
+								onPress={() => this.typeSelector.snapTo({ index: i })}
+							>
 								<SubHeader animated style={this.typeSelectionStyle(i)}>
 									{title}
 								</SubHeader>

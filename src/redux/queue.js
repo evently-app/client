@@ -21,11 +21,11 @@ const initialState = {
 };
 
 // define actions against state
-const RESET_QUEUE = "evently/queue/RESET_QUEUE";
-const LOAD_QUEUE_INIT = "evently/queue/LOAD_QUEUE_INIT";
-const LOAD_QUEUE_SUCCESS = "evently/queue/LOAD_QUEUE_SUCCESS";
-const LOAD_QUEUE_FAILURE = "evently/queue/LOAD_QUEUE_FAILURE";
-const POP = "evently/queue/POP";
+export const RESET_QUEUE = "evently/queue/RESET_QUEUE";
+export const LOAD_QUEUE_INIT = "evently/queue/LOAD_QUEUE_INIT";
+export const LOAD_QUEUE_SUCCESS = "evently/queue/LOAD_QUEUE_SUCCESS";
+export const LOAD_QUEUE_FAILURE = "evently/queue/LOAD_QUEUE_FAILURE";
+export const POP = "evently/queue/POP";
 
 /* 
 function that takes initial state and an action and returns next state

@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App renders correctly 1`] = `
+<LinearGradient
+  colors={
+    Array [
+      "black",
+      "#150218",
+    ]
+  }
+  end={
+    Object {
+      "x": 0.5,
+      "y": 1,
+    }
+  }
+  locations={
+    Array [
+      0,
+      0.9,
+    ]
+  }
+  start={
+    Object {
+      "x": 0.5,
+      "y": 0,
+    }
+  }
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <StatusBar
+    animated={false}
+    barStyle="light-content"
+    showHideTransition="fade"
+  />
+  <WrappedAnimatedInteractableView
+    animatedNativeDriver={true}
+    animatedValueX={-750}
+    dragEnabled={false}
+    horizontalOnly={true}
+    initialPosition={
+      Object {
+        "damping": 0.5,
+        "tension": 700,
+        "x": -750,
+      }
+    }
+    snapPoints={
+      Array [
+        Object {
+          "damping": 0.5,
+          "tension": 700,
+          "x": 0,
+        },
+        Object {
+          "damping": 0.5,
+          "tension": 700,
+          "x": -750,
+        },
+        Object {
+          "damping": 0.5,
+          "tension": 700,
+          "x": -1500,
+        },
+      ]
+    }
+    style={
+      Object {
+        "flexDirection": "row",
+        "height": 1334,
+        "position": "absolute",
+        "width": 2250,
+      }
+    }
+  >
+    <Connect(Profile) />
+    <Connect(Feed) />
+    <Connect(Timeline) />
+  </WrappedAnimatedInteractableView>
+  <View
+    style={
+      Object {
+        "alignItems": "flex-end",
+        "backgroundColor": "transparent",
+        "bottom": 0,
+        "flexDirection": "row",
+        "height": 75,
+        "justifyContent": "space-between",
+        "left": 0,
+        "padding": 15,
+        "paddingBottom": 15,
+        "position": "absolute",
+        "right": 0,
+      }
+    }
+  >
+    <LinearGradient
+      colors={
+        Array [
+          "rgba(21,2,24,0)",
+          "rgba(21,2,24,0.95)",
+          "rgba(21,2,24,1)",
+        ]
+      }
+      end={
+        Object {
+          "x": 0.5,
+          "y": 1,
+        }
+      }
+      locations={
+        Array [
+          0,
+          0.8,
+          1,
+        ]
+      }
+      start={
+        Object {
+          "x": 0.5,
+          "y": 0,
+        }
+      }
+      style={
+        Object {
+          "bottom": 0,
+          "height": 100,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+        }
+      }
+    />
+    <TouchableScale
+      animatedStyle={
+        Object {
+          "opacity": 0.5,
+        }
+      }
+      key="0"
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 60,
+          "justifyContent": "center",
+          "width": 60,
+        }
+      }
+    >
+      <[object Object] />
+    </TouchableScale>
+    <TouchableScale
+      animatedStyle={
+        Object {
+          "opacity": 1,
+        }
+      }
+      key="1"
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 60,
+          "justifyContent": "center",
+          "width": 60,
+        }
+      }
+    >
+      <[object Object] />
+    </TouchableScale>
+    <TouchableScale
+      animatedStyle={
+        Object {
+          "opacity": 0.5,
+        }
+      }
+      key="2"
+      onPress={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 60,
+          "justifyContent": "center",
+          "width": 60,
+        }
+      }
+    >
+      <[object Object] />
+    </TouchableScale>
+  </View>
+</LinearGradient>
+`;
