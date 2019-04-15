@@ -17,3 +17,9 @@ it("App renders correctly", () => {
 	);
 	expect(snap).toMatchSnapshot();
 });
+
+// it("App fires Auth", () => {
+// 	const wrapper = mount(<App/>)
+// 	const instance = wrapper.instance
+// 	instance.Auth()
+// })

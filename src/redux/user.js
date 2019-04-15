@@ -6,7 +6,7 @@ let firestore = firebase.firestore();
 // redux pattern: https://github.com/erikras/ducks-modular-redux
 
 // define starting state
-const initialState = {
+export const initialState = {
 	uid: null,
 	entity: {},
 	location: { latitude: 0.0, longitude: 0.0 },
@@ -173,9 +173,7 @@ export const Auth = () => {
 									.set(userData)
 									.then(() => {
 										// user created!
-										dispatch(
-											authSuccess(user.uid, userData)
-										);
+										dispatch(authSuccess(user.uid, userData));
 										resolve();
 									})
 									.catch(error => {

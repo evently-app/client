@@ -9,7 +9,7 @@ import {
 	loadTimelineFailure,
 	resetTimeline,
 	push
-} from "../src/redux/timeline";
+} from "../../src/redux/timeline";
 
 describe("actions", () => {
 	it("Test reset Timeline", () => {

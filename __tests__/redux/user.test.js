@@ -1,4 +1,7 @@
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
 import {
+	initialState,
 	resetUser,
 	authInit,
 	authSuccess,
@@ -14,9 +17,18 @@ import {
 	WATCH_USER_INIT,
 	WATCH_USER_SUCCESS,
 	WATCH_USER_FAILURE,
-	RESET_USER
-} from "../src/redux/user";
-//import * as types from "../../constants/ActionTypes";
+	RESET_USER,
+	Auth
+} from "../../src/redux/user";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
+jest.mock("moment", () => {
+	unix: () => {
+		return 1555289366;
+	};
+});
 
 describe("actions", () => {
 	it("Test reset user", () => {
@@ -76,5 +88,25 @@ describe("actions", () => {
 			//error
 		};
 		expect(watchUserFailure()).toEqual(expectedAction);
+	});
+});
+
+it("Auth", () => {
+	const expectedActions = [
+		{
+			type: AUTH_INIT
+		},
+		{
+			type: AUTH_SUCCESS,
+			userId: "testUserId",
+			data: {
+				joinedTime: 1555289366
+			}
+		}
+	];
+
+	const store = mockStore(initialState);
+	store.dispatch(Auth()).then(() => {
+		expect(store.getActions()).toEqual(expectedActions);
 	});
 });

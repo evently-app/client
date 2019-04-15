@@ -9,7 +9,7 @@ import {
 	loadQueueFailure,
 	resetQueue,
 	pop
-} from "../src/redux/queue";
+} from "../../src/redux/queue";
 
 describe("actions", () => {
 	it("Test reset queue", () => {
@@ -30,23 +30,23 @@ describe("actions", () => {
 		const filterType = "";
 		const filterTime = "";
 		const expectedAction = {
-			type: LOAD_QUEUE_SUCCESS
-			// events,
-			// lastDoc,
-			// filterTime,
-			// filterType
+			type: LOAD_QUEUE_SUCCESS,
+			events,
+			lastDoc,
+			filterTime,
+			filterType
 		};
 		expect(
-			loadQueueSuccess(events, lastDoc, filterTime, filterType)
+			loadQueueSuccess({ events, lastDoc, filterTime, filterType })
 		).toEqual(expectedAction);
 	});
 	it("Test load queue failure ", () => {
 		const error = "error message";
 		const expectedAction = {
-			type: LOAD_QUEUE_FAILURE
-			//error
+			type: LOAD_QUEUE_FAILURE,
+			error
 		};
-		expect(loadQueueFailure()).toEqual(expectedAction);
+		expect(loadQueueFailure(error)).toEqual(expectedAction);
 	});
 	it("Test pop ", () => {
 		const expectedAction = {

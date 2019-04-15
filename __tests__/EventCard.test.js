@@ -12,7 +12,7 @@ const yOffset = {
 };
 
 test("EventCard renders correctly", () => {
-	const tree = renderer.create(<EventCard />).toJSON();
+	const tree = shallow(<EventCard startTime={"2019-04-22T19:30:00"} />);
 	expect(tree).toMatchSnapshot();
 });
 

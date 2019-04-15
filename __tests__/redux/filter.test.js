@@ -11,7 +11,7 @@ import {
 	snapClosed,
 	scrollTimeSelection,
 	scrollTypeSelection
-} from "../src/redux/filter";
+} from "../../src/redux/filter";
 
 describe("actions", () => {
 	it("Test begin transition", () => {
