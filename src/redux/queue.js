@@ -123,11 +123,11 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					const { latitude, longitude } = coords;
+					// const { latitude, longitude } = coords;
 
 					// OVERRIDE FOR DEV
-					// const latitude = 41.310726;
-					// const longitude = -72.929916;
+					const latitude = 41.310726;
+					const longitude = -72.929916;
 
 					dispatch(setLocation({ latitude, longitude }));
 
@@ -187,6 +187,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 					}
 				},
 				error => {
+					console.log(error);
 					dispatch(loadQueueFailure(error));
 					reject(error);
 				},

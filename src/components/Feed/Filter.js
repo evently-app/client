@@ -5,12 +5,11 @@ import Interactable from "react-native-interactable";
 import Haptics from "react-native-haptic-feedback";
 
 import {
-	BeginTransition,
-	EndTransition,
-	SnapOpen,
-	SnapClosed,
-	ScrollTimeSelection,
-	ScrollTypeSelection
+	beginTransition,
+	snapOpen,
+	snapClosed,
+	scrollTimeSelection,
+	scrollTypeSelection
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
 import {
@@ -50,21 +49,23 @@ export class Filter extends PureComponent {
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
-		const { open, onPress, BeginTransition, EndTransition } = this.props;
+		const { open, onPress, beginTransition } = this.props;
 
-		if (state === "start") BeginTransition();
+		if (state === "start") beginTransition();
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
 		const {
-			SnapOpen,
-			SnapClosed,
+			snapOpen,
+			snapClosed,
 			timeSelection,
 			typeSelection,
-			ScrollTimeSelection,
-			ScrollTypeSelection
+			scrollTimeSelection,
+			scrollTypeSelection
 		} = this.props;
+
+		console.log(snapOpen);
 
 		const { time, type } = this.state;
 
@@ -75,8 +76,8 @@ export class Filter extends PureComponent {
 		this.typeXOffset.setValue(((7 - 2 * typeSelection) * SCREEN_WIDTH) / 8);
 
 		// snap closed, update the selected time and type filters
-		if (index == 0) SnapClosed({ time, type });
-		else SnapOpen();
+		if (index == 0) snapClosed({ time, type });
+		else snapOpen();
 	};
 
 	handleSelectorScroll = ({ nativeEvent }, field) => {
@@ -105,9 +106,7 @@ export class Filter extends PureComponent {
 				!transitioning && open
 					? this.timeXOffset.interpolate({
 							inputRange: TIME_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: TIME_SNAP_POINTS.map((point, i) =>
-								index === i ? 1 : 0.5
-							).reverse(),
+							outputRange: TIME_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -132,9 +131,7 @@ export class Filter extends PureComponent {
 				!transitioning && open
 					? this.typeXOffset.interpolate({
 							inputRange: TYPE_SNAP_POINTS.map(({ x }) => x).reverse(),
-							outputRange: TYPE_SNAP_POINTS.map((point, i) =>
-								index === i ? 1 : 0.5
-							).reverse(),
+							outputRange: TYPE_SNAP_POINTS.map((point, i) => (index === i ? 1 : 0.5)).reverse(),
 							extrapolate: "clamp"
 					  })
 					: filterDrag.interpolate({
@@ -232,10 +229,7 @@ export class Filter extends PureComponent {
 					style={styles.filterContainer}
 					animatedValueY={filterDrag}
 				>
-					<Paragraph
-						animated
-						style={{ ...animatedLocation, ...animatedOpacity }}
-					>
+					<Paragraph animated style={{ ...animatedLocation, ...animatedOpacity }}>
 						I want events
 					</Paragraph>
 					<Header animated style={animatedLocation}>
@@ -256,10 +250,7 @@ export class Filter extends PureComponent {
 						animatedValueX={this.timeXOffset}
 					>
 						{TIME_TYPES.map(({ title }, i) => (
-							<TouchableOpacity
-								key={i}
-								onPress={() => this.timeSelector.snapTo({ index: i })}
-							>
+							<TouchableOpacity key={i} onPress={() => this.timeSelector.snapTo({ index: i })}>
 								<SubHeader animated style={this.timeSelectionStyle(i)}>
 									{title}
 								</SubHeader>
@@ -286,10 +277,7 @@ export class Filter extends PureComponent {
 						animatedValueX={this.typeXOffset}
 					>
 						{CATEGORIES.map(({ title }, i) => (
-							<TouchableOpacity
-								key={i}
-								onPress={() => this.typeSelector.snapTo({ index: i })}
-							>
+							<TouchableOpacity key={i} onPress={() => this.typeSelector.snapTo({ index: i })}>
 								<SubHeader animated style={this.typeSelectionStyle(i)}>
 									{title}
 								</SubHeader>
@@ -383,12 +371,11 @@ const mapStateToProps = ({ filter }) => {
 };
 
 const mapDispatchToProps = {
-	BeginTransition,
-	EndTransition,
-	SnapOpen,
-	SnapClosed,
-	ScrollTimeSelection,
-	ScrollTypeSelection
+	beginTransition,
+	snapOpen,
+	snapClosed,
+	scrollTimeSelection,
+	scrollTypeSelection
 };
 
 export default connect(
