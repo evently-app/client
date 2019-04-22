@@ -51,14 +51,7 @@ export class Filter extends PureComponent {
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const {
-			snapOpen,
-			snapClosed,
-			timeSelection,
-			typeSelection,
-			scrollTimeSelection,
-			scrollTypeSelection
-		} = this.props;
+		const { snapOpen, snapClosed, timeSelection, typeSelection } = this.props;
 
 		const { time, type } = this.state;
 
