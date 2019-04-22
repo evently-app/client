@@ -46,8 +46,8 @@ export default (state = initialState, action) => {
 			// if the filter state has been updated, we need to replace the queue completely
 			// otherwise we merge with the events still in the queue
 			const filterUpdated =
-				state.currentTypeFilter != action.typeFilter ||
-				state.currentTimeFilter != action.timeFilter;
+				state.currentTypeFilter != action.filterType ||
+				state.currentTimeFilter != action.filterTime;
 
 			return {
 				...state,
