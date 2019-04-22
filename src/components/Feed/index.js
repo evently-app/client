@@ -64,8 +64,10 @@ export class Feed extends Component {
 		const { animatedValues, newFilterSetting } = state;
 
 		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime) {
+			// if the filter has changed, update the local state to reflect the impending update
 			return { newFilterSetting: true };
 		} else if (queue.length !== _.size(state.animatedValues) && !newFilterSetting) {
+			// update the animated values if there are new events in the queue
 			let newAnimatedValues = {};
 			queue.forEach(({ id }) => {
 				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
@@ -73,6 +75,7 @@ export class Feed extends Component {
 
 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
 		} else if (newFilterSetting) {
+			// if there's a new filter setting and we have new props: refresh the animated values
 			let newAnimatedValues = {};
 			queue.forEach(({ id }) => (newAnimatedValues[id] = new Animated.Value(0)));
 			return { animatedValues: newAnimatedValues, newFilterSetting: false };
@@ -85,6 +88,7 @@ export class Feed extends Component {
 		const { UpdateQueue, selectedTime, selectedType } = this.props;
 		const { newFilterSetting } = this.state;
 
+		// if the filter state has changed, update the queue
 		if (!prevState.newFilterSetting && newFilterSetting) {
 			this.exitAnimation();
 			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
