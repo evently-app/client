@@ -60,6 +60,13 @@ class EventCard extends Component {
 			]
 		};
 
+		const image =
+			imageUrl !== null ? (
+				<Image style={styles.image} source={{ uri: imageUrl }} />
+			) : (
+				<View style={styles.image} />
+			);
+
 		return (
 			<View style={styles.container}>
 				<Animated.ScrollView
@@ -68,7 +75,7 @@ class EventCard extends Component {
 					bounces={false}
 					onScroll={this.onScroll}
 				>
-					<Image style={styles.image} source={{ uri: imageUrl }} />
+					{image}
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.1]}
