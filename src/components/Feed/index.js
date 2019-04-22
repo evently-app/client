@@ -1,13 +1,5 @@
-import React, { Component, Fragment } from "react";
-import {
-	Animated,
-	Easing,
-	View,
-	Text,
-	TouchableOpacity,
-	Alert,
-	StyleSheet
-} from "react-native";
+import React, { Component } from "react";
+import { Animated, Easing, View, Alert, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -71,27 +63,18 @@ export class Feed extends Component {
 		} = props;
 		const { animatedValues, newFilterSetting } = state;
 
-		if (
-			currentTypeFilter !== selectedType ||
-			currentTimeFilter !== selectedTime
-		) {
+		if (currentTypeFilter !== selectedType || currentTimeFilter !== selectedTime) {
 			return { newFilterSetting: true };
-		} else if (
-			queue.length !== _.size(state.animatedValues) &&
-			!newFilterSetting
-		) {
+		} else if (queue.length !== _.size(state.animatedValues) && !newFilterSetting) {
 			let newAnimatedValues = {};
 			queue.forEach(({ id }) => {
-				if (animatedValues[id] == undefined)
-					newAnimatedValues[id] = new Animated.Value(0);
+				if (animatedValues[id] == undefined) newAnimatedValues[id] = new Animated.Value(0);
 			});
 
 			return { animatedValues: { ...newAnimatedValues, ...animatedValues } };
 		} else if (newFilterSetting) {
 			let newAnimatedValues = {};
-			queue.forEach(
-				({ id }) => (newAnimatedValues[id] = new Animated.Value(0))
-			);
+			queue.forEach(({ id }) => (newAnimatedValues[id] = new Animated.Value(0)));
 			return { animatedValues: newAnimatedValues, newFilterSetting: false };
 		} else {
 			return null;
@@ -102,11 +85,9 @@ export class Feed extends Component {
 		const { UpdateQueue, selectedTime, selectedType } = this.props;
 		const { newFilterSetting } = this.state;
 
-		if (prevState.newFilterSetting !== newFilterSetting) {
+		if (!prevState.newFilterSetting && newFilterSetting) {
 			this.exitAnimation();
-			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(
-				this.entryAnimation
-			);
+			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
 		}
 	}
 

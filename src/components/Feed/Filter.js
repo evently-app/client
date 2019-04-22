@@ -12,14 +12,7 @@ import {
 	scrollTypeSelection
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import {
-	SB_HEIGHT,
-	SCREEN_WIDTH,
-	SCREEN_HEIGHT,
-	IS_X,
-	CATEGORIES,
-	TIME_TYPES
-} from "../../lib/constants";
+import { SB_HEIGHT, SCREEN_WIDTH, IS_X, CATEGORIES, TIME_TYPES } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
 const CLOSED_POINT = { y: 0 };
@@ -31,9 +24,11 @@ const BOUNDARIES = {
 };
 
 const FILTER_DRAG_RANGE = [0, 50, 150];
+
 const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({
 	x: ((7 - 2 * i) * SCREEN_WIDTH) / 8
 }));
+
 const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({
 	x: -1 * (((i - 1) * SCREEN_WIDTH) / 3)
 }));
@@ -64,8 +59,6 @@ export class Filter extends PureComponent {
 			scrollTimeSelection,
 			scrollTypeSelection
 		} = this.props;
-
-		console.log(snapOpen);
 
 		const { time, type } = this.state;
 
