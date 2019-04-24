@@ -115,6 +115,26 @@ class Timeline extends Component {
 		}
 	);
 
+	scrollToToday = () => {
+		const { sections } = compileSections(this.props.timeline);
+		if (!!sections[0] && sections[0].title == "Past") {
+			// Past is at the top, scroll to next section
+			console.log(this.Timeline.getNode().scrollToLocation);
+			this.Timeline.getNode().scrollToLocation({
+				itemIndex: 0,
+				sectionIndex: 1
+			});
+		}
+	};
+
+	componentDidMount() {
+		this.scrollToToday();
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		this.scrollToToday();
+	}
+
 	shouldComponentUpdate(nextProps, nextState) {
 		if (nextProps.timeline.length > this.props.timeline.length) {
 			return true;
@@ -230,6 +250,14 @@ class Timeline extends Component {
 					sections={sections}
 					keyExtractor={(item, index) => {
 						return item.id;
+					}}
+					getItemLayout={(data, index) => ({
+						length: 150,
+						offset: 150 * index,
+						index
+					})}
+					onScrollToIndexFailed={e => {
+						console.log(e);
 					}}
 					ListFooterComponent={<View style={{ height: IS_X ? 80 : 60 }} />}
 				/>

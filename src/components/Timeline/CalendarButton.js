@@ -36,7 +36,6 @@ class CalendarButton extends Component {
 		};
 
 		let addToCalendar = (title, start, end, uid, eventId) => {
-			this.setState({});
 			RNCalendarEvents.saveEvent(title, {
 				startDate: formatDay(start)[0],
 				endDate: formatDay(start)[1]
@@ -84,7 +83,7 @@ class CalendarButton extends Component {
 				activeOpacity={0.9}
 				style={styles.wrapper}
 				onPressIn={() => {
-					//addToCalendar goes here
+					// addToCalendar goes here
 					calendarAuth(eventName, start, end, uid, eventId);
 				}}
 			>

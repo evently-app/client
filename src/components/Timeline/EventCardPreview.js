@@ -52,8 +52,6 @@ class EventCardPreview extends Component {
 		} = this.props;
 		const { isAddedToCalendar } = this.state;
 
-		console.log(title, this.state);
-
 		return (
 			<TouchableWithoutFeedback
 				onPressIn={() => {
