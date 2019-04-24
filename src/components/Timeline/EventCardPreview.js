@@ -31,6 +31,9 @@ const CARD_HEIGHT = 150;
 class EventCardPreview extends Component {
 	scale = new Animated.Value(1);
 	actionScale = new Animated.Value(1);
+	state = {
+		isAddedToCalendar: this.props.isAddedToCalendar
+	};
 
 	render() {
 		const {
@@ -45,9 +48,11 @@ class EventCardPreview extends Component {
 			id,
 			action,
 			onPress,
-			onAction,
-			isAddedToCalendar
+			onAction
 		} = this.props;
+		const { isAddedToCalendar } = this.state;
+
+		console.log(title, this.state);
 
 		return (
 			<TouchableWithoutFeedback
@@ -73,7 +78,11 @@ class EventCardPreview extends Component {
 						}
 					]}
 				>
-					<Image source={{ uri: imageUrl }} resizeMode="cover" style={styles.image} />
+					<Image
+						source={{ uri: imageUrl }}
+						resizeMode="cover"
+						style={styles.image}
+					/>
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.9]}
@@ -85,47 +94,45 @@ class EventCardPreview extends Component {
 						{!!endTime && ` - ${endTime}`}
 					</SubHeader>
 					{!!date && <SubHeader>{date}</SubHeader>}
-					{!isAddedToCalendar ? (
-						<CalendarButton
-							eventName={title}
-							start={momentStartDate}
-							end={momentEndDate}
-							uid={uid}
-							eventId={id}
-						/>
-					) : (
-						<GoingButton />
-					)}
-					<TouchableWithoutFeedback
-						onPressIn={() => {
-							Animated.timing(this.actionScale, {
-								toValue: 1.1,
-								duration: 100
-							}).start();
-						}}
-						onPressOut={() => {
-							Animated.timing(this.actionScale, {
-								toValue: 1,
-								duration: 100
-							}).start();
-						}}
-						onPress={onAction}
-					>
-						<Animated.View
-							style={[
-								styles.actionWrapper,
-								{
-									transform: [{ scale: this.actionScale }]
-								}
-							]}
+					{!isAddedToCalendar && action && (
+						<TouchableWithoutFeedback
+							onPressIn={() => {
+								Animated.timing(this.actionScale, {
+									toValue: 1.1,
+									duration: 100
+								}).start();
+							}}
+							onPressOut={() => {
+								Animated.timing(this.actionScale, {
+									toValue: 1,
+									duration: 100
+								}).start();
+							}}
+							onPress={onAction}
 						>
-							{!!action && (
-								<VibrancyView style={styles.action} blurType="xlight">
-									<Header style={styles.actionText}>{action}</Header>
-								</VibrancyView>
-							)}
-						</Animated.View>
-					</TouchableWithoutFeedback>
+							<Animated.View
+								style={[
+									styles.actionWrapper,
+									{
+										transform: [{ scale: this.actionScale }]
+									}
+								]}
+							>
+								<CalendarButton
+									eventName={title}
+									start={momentStartDate}
+									end={momentEndDate}
+									uid={uid}
+									eventId={id}
+									onAdd={() => {
+										console.log("isadded");
+										this.setState({ isAddedToCalendar: true });
+									}}
+								/>
+							</Animated.View>
+						</TouchableWithoutFeedback>
+					)}
+					{isAddedToCalendar == true && <GoingButton />}
 				</Animated.View>
 			</TouchableWithoutFeedback>
 		);
@@ -182,6 +189,7 @@ const styles = StyleSheet.create({
 	},
 	actionText: {
 		// color: "black"
+		fontWeight: "700"
 	},
 	outline: {
 		//backgroundColor: "rgba(255,255,255,0.5)",

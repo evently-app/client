@@ -119,14 +119,6 @@ class Timeline extends Component {
 		if (nextProps.timeline.length > this.props.timeline.length) {
 			return true;
 		} else {
-			for (var i = 0; i < this.props.timeline.length; i++) {
-				if (
-					this.props.timeline[i].isAddedToCalendar !=
-					nextProps.timeline[i].isAddedToCalendar
-				) {
-					return true;
-				}
-			}
 			return false;
 		}
 	}
@@ -218,7 +210,7 @@ class Timeline extends Component {
 								}
 								momentStartDate={item.startTime}
 								momentEndDate={item.endTime}
-								action={section.title != "Past" ? item.action : null}
+								action={section.title != "Past" ? true : false}
 								onAction={() => {
 									// Alert.alert(`action for ${item.id}`);
 								}}
