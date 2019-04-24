@@ -5,77 +5,74 @@ import { BlurView } from "react-native-blur";
 import moment from "moment";
 import RNCalendarEvents from "react-native-calendar-events";
 
-
 import { colors } from "../../lib/styles";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import { AddEventToCalendar } from "../../api"; 
+import { AddEventToCalendar } from "../../api";
 
-
-const CalendarButton = ({ eventName, start, end, eventId, uid}) => {
+const CalendarButton = ({ eventName, start, end, eventId, uid }) => {
 	const inputRange = [0, 50, 110, 150];
 
 	function formatDay(date) {
 		date = moment(date).format("YYYY-MM-DDThh:mm:ss");
-		console.log("The formatted event is: ", date)
-		return date 
-	}	
+		console.log("The formatted event is: ", date);
+		return date;
+	}
 
 	addToCalendar = (title, start, end, uid, eventId) => {
-		console.log("date: ", start, end)
+		console.log("date: ", start, end);
 		RNCalendarEvents.saveEvent(title, {
-			  startDate: formatDay(start) + ".000Z",
-  				endDate: formatDay(end) + ".000Z"
-		}).then(res => {
-			//add event to Firebase 
-			AddEventToCalendar(uid, eventId).then(res => {
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-		}).catch((err) => {
-			console.log("Error. Unable to save event: ", err)
+			startDate: formatDay(start) + ".000Z",
+			endDate: formatDay(end) + ".000Z"
 		})
-	}
+			.then(res => {
+				//add event to Firebase
+				AddEventToCalendar(uid, eventId)
+					.then(res => {})
+					.catch(err => {
+						console.log(err);
+					});
+			})
+			.catch(err => {
+				console.log("Error. Unable to save event: ", err);
+			});
+	};
 
 	calendarAuth = (eventName, start, end, uid, eventId) => {
-		RNCalendarEvents.authorizationStatus().then(res => {
-			if(res == "authorized"){
-				console.log("RES1: ", res)
-				addToCalendar(eventName, start, end); 
-			}
-			else if(res == "undetermined"){
-				RNCalendarEvents.authorizeEventStore().then( res => {
-					addToCalendar(eventName, start, end, uid, eventId); 
-				})
-				.catch((err) =>{
-					console.log(err)
-				})
-			}
-			//TODO - make alert here if no access is granted 
-		})
-		.catch((err) =>{
-			console.log(err)
-		})
+		RNCalendarEvents.authorizationStatus()
+			.then(res => {
+				if (res == "authorized") {
+					console.log("RES1: ", res);
+					addToCalendar(eventName, start, end);
+				} else if (res == "undetermined") {
+					RNCalendarEvents.authorizeEventStore()
+						.then(res => {
+							addToCalendar(eventName, start, end, uid, eventId);
+						})
+						.catch(err => {
+							console.log(err);
+						});
+				}
+				//TODO - make alert here if no access is granted
+			})
+			.catch(err => {
+				console.log(err);
+			});
 
-		addToCalendar(eventName, start, end, uid, eventId); 
-	}
+		addToCalendar(eventName, start, end, uid, eventId);
+	};
 
 	return (
 		<TouchableOpacity
 			activeOpacity={0.9}
 			style={styles.wrapper}
 			onPressIn={() => {
-				//addToCalendar goes here 
+				//addToCalendar goes here
 				calendarAuth(eventName, start, end, uid, eventId);
 			}}
 		>
-
-		<BlurView blurType="xlight" style={styles.button}>
-			<SubHeader style={{color: "black"}}>
-				Add to Calendar
-			</SubHeader>
-		</BlurView>
-
+			<BlurView blurType="xlight" style={styles.button}>
+				<SubHeader style={{ color: "black" }}>Add to Calendar</SubHeader>
+			</BlurView>
 		</TouchableOpacity>
 	);
 };
@@ -89,8 +86,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		borderRadius: 10,
 		justifyContent: "center",
-	 	alignItems: "center"
-
+		alignItems: "center"
 	},
 	wrapper: {
 		right: 10,
@@ -100,17 +96,14 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		borderRadius: 10,
 		justifyContent: "center",
-	 	alignItems: "center"
+		alignItems: "center"
 	}
 });
 
-
 const mapStateToProps = ({ user }) => {
 	return {
-		uid: user.uid,
+		uid: user.uid
 	};
 };
 
-export default connect(
-	mapStateToProps,
-)(CalendarButton);
+export default connect(mapStateToProps)(CalendarButton);

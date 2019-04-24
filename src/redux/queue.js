@@ -123,11 +123,11 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					// const { latitude, longitude } = coords;
+					const { latitude, longitude } = coords;
 
 					// OVERRIDE FOR DEV
-					const latitude = 41.310726;
-					const longitude = -72.929916;
+					// const latitude = 41.310726;
+					// const longitude = -72.929916;
 
 					dispatch(setLocation({ latitude, longitude }));
 
@@ -232,22 +232,18 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 const generateQuery = ({ ref, startAtDoc, amount, filterType }) => {
 	// console.log(ref, startAtDoc, amount, filterType);
 	if (startAtDoc.exists && filterType)
-		return (
-			ref
-				.where("swiped", "==", false)
-				// .where("tags", "array-contains", CATEGORIES[filterType].title)
-				.orderBy("score", "desc")
-				.startAt(startAtDoc)
-				.limit(amount)
-		);
+		return ref
+			.where("swiped", "==", false)
+			.where("categories", "array-contains", CATEGORIES[filterType].title)
+			.orderBy("score", "desc")
+			.startAt(startAtDoc)
+			.limit(amount);
 	else if (!startAtDoc.exists && filterType)
-		return (
-			ref
-				.where("swiped", "==", false)
-				// .where("tags", "array-contains", CATEGORIES[filterType].title)
-				.orderBy("score", "desc")
-				.limit(amount)
-		);
+		return ref
+			.where("swiped", "==", false)
+			.where("categories", "array-contains", CATEGORIES[filterType].title)
+			.orderBy("score", "desc")
+			.limit(amount);
 	else if (startAtDoc.exists && !filterType)
 		return ref
 			.where("swiped", "==", false)

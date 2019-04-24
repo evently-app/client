@@ -56,8 +56,6 @@ function compileSections(data) {
 	for (let i = 0; i < data.length; i++) {
 		const item = data[i];
 
-		console.log("ITEM: ", item)
-
 		let now = new Date();
 		let tomorrow = new Date();
 		tomorrow.setDate(tomorrow.getDate() + 1);
@@ -68,9 +66,7 @@ function compileSections(data) {
 			Past.push(item);
 		} else if (startDate.setHours(0, 0, 0, 0) == now.setHours(0, 0, 0, 0)) {
 			Today.push(item);
-		} else if (
-			startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)
-		) {
+		} else if (startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)) {
 			Tomorrow.push(item);
 		} else {
 			Later.push(item);
@@ -110,20 +106,17 @@ function compileSections(data) {
 class Timeline extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event(
-		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
-		{
-			useNativeDriver: true
-		}
-	);
+	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
+		useNativeDriver: true
+	});
 
 	shouldComponentUpdate(nextProps, nextState) {
 		if (nextProps.timeline.length > this.props.timeline.length) {
 			return true;
 		} else {
-			for(var i =0; i < this.props.timeline.length; i++){
-				if(this.props.timeline[i].isAddedToCalendar != nextProps.timeline[i].isAddedToCalendar){
-					return true 
+			for (var i = 0; i < this.props.timeline.length; i++) {
+				if (this.props.timeline[i].isAddedToCalendar != nextProps.timeline[i].isAddedToCalendar) {
+					return true;
 				}
 			}
 			return false;
@@ -141,16 +134,9 @@ class Timeline extends Component {
 				const scrollTopDifference = IS_X ? 80 : 60;
 				const scrollPosition = y0 - scrollTopDifference + dy;
 				let scrollPercentage = scrollPosition / SCROLL_BAR_HEIGHT;
-				scrollPercentage =
-					scrollPercentage > 0
-						? scrollPercentage < 1
-							? scrollPercentage
-							: 1
-						: 0;
+				scrollPercentage = scrollPercentage > 0 ? (scrollPercentage < 1 ? scrollPercentage : 1) : 0;
 
-				const { sections, SECTION_LIST_HEIGHT } = compileSections(
-					this.props.timeline
-				);
+				const { sections, SECTION_LIST_HEIGHT } = compileSections(this.props.timeline);
 				this.yOffset.setValue(scrollPercentage * SECTION_LIST_HEIGHT);
 				// this.Timeline.getNode().scrollTo({
 				// 	y: scrollPercentage * SECTION_LIST_HEIGHT,
@@ -172,10 +158,8 @@ class Timeline extends Component {
 	}
 
 	render() {
-		const {uid} = this.props; 
-		const { sections, SECTION_LIST_HEIGHT } = compileSections(
-			this.props.timeline
-		);
+		const { uid } = this.props;
+		const { sections, SECTION_LIST_HEIGHT } = compileSections(this.props.timeline);
 
 		const animatedScrollIndicator = {
 			transform: [
@@ -210,11 +194,7 @@ class Timeline extends Component {
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}
-								date={
-									["Past", "Later"].includes(section.title)
-										? formatDay(startDate)
-										: null
-								}
+								date={["Past", "Later"].includes(section.title) ? formatDay(startDate) : null}
 								momentStartDate={item.startTime}
 								momentEndDate={item.endTime}
 								action={section.title != "Past" ? item.action : null}
@@ -292,7 +272,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		timeline: state.timeline.timeline,
 		uid: state.user.uid

@@ -73,11 +73,7 @@ class EventCardPreview extends Component {
 						}
 					]}
 				>
-					<Image
-						source={{ uri: imageUrl }}
-						resizeMode="cover"
-						style={styles.image}
-					/>
+					<Image source={{ uri: imageUrl }} resizeMode="cover" style={styles.image} />
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.9]}

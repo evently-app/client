@@ -65,9 +65,9 @@ class Swipeable extends Component {
 	};
 
 	render() {
-		const { index, swipeAmount, scaleAmount, filterDrag, children } = this.props;
+		const { index, swipeAmount, scaleAmount, children } = this.props;
 
-		const spring = { damping: 0.5, tension: 500 };
+		const spring = { damping: 0.5, tension: 700 };
 
 		const left = { x: -1.2 * SCREEN_WIDTH, ...spring };
 		const centered = { x: 0, damping: 0.7, tension: 200 };

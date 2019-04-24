@@ -90,7 +90,7 @@ export class Feed extends Component {
 
 		// if the filter state has changed, update the queue
 		if (!prevState.newFilterSetting && newFilterSetting) {
-			this.exitAnimation();
+			this.exitAnimation(); // add delay so that this animation completes
 			UpdateQueue({ filterTime: selectedTime, filterType: selectedType }).then(this.entryAnimation);
 		}
 	}
