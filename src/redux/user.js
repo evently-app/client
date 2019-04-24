@@ -1,6 +1,7 @@
 import { resetQueue } from "./queue";
 import firebase from "react-native-firebase";
 import moment from "moment";
+import { PREFERENCES } from "../../lib/constants";
 let firestore = firebase.firestore();
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
@@ -163,8 +164,15 @@ export const Auth = () => {
 							} else {
 								// user doesn't exist, create an account
 
+								// generate initial preferences
+								let newPreferences = {};
+								PREFERENCES.forEach(preference => {
+									newPreferences[preference] = 0.5;
+								});
+
 								const userData = {
-									joinedTime: moment().unix()
+									joinedTime: moment().unix(),
+									preferences: newPreferences
 								};
 
 								firestore
