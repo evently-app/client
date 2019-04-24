@@ -12,7 +12,7 @@ import moment from "moment";
 import RNCalendarEvents from "react-native-calendar-events";
 
 import { colors } from "../../lib/styles";
-import { Header, SubHeader, Paragraph } from "../universal/Text";
+import { SubHeader, Paragraph } from "../universal/Text";
 import { AddEventToCalendar } from "../../api";
 
 class CalendarButton extends Component {
@@ -25,8 +25,6 @@ class CalendarButton extends Component {
 			uid,
 			onAdd = () => {}
 		} = this.props;
-
-		const inputRange = [0, 50, 110, 150];
 
 		let formatDay = date => {
 			console.log("**********", date);

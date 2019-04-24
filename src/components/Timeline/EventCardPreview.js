@@ -14,7 +14,6 @@ import { Header, SubHeader } from "../universal/Text";
 import CalendarButton from "./CalendarButton";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
 import LinearGradient from "react-native-linear-gradient";
-import { VibrancyView } from "react-native-blur";
 
 const GoingButton = () => {
 	return (

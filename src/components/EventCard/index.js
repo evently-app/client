@@ -6,7 +6,7 @@ import moment from "moment";
 
 import ActionButton from "./ActionButton";
 import Description from "./Description";
-import { Hero, Header, SubHeader, Paragraph } from "../universal/Text";
+import { Hero, SubHeader, Paragraph } from "../universal/Text";
 
 import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
 import { colors } from "../../lib/styles";
