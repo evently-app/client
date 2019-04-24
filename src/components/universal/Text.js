@@ -15,6 +15,13 @@ props {
 
 */
 
+const heroStyle = {
+	fontSize: 30,
+	fontWeight: "700",
+	color: "white",
+	fontFamily: "Avenir Next"
+};
+
 const headerStyle = {
 	fontSize: 20,
 	fontWeight: "700",
@@ -35,22 +42,44 @@ const paragraphStyle = {
 	fontFamily: "Avenir Next"
 };
 
+const Hero = ({ animated, style, children }) => {
+	if (animated)
+		return (
+			<Animated.Text style={{ ...heroStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
+	else return <Text style={{ ...heroStyle, ...style }}>{children}</Text>;
+};
+
 const Header = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...headerStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...headerStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...headerStyle, ...style }}>{children}</Text>;
 };
 
 const SubHeader = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...subHeaderStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...subHeaderStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...subHeaderStyle, ...style }}>{children}</Text>;
 };
 
 const Paragraph = ({ animated, style, children }) => {
 	if (animated)
-		return <Animated.Text style={{ ...paragraphStyle, ...style }}>{children}</Animated.Text>;
+		return (
+			<Animated.Text style={{ ...paragraphStyle, ...style }}>
+				{children}
+			</Animated.Text>
+		);
 	else return <Text style={{ ...paragraphStyle, ...style }}>{children}</Text>;
 };
 
-export { Header, SubHeader, Paragraph };
+export { Hero, Header, SubHeader, Paragraph };

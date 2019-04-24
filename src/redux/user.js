@@ -1,7 +1,7 @@
 import { resetQueue } from "./queue";
 import firebase from "react-native-firebase";
 import moment from "moment";
-import { PREFERENCES } from "../../lib/constants";
+import { PREFERENCES } from "../lib/constants";
 let firestore = firebase.firestore();
 
 // redux pattern: https://github.com/erikras/ducks-modular-redux
