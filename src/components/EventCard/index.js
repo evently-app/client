@@ -19,25 +19,33 @@ const SCROLL_INDICATOR_HEIGHT = 20;
 
 // takes date object returns readable day
 function formatDay(date) {
-	return moment(date).format("ddd MMMM Do h:mm a");
+	return moment.unix(date).format("ddd MMMM Do h:mm a");
 }
 
 class EventCard extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
-		useNativeDriver: true
-	});
+	onScroll = Animated.event(
+		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+		{
+			useNativeDriver: true
+		}
+	);
 
 	fitMapBounds = () => {
 		const { latitude, longitude, userLocation } = this.props;
-		this.map.fitBounds([+longitude, +latitude], [userLocation.longitude, userLocation.latitude], 5);
+		this.map.fitBounds(
+			[+longitude, +latitude],
+			[userLocation.longitude, userLocation.latitude],
+			5
+		);
 	};
 
 	render() {
 		const {
 			eventName,
 			tags,
+			startTimestamp,
 			startTime,
 			endTime,
 			imageUrl,
@@ -53,7 +61,10 @@ class EventCard extends Component {
 				{
 					translateY: this.yOffset.interpolate({
 						inputRange: [0, SCREEN_HEIGHT],
-						outputRange: [0, SCROLL_BAR_HEIGHT - SCROLL_INDICATOR_HEIGHT],
+						outputRange: [
+							0,
+							SCROLL_BAR_HEIGHT - SCROLL_INDICATOR_HEIGHT
+						],
 						extrapolate: "clamp"
 					})
 				}
@@ -83,12 +94,15 @@ class EventCard extends Component {
 					/>
 					<View style={styles.textContainer}>
 						<Header>{eventName}</Header>
-						<SubHeader>{formatDay(startTime)}</SubHeader>
+						<SubHeader>{formatDay(startTimestamp)}</SubHeader>
 					</View>
 					{!!tags && (
 						<LinearGradient
 							locations={[0, 1]}
-							colors={["rgba(255,255,255,0.1)", "rgba(255,255,255,0.14)"]}
+							colors={[
+								"rgba(255,255,255,0.1)",
+								"rgba(255,255,255,0.14)"
+							]}
 							style={styles.tags}
 						>
 							{tags.map((tag, i) => (
@@ -106,13 +120,25 @@ class EventCard extends Component {
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}
 					>
-						<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} />
+						<MapboxGL.PointAnnotation
+							id={"coord"}
+							coordinate={[+longitude, +latitude]}
+						/>
 					</MapboxGL.MapView>
 					<Description description={description} />
 				</Animated.ScrollView>
-				<ActionButton yOffset={this.yOffset} title="Get Tickets" url={ticketUrl} />
+				<ActionButton
+					yOffset={this.yOffset}
+					title="Get Tickets"
+					url={ticketUrl}
+				/>
 				<View style={styles.scrollContainer}>
-					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
+					<Animated.View
+						style={[
+							styles.scrollIndicator,
+							animatedScrollIndicator
+						]}
+					/>
 				</View>
 			</View>
 		);
