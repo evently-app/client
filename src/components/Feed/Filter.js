@@ -5,22 +5,14 @@ import Interactable from "react-native-interactable";
 import Haptics from "react-native-haptic-feedback";
 
 import {
-	BeginTransition,
-	EndTransition,
-	SnapOpen,
-	SnapClosed,
-	ScrollTimeSelection,
-	ScrollTypeSelection
+	beginTransition,
+	snapOpen,
+	snapClosed,
+	scrollTimeSelection,
+	scrollTypeSelection
 } from "../../redux/filter";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
-import {
-	SB_HEIGHT,
-	SCREEN_WIDTH,
-	SCREEN_HEIGHT,
-	IS_X,
-	CATEGORIES,
-	TIME_TYPES
-} from "../../lib/constants";
+import { SB_HEIGHT, SCREEN_WIDTH, IS_X, CATEGORIES, TIME_TYPES } from "../../lib/constants";
 import { colors } from "../../lib/styles";
 
 const CLOSED_POINT = { y: 0 };
@@ -32,55 +24,59 @@ const BOUNDARIES = {
 };
 
 const FILTER_DRAG_RANGE = [0, 50, 150];
-const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({ x: ((9 - 2 * i) * SCREEN_WIDTH) / 8 }));
-const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({ x: -1 * (((i - 1) * SCREEN_WIDTH) / 3) }));
 
-class Filter extends PureComponent {
+const TYPE_SNAP_POINTS = CATEGORIES.map((category, i) => ({
+	x: ((7 - 2 * i) * SCREEN_WIDTH) / 8
+}));
+
+const TIME_SNAP_POINTS = TIME_TYPES.map((time, i) => ({
+	x: -1 * (((i - 1) * SCREEN_WIDTH) / 3)
+}));
+
+export class Filter extends PureComponent {
+	state = {
+		time: 0,
+		type: 0
+	};
+
 	timeXOffset = new Animated.Value(0);
 	typeXOffset = new Animated.Value(0);
 
 	handleOnDrag = ({ nativeEvent }) => {
 		const { state } = nativeEvent;
-		const { open, onPress, BeginTransition, EndTransition } = this.props;
+		const { open, onPress, beginTransition } = this.props;
 
-		if (state === "start") BeginTransition();
-		// else EndTransition();
+		if (state === "start") beginTransition();
 	};
 
 	handleOnSnap = ({ nativeEvent }) => {
 		const { index } = nativeEvent;
-		const { SnapOpen, SnapClosed, timeSelection, typeSelection } = this.props;
+		const { snapOpen, snapClosed, timeSelection, typeSelection } = this.props;
+
+		const { time, type } = this.state;
 
 		Haptics.trigger("impactLight");
 
 		// weird necessary fix
 		this.timeXOffset.setValue(-1 * (((timeSelection - 1) * SCREEN_WIDTH) / 3));
-		this.typeXOffset.setValue(((9 - typeSelection * 2) * SCREEN_WIDTH) / 8);
+		this.typeXOffset.setValue(((7 - 2 * typeSelection) * SCREEN_WIDTH) / 8);
 
-		if (index == 0) SnapClosed();
-		else SnapOpen();
+		// snap closed, update the selected time and type filters
+		if (index == 0) snapClosed({ time, type });
+		else snapOpen();
 	};
 
-	// update time selection in redux
-	handleTimeScroll = ({ nativeEvent }) => {
+	handleSelectorScroll = ({ nativeEvent }, field) => {
 		const { index } = nativeEvent;
-		const { ScrollTimeSelection } = this.props;
 
+		// update local filter state with new selection
 		Haptics.trigger("impactLight");
-		ScrollTimeSelection(index);
-	};
-
-	// update type selection in redux
-	handleTypeScroll = ({ nativeEvent }) => {
-		const { index } = nativeEvent;
-		const { ScrollTypeSelection } = this.props;
-
-		Haptics.trigger("impactLight");
-		ScrollTypeSelection(index);
+		this.setState({ [field]: index });
 	};
 
 	timeSelectionStyle = index => {
-		const { open, transitioning, timeSelection, filterDrag } = this.props;
+		const { open, transitioning, filterDrag } = this.props;
+		const { time } = this.state;
 
 		return {
 			// transform: [
@@ -102,9 +98,9 @@ class Filter extends PureComponent {
 					: filterDrag.interpolate({
 							inputRange: FILTER_DRAG_RANGE,
 							outputRange: [
-								index === timeSelection ? 1 : 0,
-								index === timeSelection ? 1 : 0.25,
-								index === timeSelection ? 1 : 0.3
+								index === time ? 1 : 0,
+								index === time ? 1 : 0.1,
+								index === time ? 1 : 0.3
 							],
 							extrapolate: "clamp"
 					  })
@@ -112,7 +108,8 @@ class Filter extends PureComponent {
 	};
 
 	typeSelectionStyle = index => {
-		const { open, transitioning, typeSelection, filterDrag } = this.props;
+		const { open, transitioning, filterDrag } = this.props;
+		const { type } = this.state;
 
 		return {
 			...styles.typeSelection,
@@ -126,9 +123,9 @@ class Filter extends PureComponent {
 					: filterDrag.interpolate({
 							inputRange: FILTER_DRAG_RANGE,
 							outputRange: [
-								index === typeSelection ? 1 : 0,
-								index === typeSelection ? 1 : 0.25,
-								index === typeSelection ? 1 : 0.3
+								index === type ? 1 : 0,
+								index === type ? 1 : 0.25,
+								index === type ? 1 : 0.3
 							],
 							extrapolate: "clamp"
 					  })
@@ -144,7 +141,8 @@ class Filter extends PureComponent {
 	};
 
 	render() {
-		const { open, filterDrag, timeSelection, typeSelection } = this.props;
+		const { open, filterDrag } = this.props;
+		const { type } = this.state;
 
 		const animatedLocation = {
 			transform: [
@@ -233,7 +231,7 @@ class Filter extends PureComponent {
 						dragEnabled={open}
 						snapPoints={TIME_SNAP_POINTS}
 						initialPosition={TIME_SNAP_POINTS[0]}
-						onSnapStart={this.handleTimeScroll}
+						onSnapStart={event => this.handleSelectorScroll(event, "time")}
 						style={[animatedTime, styles.horizontalSelector]}
 						animatedValueX={this.timeXOffset}
 					>
@@ -255,12 +253,12 @@ class Filter extends PureComponent {
 						dragEnabled={open}
 						snapPoints={TYPE_SNAP_POINTS}
 						initialPosition={TYPE_SNAP_POINTS[0]}
-						onSnapStart={this.handleTypeScroll}
+						onSnapStart={event => this.handleSelectorScroll(event, "type")}
 						style={[
 							animatedType,
 							animatedOpacity2,
 							styles.horizontalSelector,
-							{ width: 2.5 * SCREEN_WIDTH }
+							{ width: 2 * SCREEN_WIDTH }
 						]}
 						animatedValueX={this.typeXOffset}
 					>
@@ -273,9 +271,9 @@ class Filter extends PureComponent {
 						))}
 					</Interactable.View>
 				</Interactable.View>
-				{typeSelection !== 0 && (
+				{type !== 0 && (
 					<Animated.View style={[styles.typeIndicator, indicatorOpacity]}>
-						<Paragraph>{CATEGORIES[typeSelection].title}</Paragraph>
+						<Paragraph>{CATEGORIES[type].title}</Paragraph>
 					</Animated.View>
 				)}
 				{open && (
@@ -359,12 +357,11 @@ const mapStateToProps = ({ filter }) => {
 };
 
 const mapDispatchToProps = {
-	BeginTransition,
-	EndTransition,
-	SnapOpen,
-	SnapClosed,
-	ScrollTimeSelection,
-	ScrollTypeSelection
+	beginTransition,
+	snapOpen,
+	snapClosed,
+	scrollTimeSelection,
+	scrollTypeSelection
 };
 
 export default connect(

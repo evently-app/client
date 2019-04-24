@@ -6,12 +6,12 @@ const initialState = {
 	typeSelection: 0
 };
 
-const BEGIN_TRANSITION = "evently/filter/BEGIN_TRANSITION";
-const END_TRANSITION = "evently/filter/END_TRANSITION";
-const SNAP_OPEN = "evently/filter/SNAP_OPEN";
-const SNAP_CLOSED = "evently/filter/SNAP_CLOSED";
-const SCROLL_TIME_SELECTION = "evently/filter/SCROLL_TIME_SELECTION";
-const SCROLL_TYPE_SELECTION = "evently/filter/SCROLL_TYPE_SELECTION";
+export const BEGIN_TRANSITION = "evently/filter/BEGIN_TRANSITION";
+export const END_TRANSITION = "evently/filter/END_TRANSITION";
+export const SNAP_OPEN = "evently/filter/SNAP_OPEN";
+export const SNAP_CLOSED = "evently/filter/SNAP_CLOSED";
+// const SCROLL_TIME_SELECTION = "evently/filter/SCROLL_TIME_SELECTION";
+// const SCROLL_TYPE_SELECTION = "evently/filter/SCROLL_TYPE_SELECTION";
 
 export default (state = initialState, action) => {
 	switch (action.type) {
@@ -37,20 +37,10 @@ export default (state = initialState, action) => {
 		case SNAP_CLOSED:
 			return {
 				...state,
+				timeSelection: action.timeSelection,
+				typeSelection: action.typeSelection,
 				transitioning: false,
 				open: false
-			};
-
-		case SCROLL_TIME_SELECTION:
-			return {
-				...state,
-				timeSelection: action.selection
-			};
-
-		case SCROLL_TYPE_SELECTION:
-			return {
-				...state,
-				typeSelection: action.selection
 			};
 
 		default:
@@ -59,40 +49,30 @@ export default (state = initialState, action) => {
 };
 
 // functions which return the actions that affects the state
-export const BeginTransition = () => {
-	return {
-		type: BEGIN_TRANSITION
-	};
-};
+export const beginTransition = () => ({
+	type: BEGIN_TRANSITION
+});
 
-export const EndTransition = () => {
-	return {
-		type: END_TRANSITION
-	};
-};
+export const endTransition = () => ({
+	type: END_TRANSITION
+});
 
-export const SnapOpen = () => {
-	return {
-		type: SNAP_OPEN
-	};
-};
+export const snapOpen = () => ({
+	type: SNAP_OPEN
+});
 
-export const SnapClosed = () => {
-	return {
-		type: SNAP_CLOSED
-	};
-};
+export const snapClosed = ({ time, type }) => ({
+	type: SNAP_CLOSED,
+	timeSelection: time,
+	typeSelection: type
+});
 
-export const ScrollTimeSelection = selection => {
-	return {
-		type: SCROLL_TIME_SELECTION,
-		selection
-	};
-};
+export const scrollTimeSelection = selection => ({
+	type: SCROLL_TIME_SELECTION,
+	selection
+});
 
-export const ScrollTypeSelection = selection => {
-	return {
-		type: SCROLL_TYPE_SELECTION,
-		selection
-	};
-};
+export const scrollTypeSelection = selection => ({
+	type: SCROLL_TYPE_SELECTION,
+	selection
+});

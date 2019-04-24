@@ -3,6 +3,7 @@ import firebase from "react-native-firebase";
 import _ from "lodash";
 
 import { setLocation } from "./user";
+import { CATEGORIES } from "../lib/constants";
 
 let firestore = firebase.firestore();
 
@@ -13,16 +14,18 @@ const initialState = {
 	isLoadingQueue: false,
 	successLoadingQueue: false,
 	errorLoadingQueue: false,
+	currentTimeFilter: 0,
+	currentTypeFilter: 0,
 	queue: [],
 	lastDoc: null
 };
 
 // define actions against state
-const RESET_QUEUE = "evently/queue/RESET_QUEUE";
-const LOAD_QUEUE_INIT = "evently/queue/LOAD_QUEUE_INIT";
-const LOAD_QUEUE_SUCCESS = "evently/queue/LOAD_QUEUE_SUCCESS";
-const LOAD_QUEUE_FAILURE = "evently/queue/LOAD_QUEUE_FAILURE";
-const POP = "evently/queue/POP";
+export const RESET_QUEUE = "evently/queue/RESET_QUEUE";
+export const LOAD_QUEUE_INIT = "evently/queue/LOAD_QUEUE_INIT";
+export const LOAD_QUEUE_SUCCESS = "evently/queue/LOAD_QUEUE_SUCCESS";
+export const LOAD_QUEUE_FAILURE = "evently/queue/LOAD_QUEUE_FAILURE";
+export const POP = "evently/queue/POP";
 
 /* 
 function that takes initial state and an action and returns next state
@@ -40,12 +43,20 @@ export default (state = initialState, action) => {
 			};
 
 		case LOAD_QUEUE_SUCCESS:
+			// if the filter state has been updated, we need to replace the queue completely
+			// otherwise we merge with the events still in the queue
+			const filterUpdated =
+				state.currentTypeFilter != action.filterType ||
+				state.currentTimeFilter != action.filterTime;
+
 			return {
 				...state,
 				isLoadingQueue: false,
 				successLoadingQueue: true,
-				queue: _.unionBy(action.events, state.queue, ({ id }) => id),
-				lastDoc: action.lastDoc
+				currentTypeFilter: action.filterType,
+				currentTimeFilter: action.filterTime,
+				lastDoc: action.lastDoc,
+				queue: filterUpdated ? action.events : _.unionBy(action.events, state.queue, ({ id }) => id)
 			};
 
 		case LOAD_QUEUE_FAILURE:
@@ -72,15 +83,16 @@ export default (state = initialState, action) => {
 };
 
 // functions which return the actions that affects the state
-
 export const loadQueueInit = () => ({
 	type: LOAD_QUEUE_INIT
 });
 
-export const loadQueueSuccess = (events, lastDoc) => ({
+export const loadQueueSuccess = ({ events, lastDoc, filterTime, filterType }) => ({
 	type: LOAD_QUEUE_SUCCESS,
 	events,
-	lastDoc
+	lastDoc,
+	filterTime,
+	filterType
 });
 
 export const loadQueueFailure = error => ({
@@ -101,6 +113,7 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			dispatch(loadQueueInit());
+			// console.log("filter time type in load Queue", filterTime, filterType);
 
 			const state = getState();
 			const { user, queue } = state;
@@ -110,13 +123,13 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 
 			navigator.geolocation.getCurrentPosition(
 				({ coords }) => {
-					// const { latitude, longitude } = coords;
+					const { latitude, longitude } = coords;
 
 					// OVERRIDE FOR DEV
-					const latitude = 41.310726;
-					const longitude = -72.929916;
+					// const latitude = 41.310726;
+					// const longitude = -72.929916;
 
-					// dispatch(setLocation({ latitude, longitude }));
+					dispatch(setLocation({ latitude, longitude }));
 
 					if (queue.queue.length < 5) {
 						// .post("http://localhost:3000/ping_events_queue", {
@@ -127,10 +140,22 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 								uid
 							})
 							.then(response => {
-								FetchEvents({ uid, startAt, amount: 15 })
+								FetchEvents({
+									uid,
+									startAt,
+									filter: { filterTime, filterType },
+									amount: 25
+								})
 									.then(({ events, lastDoc }) => {
 										resolve();
-										dispatch(loadQueueSuccess(events, lastDoc));
+										dispatch(
+											loadQueueSuccess({
+												events,
+												lastDoc,
+												filterTime,
+												filterType
+											})
+										);
 									})
 									.catch(error => {
 										reject();
@@ -138,19 +163,35 @@ export const LoadQueue = ({ filterTime, filterType }) => {
 									});
 							})
 							.catch(error => {
+								// console.log("post error", error);
 								reject();
 								dispatch(loadQueueFailure(error));
 							});
 					} else {
+						const {
+							queue: events,
+							currentTimeFilter: filterTime,
+							currentTypeFilter: filterType,
+							lastDoc
+						} = queue;
+
 						resolve();
-						dispatch(loadQueueSuccess([], queue.lastDoc));
+						dispatch(
+							loadQueueSuccess({
+								events,
+								lastDoc,
+								filterTime,
+								filterType
+							})
+						);
 					}
 				},
 				error => {
+					console.log(error);
 					dispatch(loadQueueFailure(error));
 					reject(error);
 				},
-				{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+				{ enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
 			);
 		});
 	};
@@ -164,12 +205,21 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 			const { user, queue } = state;
 
 			const { uid } = user;
-			const { lastDoc: startAt } = queue;
+			const { lastDoc: startAt, currentTimeFilter, currentTypeFilter } = queue;
 
-			FetchEvents({ uid, startAt, amount: 10 })
+			const filterChanged = currentTimeFilter !== filterTime || currentTypeFilter !== filterType;
+
+			if (filterChanged) dispatch(loadQueueInit());
+
+			FetchEvents({
+				uid,
+				startAt: filterChanged ? null : startAt, // if the filter has changed we need to start looking from the top of the queue
+				filter: { filterTime, filterType },
+				amount: 15
+			})
 				.then(({ events, lastDoc }) => {
 					resolve();
-					dispatch(loadQueueSuccess(events, lastDoc));
+					dispatch(loadQueueSuccess({ events, lastDoc, filterTime, filterType }));
 				})
 				.catch(error => {
 					reject();
@@ -179,7 +229,35 @@ export const UpdateQueue = ({ filterTime, filterType }) => {
 	};
 };
 
-const FetchEvents = ({ uid, amount, startAt }) => {
+const generateQuery = ({ ref, startAtDoc, amount, filterType }) => {
+	// console.log(ref, startAtDoc, amount, filterType);
+	if (startAtDoc.exists && filterType)
+		return ref
+			.where("swiped", "==", false)
+			.where("categories", "array-contains", CATEGORIES[filterType].title)
+			.orderBy("score", "desc")
+			.startAt(startAtDoc)
+			.limit(amount);
+	else if (!startAtDoc.exists && filterType)
+		return ref
+			.where("swiped", "==", false)
+			.where("categories", "array-contains", CATEGORIES[filterType].title)
+			.orderBy("score", "desc")
+			.limit(amount);
+	else if (startAtDoc.exists && !filterType)
+		return ref
+			.where("swiped", "==", false)
+			.orderBy("score", "desc")
+			.startAt(startAtDoc)
+			.limit(amount);
+	else if (!startAtDoc.exists && !filterType)
+		return ref
+			.where("swiped", "==", false)
+			.orderBy("score", "desc")
+			.limit(amount);
+};
+
+const FetchEvents = ({ uid, amount, startAt, filter: { filterType } }) => {
 	return new Promise(async (resolve, reject) => {
 		// const eventsRef = firestore.collection("events");
 		const userEventsRef = firestore
@@ -187,18 +265,15 @@ const FetchEvents = ({ uid, amount, startAt }) => {
 			.doc(uid)
 			.collection("eventQueue");
 
-		const startAtDoc = await userEventsRef.doc(startAt).get();
+		const startAtDoc =
+			startAt === null ? { exists: false } : await userEventsRef.doc(startAt).get();
 
-		const query = startAtDoc.exists
-			? userEventsRef
-					.where("swiped", "==", false)
-					.orderBy("score")
-					.startAt(startAtDoc)
-					.limit(amount)
-			: userEventsRef
-					.where("swiped", "==", false)
-					.orderBy("score")
-					.limit(amount);
+		const query = generateQuery({
+			ref: userEventsRef,
+			startAtDoc,
+			amount,
+			filterType
+		});
 
 		query
 			.get()
@@ -218,7 +293,7 @@ const FetchEvents = ({ uid, amount, startAt }) => {
 				// 					eventIds.push(doc.id);
 				// 				});
 				//
-				// 				console.log(eventIds);
+				// console.log(eventIds);
 				//
 				// 				let promises = [];
 				// 				eventIds.forEach(id => {

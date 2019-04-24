@@ -29,18 +29,10 @@ class EventCard extends Component {
 		useNativeDriver: true
 	});
 
-	componentDidMount() {
-		// const { latitude, longitude, userLocation } = this.props;
-		// setTimeout(
-		// 	() =>
-		// 		this.map.fitBounds(
-		// 			[+longitude, +latitude],
-		// 			[userLocation.longitude, userLocation.latitude],
-		// 			5
-		// 		),
-		// 	100
-		// );
-	}
+	fitMapBounds = () => {
+		const { latitude, longitude, userLocation } = this.props;
+		this.map.fitBounds([+longitude, +latitude], [userLocation.longitude, userLocation.latitude], 5);
+	};
 
 	render() {
 		const {
@@ -68,6 +60,13 @@ class EventCard extends Component {
 			]
 		};
 
+		const image =
+			imageUrl !== null ? (
+				<Image style={styles.image} source={{ uri: imageUrl }} />
+			) : (
+				<View style={styles.image} />
+			);
+
 		return (
 			<View style={styles.container}>
 				<Animated.ScrollView
@@ -76,7 +75,7 @@ class EventCard extends Component {
 					bounces={false}
 					onScroll={this.onScroll}
 				>
-					<Image style={styles.image} source={{ uri: imageUrl }} />
+					{image}
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.1]}
@@ -102,7 +101,7 @@ class EventCard extends Component {
 					<MapboxGL.MapView
 						showUserLocation
 						ref={MapView => (this.map = MapView)}
-						centerCoordinate={[+longitude, +latitude]}
+						onDidFinishLoadingMap={this.fitMapBounds}
 						logoEnabled={false}
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}

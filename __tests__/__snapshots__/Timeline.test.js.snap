@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Add to calendar button renders correctly 1`] = `
+<ContextConsumer>
+  <Component />
+</ContextConsumer>
+`;
+
+exports[`Event card preview renders correctly 1`] = `
+<TouchableWithoutFeedback
+  onPressIn={[Function]}
+  onPressOut={[Function]}
+>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "backgroundColor": "rgba(255, 255, 255, 0.3)",
+          "borderRadius": 10,
+          "height": 150,
+          "marginBottom": 20,
+          "marginHorizontal": 20,
+          "overflow": "hidden",
+          "padding": 10,
+          "width": 700,
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "scale": 1,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <Image
+      resizeMode="cover"
+      source={
+        Object {
+          "uri": undefined,
+        }
+      }
+      style={
+        Object {
+          "height": 150,
+          "left": 0,
+          "position": "absolute",
+          "right": 0,
+          "width": 710,
+        }
+      }
+    />
+    <LinearGradient
+      colors={
+        Array [
+          "rgba(0,0,0,0.5)",
+          "rgba(0,0,0,0.7)",
+        ]
+      }
+      end={
+        Object {
+          "x": 0.5,
+          "y": 1,
+        }
+      }
+      locations={
+        Array [
+          0,
+          0.9,
+        ]
+      }
+      start={
+        Object {
+          "x": 0.5,
+          "y": 0,
+        }
+      }
+      style={
+        Object {
+          "height": 150,
+          "left": 0,
+          "position": "absolute",
+          "top": 0,
+          "width": 710,
+        }
+      }
+    />
+    <Header
+      style={
+        Object {
+          "marginBottom": 5,
+        }
+      }
+    />
+    <SubHeader />
+    <Connect(CalendarButton) />
+    <TouchableWithoutFeedback
+      onPressIn={[Function]}
+      onPressOut={[Function]}
+    >
+      <AnimatedComponent
+        style={
+          Array [
+            Object {
+              "bottom": 10,
+              "position": "absolute",
+              "right": 10,
+            },
+            Object {
+              "transform": Array [
+                Object {
+                  "scale": 1,
+                },
+              ],
+            },
+          ]
+        }
+      />
+    </TouchableWithoutFeedback>
+  </AnimatedComponent>
+</TouchableWithoutFeedback>
+`;
+
+exports[`Timeline renders correctly 1`] = `
+<ContextConsumer>
+  <Component />
+</ContextConsumer>
+`;

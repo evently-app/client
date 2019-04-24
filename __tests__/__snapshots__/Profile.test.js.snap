@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dial renders correctly 1`] = `
+<View
+  onLayout={[Function]}
+  onMoveShouldSetResponder={[Function]}
+  onMoveShouldSetResponderCapture={[Function]}
+  onResponderEnd={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderReject={[Function]}
+  onResponderRelease={[Function]}
+  onResponderStart={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  onStartShouldSetResponderCapture={[Function]}
+  style={
+    Object {
+      "flexDirection": "column",
+      "padding": 20,
+    }
+  }
+>
+  <AnimatedCircularProgress
+    backgroundColor="rgba(110,10,234,0.30)"
+    duration={500}
+    easing={[Function]}
+    fill={NaN}
+    prefill={0}
+    rotation={0}
+    size={116}
+    tintColor="rgba(110,10,234,0.95)"
+    width={10}
+  />
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "bottom": 35,
+        "justifyContent": "center",
+        "left": 0,
+        "position": "absolute",
+        "right": 0,
+        "top": 0,
+      }
+    }
+  >
+    <AnimatedComponent
+      style={
+        Array [
+          Object {
+            "borderColor": "white",
+            "borderRadius": 40,
+            "borderWidth": 15,
+            "height": 80,
+            "width": 80,
+          },
+          Object {
+            "opacity": 1,
+          },
+        ]
+      }
+    />
+  </View>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "color": "white",
+          "fontFamily": "Avenir Next",
+          "fontSize": 16,
+          "fontWeight": "700",
+          "paddingTop": 14,
+          "textAlign": "center",
+        },
+        Object {
+          "opacity": 1,
+        },
+      ]
+    }
+  >
+    test dial
+  </AnimatedComponent>
+</View>
+`;
+
+exports[`Profile renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "flex-start",
+      "flex": 1,
+      "flexDirection": "column",
+      "height": 1334,
+      "justifyContent": "flex-start",
+      "paddingBottom": 20,
+      "paddingTop": 40,
+      "width": 750,
+    }
+  }
+>
+  <Header
+    style={
+      Object {
+        "marginHorizontal": 20,
+      }
+    }
+  >
+    Preferences
+  </Header>
+  <SubHeader
+    style={
+      Object {
+        "marginHorizontal": 20,
+      }
+    }
+  >
+    I like events that are...
+  </SubHeader>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "space-around",
+        "paddingTop": 20,
+      }
+    }
+  >
+    <Dial
+      fill={0}
+      key="dial-lit"
+      onChange={[Function]}
+      title="Lit"
+    />
+    <Dial
+      fill={0}
+      key="dial-active"
+      onChange={[Function]}
+      title="Active"
+    />
+    <Dial
+      fill={0}
+      key="dial-relaxing"
+      onChange={[Function]}
+      title="Relaxing"
+    />
+    <Dial
+      fill={0}
+      key="dial-cultural"
+      onChange={[Function]}
+      title="Cultural"
+    />
+  </View>
+</View>
+`;

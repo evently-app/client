@@ -18,15 +18,10 @@ import { VibrancyView } from "react-native-blur";
 
 const GoingButton = () => {
 	return (
-		<TouchableOpacity
-			activeOpacity={0.9}
-			style={styles.outline}
-		>
-		<BlurView blurType="regular" style={styles.button}>
-			<SubHeader style={{color: "white"}}>
-				Going
-			</SubHeader>
-		</BlurView>
+		<TouchableOpacity activeOpacity={0.9} style={styles.outline}>
+			<BlurView blurType="regular" style={styles.button}>
+				<SubHeader style={{ color: "white" }}>Going</SubHeader>
+			</BlurView>
 		</TouchableOpacity>
 	);
 };
@@ -34,15 +29,25 @@ const GoingButton = () => {
 const CARD_HEIGHT = 150;
 
 class EventCardPreview extends Component {
-
-	scale = new Animated.Value(1)
-	actionScale = new Animated.Value(1)
-
-
+	scale = new Animated.Value(1);
+	actionScale = new Animated.Value(1);
 
 	render() {
-
-		const { imageUrl, startTime, endTime, date, title, momentStartDate, momentEndDate, uid, id, action, onPress, onAction, isAddedToCalendar } = this.props;
+		const {
+			imageUrl,
+			startTime,
+			endTime,
+			date,
+			title,
+			momentStartDate,
+			momentEndDate,
+			uid,
+			id,
+			action,
+			onPress,
+			onAction,
+			isAddedToCalendar
+		} = this.props;
 
 		return (
 			<TouchableWithoutFeedback
@@ -68,11 +73,7 @@ class EventCardPreview extends Component {
 						}
 					]}
 				>
-					<Image
-						source={{ uri: this.imageUrl }}
-						resizeMode="cover"
-						style={styles.image}
-					/>
+					<Image source={{ uri: imageUrl }} resizeMode="cover" style={styles.image} />
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.9]}
@@ -84,17 +85,17 @@ class EventCardPreview extends Component {
 						{!!endTime && ` - ${endTime}`}
 					</SubHeader>
 					{!!date && <SubHeader>{date}</SubHeader>}
-				      {!isAddedToCalendar ? (
-				        <CalendarButton 
-							eventName={title} 
+					{!isAddedToCalendar ? (
+						<CalendarButton
+							eventName={title}
 							start={momentStartDate}
 							end={momentEndDate}
 							uid={uid}
 							eventId={id}
-						/> 
-				      ) : (
-				        <GoingButton /> 
-				      )}
+						/>
+					) : (
+						<GoingButton />
+					)}
 					<TouchableWithoutFeedback
 						onPressIn={() => {
 							Animated.timing(this.actionScale, {
@@ -172,8 +173,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		borderRadius: 10,
 		justifyContent: "center",
-	 	alignItems: "center"
-
+		alignItems: "center"
 	},
 	action: {
 		paddingHorizontal: 12,
@@ -192,8 +192,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		borderRadius: 10,
 		justifyContent: "center",
-	 	alignItems: "center"
-
+		alignItems: "center"
 	}
 });
 

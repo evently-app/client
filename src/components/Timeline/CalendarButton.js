@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { BlurView } from "react-native-blur";
-import RNCalendarEvents from "react-native-calendar-events";
 import moment from "moment";
+import RNCalendarEvents from "react-native-calendar-events";
 
 import { colors } from "../../lib/styles";
 import { Header, SubHeader, Paragraph } from "../universal/Text";
@@ -17,6 +17,7 @@ import { AddEventToCalendar } from "../../api";
 
 const CalendarButton = ({ eventName, start, end, eventId, uid }) => {
 	const inputRange = [0, 50, 110, 150];
+
 
 	formatDay = date => {
 		console.log("**********", date);

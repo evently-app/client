@@ -1,0 +1,468 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Feed renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "height": 1334,
+      "justifyContent": "center",
+      "overflow": "hidden",
+      "width": 750,
+    }
+  }
+>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "justifyContent": "center",
+        },
+        Object {
+          "opacity": 0,
+          "transform": Array [
+            Object {
+              "translateY": 0,
+            },
+            Object {
+              "scale": 0.9,
+            },
+          ],
+        },
+      ]
+    }
+  />
+  <Connect(Filter)
+    filterDrag={0}
+  />
+</View>
+`;
+
+exports[`Filters renders correctly 1`] = `
+<Fragment>
+  <WrappedAnimatedInteractableView
+    animatedNativeDriver={true}
+    animatedValueY={
+      Value {
+        "_value": 0,
+      }
+    }
+    boundaries={
+      Object {
+        "bottom": 225,
+        "haptics": true,
+        "top": -1,
+      }
+    }
+    initialPosition={
+      Object {
+        "y": 0,
+      }
+    }
+    onDrag={[Function]}
+    onSnapStart={[Function]}
+    snapPoints={
+      Array [
+        Object {
+          "y": 0,
+        },
+        Object {
+          "y": 150,
+        },
+      ]
+    }
+    style={
+      Object {
+        "alignItems": "center",
+        "height": 400,
+        "justifyContent": "flex-end",
+        "left": 0,
+        "position": "absolute",
+        "right": 0,
+        "top": -220,
+      }
+    }
+    verticalOnly={true}
+  >
+    <Paragraph
+      animated={true}
+      style={
+        Object {
+          "opacity": undefined,
+          "transform": Array [
+            Object {
+              "translateY": undefined,
+            },
+          ],
+        }
+      }
+    >
+      I want events
+    </Paragraph>
+    <Header
+      animated={true}
+      style={
+        Object {
+          "transform": Array [
+            Object {
+              "translateY": undefined,
+            },
+          ],
+        }
+      }
+    >
+      Nearby
+    </Header>
+    <Paragraph
+      animated={true}
+      style={
+        Object {
+          "opacity": undefined,
+          "transform": Array [
+            Object {
+              "translateY": undefined,
+            },
+          ],
+        }
+      }
+    >
+      that are
+    </Paragraph>
+    <WrappedAnimatedInteractableView
+      animatedNativeDriver={true}
+      animatedValueX={0}
+      horizontalOnly={true}
+      initialPosition={
+        Object {
+          "x": 250,
+        }
+      }
+      onSnapStart={[Function]}
+      snapPoints={
+        Array [
+          Object {
+            "x": 250,
+          },
+          Object {
+            "x": -0,
+          },
+          Object {
+            "x": -250,
+          },
+        ]
+      }
+      style={
+        Array [
+          Object {
+            "transform": Array [
+              Object {
+                "translateY": undefined,
+              },
+            ],
+          },
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "space-around",
+            "paddingBottom": 25,
+            "width": 750,
+          },
+        ]
+      }
+    >
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="0"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 250,
+            }
+          }
+        >
+          Upcoming
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="1"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 250,
+            }
+          }
+        >
+          Next Week
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="2"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 250,
+            }
+          }
+        >
+          This Month
+        </SubHeader>
+      </TouchableOpacity>
+    </WrappedAnimatedInteractableView>
+    <Paragraph
+      animated={true}
+      style={
+        Object {
+          "opacity": undefined,
+          "transform": Array [
+            Object {
+              "translateY": undefined,
+            },
+          ],
+        }
+      }
+    >
+      and
+    </Paragraph>
+    <WrappedAnimatedInteractableView
+      animatedNativeDriver={true}
+      animatedValueX={0}
+      horizontalOnly={true}
+      initialPosition={
+        Object {
+          "x": 656.25,
+        }
+      }
+      onSnapStart={[Function]}
+      snapPoints={
+        Array [
+          Object {
+            "x": 656.25,
+          },
+          Object {
+            "x": 468.75,
+          },
+          Object {
+            "x": 281.25,
+          },
+          Object {
+            "x": 93.75,
+          },
+          Object {
+            "x": -93.75,
+          },
+          Object {
+            "x": -281.25,
+          },
+          Object {
+            "x": -468.75,
+          },
+          Object {
+            "x": -656.25,
+          },
+        ]
+      }
+      style={
+        Array [
+          Object {
+            "transform": Array [
+              Object {
+                "translateY": undefined,
+              },
+            ],
+          },
+          Object {
+            "opacity": undefined,
+          },
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "space-around",
+            "paddingBottom": 25,
+            "width": 750,
+          },
+          Object {
+            "width": 1500,
+          },
+        ]
+      }
+    >
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="0"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Anything
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="1"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Free
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="2"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Shows
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="3"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Sports
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="4"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Art
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="5"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Nightlife
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="6"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Family
+        </SubHeader>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        key="7"
+        onPress={[Function]}
+      >
+        <SubHeader
+          animated={true}
+          style={
+            Object {
+              "opacity": undefined,
+              "textAlign": "center",
+              "width": 187.5,
+            }
+          }
+        >
+          Professional
+        </SubHeader>
+      </TouchableOpacity>
+    </WrappedAnimatedInteractableView>
+  </WrappedAnimatedInteractableView>
+  <TouchableOpacity
+    activeOpacity={0.2}
+    onPress={[Function]}
+    style={
+      Object {
+        "height": 80,
+        "left": 0,
+        "position": "absolute",
+        "right": 0,
+        "top": 10,
+      }
+    }
+  />
+</Fragment>
+`;

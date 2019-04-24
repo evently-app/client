@@ -195,6 +195,8 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - ReactNativePermissions (1.1.1):
+    - React
   - RNSVG (9.3.7):
     - React
   - SSZipArchive (2.1.4)
@@ -229,6 +231,7 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
@@ -282,6 +285,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-haptic-feedback"
   react-native-mapbox-gl:
     :path: "../node_modules/@mapbox/react-native-mapbox-gl"
+  ReactNativePermissions:
+    :path: "../node_modules/react-native-permissions"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   yoga:
@@ -321,10 +326,11 @@ SPEC CHECKSUMS:
   react-native-calendar-events: 779efcd3db6ec5f703c5ba9e1891c7fe8e699974
   react-native-haptic-feedback: 0e7be9330602573e17f7354c41665b727a5098ee
   react-native-mapbox-gl: d0ac3b81a6cadbd7cadc80891da72e3e85379350
+  ReactNativePermissions: b64e084dff6a5cad51587d38c306f09246246384
   RNSVG: 2cc66383316fa84d4c672ccfa5e3bac271b6a2af
   SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   yoga: 3768a3026ade0fb46a68f3a31a917cf86bc34fc4
 
-PODFILE CHECKSUM: 58e7eed3ccb6aeab553369a585d7fe4075db35f1
+PODFILE CHECKSUM: bb9e2468e4d9cfb1b099a583f3b7da66b7578911
 
 COCOAPODS: 1.6.1
