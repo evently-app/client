@@ -10,6 +10,7 @@ import {
 	TouchableOpacity
 } from "react-native";
 import { BlurView } from "react-native-blur";
+import moment from "moment";
 import { Header, SubHeader } from "../universal/Text";
 import CalendarButton from "./CalendarButton";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../lib/constants";
@@ -25,6 +26,11 @@ const GoingButton = () => {
 		</TouchableOpacity>
 	);
 };
+
+function formatDay(date) {
+	console.log("THE DATE:", moment.unix(date).format("ddd MMMM Do"));
+	return moment.unix(date).format("h:mm a");
+}
 
 const CARD_HEIGHT = 150;
 
@@ -73,7 +79,11 @@ class EventCardPreview extends Component {
 						}
 					]}
 				>
-					<Image source={{ uri: imageUrl }} resizeMode="cover" style={styles.image} />
+					<Image
+						source={{ uri: imageUrl }}
+						resizeMode="cover"
+						style={styles.image}
+					/>
 					<LinearGradient
 						style={styles.gradient}
 						locations={[0, 0.9]}
@@ -81,8 +91,8 @@ class EventCardPreview extends Component {
 					/>
 					<Header style={styles.header}>{title}</Header>
 					<SubHeader>
-						{startTime}
-						{!!endTime && ` - ${endTime}`}
+						{formatDay(startTime)}
+						{!!endTime && ` - ${formatDay(endTime)}`}
 					</SubHeader>
 					{!!date && <SubHeader>{date}</SubHeader>}
 					{!isAddedToCalendar ? (
@@ -120,8 +130,13 @@ class EventCardPreview extends Component {
 							]}
 						>
 							{!!action && (
-								<VibrancyView style={styles.action} blurType="xlight">
-									<Header style={styles.actionText}>{action}</Header>
+								<VibrancyView
+									style={styles.action}
+									blurType="xlight"
+								>
+									<Header style={styles.actionText}>
+										{action}
+									</Header>
 								</VibrancyView>
 							)}
 						</Animated.View>

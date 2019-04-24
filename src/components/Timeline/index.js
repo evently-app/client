@@ -39,7 +39,8 @@ function formatAMPM(date) {
 
 // takes date object returns readable day
 function formatDay(date) {
-	return moment(date).format("ddd MMMM Do");
+	console.log("THE DATE:", moment.unix(date).format("ddd MMMM Do"));
+	return moment.unix(date).format("ddd MMMM Do");
 }
 
 function sortFn(a, b) {
@@ -66,7 +67,9 @@ function compileSections(data) {
 			Past.push(item);
 		} else if (startDate.setHours(0, 0, 0, 0) == now.setHours(0, 0, 0, 0)) {
 			Today.push(item);
-		} else if (startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)) {
+		} else if (
+			startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)
+		) {
 			Tomorrow.push(item);
 		} else {
 			Later.push(item);
@@ -106,16 +109,22 @@ function compileSections(data) {
 class Timeline extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
-		useNativeDriver: true
-	});
+	onScroll = Animated.event(
+		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+		{
+			useNativeDriver: true
+		}
+	);
 
 	shouldComponentUpdate(nextProps, nextState) {
 		if (nextProps.timeline.length > this.props.timeline.length) {
 			return true;
 		} else {
 			for (var i = 0; i < this.props.timeline.length; i++) {
-				if (this.props.timeline[i].isAddedToCalendar != nextProps.timeline[i].isAddedToCalendar) {
+				if (
+					this.props.timeline[i].isAddedToCalendar !=
+					nextProps.timeline[i].isAddedToCalendar
+				) {
 					return true;
 				}
 			}
@@ -134,9 +143,16 @@ class Timeline extends Component {
 				const scrollTopDifference = IS_X ? 80 : 60;
 				const scrollPosition = y0 - scrollTopDifference + dy;
 				let scrollPercentage = scrollPosition / SCROLL_BAR_HEIGHT;
-				scrollPercentage = scrollPercentage > 0 ? (scrollPercentage < 1 ? scrollPercentage : 1) : 0;
+				scrollPercentage =
+					scrollPercentage > 0
+						? scrollPercentage < 1
+							? scrollPercentage
+							: 1
+						: 0;
 
-				const { sections, SECTION_LIST_HEIGHT } = compileSections(this.props.timeline);
+				const { sections, SECTION_LIST_HEIGHT } = compileSections(
+					this.props.timeline
+				);
 				this.yOffset.setValue(scrollPercentage * SECTION_LIST_HEIGHT);
 				// this.Timeline.getNode().scrollTo({
 				// 	y: scrollPercentage * SECTION_LIST_HEIGHT,
@@ -159,21 +175,28 @@ class Timeline extends Component {
 
 	render() {
 		const { uid } = this.props;
-		const { sections, SECTION_LIST_HEIGHT } = compileSections(this.props.timeline);
+		const { sections, SECTION_LIST_HEIGHT } = compileSections(
+			this.props.timeline
+		);
 
 		const animatedScrollIndicator = {
 			transform: [
 				{
 					translateY: this.yOffset.interpolate({
 						inputRange: [0, SECTION_LIST_HEIGHT],
-						outputRange: [0, SCROLL_BAR_HEIGHT - SCROLL_INDICATOR_HEIGHT],
+						outputRange: [
+							0,
+							SCROLL_BAR_HEIGHT - SCROLL_INDICATOR_HEIGHT
+						],
 						extrapolate: "clamp"
 					})
 				}
 			]
 		};
 
-		const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
+		const AnimatedSectionList = Animated.createAnimatedComponent(
+			SectionList
+		);
 		return (
 			<View style={styles.wrapper}>
 				<AnimatedSectionList
@@ -182,8 +205,8 @@ class Timeline extends Component {
 					style={styles.sectionList}
 					onScroll={this.onScroll}
 					renderItem={({ item, index, section }) => {
-						let startDate = new Date(item.startTime);
-						let endDate = new Date(item.endTime);
+						// let startDate = new Date(item.startTimestamp);
+						// let endDate = new Date(item.endTimestamp);
 						return (
 							<EventCardPreview
 								key={item.id}
@@ -192,12 +215,18 @@ class Timeline extends Component {
 								uid={this.uid}
 								isAddedToCalendar={item.isAddedToCalendar}
 								imageUrl={item.imageUrl}
-								startTime={formatAMPM(startDate)}
-								endTime={formatAMPM(endDate)}
-								date={["Past", "Later"].includes(section.title) ? formatDay(startDate) : null}
+								startTime={item.startTimestamp}
+								endTime={item.endTimestamp}
+								date={
+									["Past", "Later"].includes(section.title)
+										? formatDay(item.startTimestamp)
+										: null
+								}
 								momentStartDate={item.startTime}
 								momentEndDate={item.endTime}
-								action={section.title != "Past" ? item.action : null}
+								action={
+									section.title != "Past" ? item.action : null
+								}
 								onAction={() => {
 									// Alert.alert(`action for ${item.id}`);
 								}}
@@ -221,7 +250,10 @@ class Timeline extends Component {
 					<View style={styles.scrollContainer}>
 						<Animated.View
 							{...this._panResponder.panHandlers}
-							style={[styles.scrollIndicator, animatedScrollIndicator]}
+							style={[
+								styles.scrollIndicator,
+								animatedScrollIndicator
+							]}
 						/>
 					</View>
 				)}
