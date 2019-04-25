@@ -1,4 +1,4 @@
-# evently-frontent
+# evently-client
 
 Evently is an events discovery app that allows you to swipe left/right on a stack of event cards: right to indicate interest, and left to indicate lack of interest. View a timeline of events you liked through the app, add these events to your calendar and purchase tickets. 
 
@@ -31,3 +31,32 @@ CI set up via TestFlight.
 * [Redux](https://redux.js.org/) - Global state manager 
 * [Mapbox](https://www.mapbox.com/) - Location services 
 * [Firebase](https://firebase.google.com/) - Realtime Database
+* [Jest](https://jestjs.io/) - Testing
+
+## Architecture Overview 
+
+### /src
+
+This where most of the code related specifically to our app lives. Directories are split up by the three main views of our app: 
+
+#### Feed
+Users swipe left and right on event cards - left if not interested, right if interested. 
+Components: 
+* event card - one "card" for each event 
+* action button - dynamic button to purchase tickets 
+* swipeable - swiping functionality for card 
+* feed - component at the top of the screen that allows you to filter for different event types and times 
+
+#### Profile
+Users update their event preferences, which will influence the types of events they are served in the feed. 
+Components: 
+* Dial - dials that users turn to indicate how much of a particular event mood they would like 
+
+#### Timeline 
+Users see a timeline of all events they expressed interest in. They can click on event to purchase tickets, or add the event to their Native calendar. 
+Components: 
+* Eventcardpreview - a preview-version of the event card that users saw in the feed 
+* Calendar button - button that handles adding an event to your Native calendar 
+
+#### Universal 
+These are components used throughout the app, most related to text and styles. 
