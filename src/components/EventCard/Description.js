@@ -3,14 +3,14 @@ import { Animated, StyleSheet, View, Text } from "react-native";
 
 import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
 import { colors } from "../../lib/styles";
-import { Paragraph } from "../universal/Text";
+import { SubHeader } from "../universal/Text";
 
 const Description = ({ description }) => {
 	// Add processing here for if description is too long
 
 	return (
 		<View style={styles.container}>
-			<Paragraph>{description}</Paragraph>
+			<SubHeader>{description}</SubHeader>
 		</View>
 	);
 };

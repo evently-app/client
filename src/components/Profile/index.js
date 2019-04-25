@@ -22,7 +22,7 @@ export class Profile extends Component {
 				!!this.props.userEntity.preferences &&
 				!!this.props.userEntity.preferences[preference.name]
 					? this.props.userEntity.preferences[preference.name]
-					: 0;
+					: 0.5;
 			Dials.push(
 				<Dial
 					key={`dial-${preference.name}`}

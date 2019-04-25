@@ -66,7 +66,9 @@ function compileSections(data) {
 			Past.push(item);
 		} else if (startDate.setHours(0, 0, 0, 0) == now.setHours(0, 0, 0, 0)) {
 			Today.push(item);
-		} else if (startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)) {
+		} else if (
+			startDate.setHours(0, 0, 0, 0) == tomorrow.setHours(0, 0, 0, 0)
+		) {
 			Tomorrow.push(item);
 		} else {
 			Later.push(item);
@@ -106,19 +108,37 @@ function compileSections(data) {
 class Timeline extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
-		useNativeDriver: true
-	});
+	onScroll = Animated.event(
+		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+		{
+			useNativeDriver: true
+		}
+	);
+
+	scrollToToday = () => {
+		const { sections } = compileSections(this.props.timeline);
+		if (!!sections[0] && sections[0].title == "Past") {
+			// Past is at the top, scroll to next section
+			console.log(this.Timeline.getNode().scrollToLocation);
+			this.Timeline.getNode().scrollToLocation({
+				itemIndex: 0,
+				sectionIndex: 1
+			});
+		}
+	};
+
+	componentDidMount() {
+		this.scrollToToday();
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		this.scrollToToday();
+	}
 
 	shouldComponentUpdate(nextProps, nextState) {
 		if (nextProps.timeline.length > this.props.timeline.length) {
 			return true;
 		} else {
-			for (var i = 0; i < this.props.timeline.length; i++) {
-				if (this.props.timeline[i].isAddedToCalendar != nextProps.timeline[i].isAddedToCalendar) {
-					return true;
-				}
-			}
 			return false;
 		}
 	}
@@ -134,9 +154,16 @@ class Timeline extends Component {
 				const scrollTopDifference = IS_X ? 80 : 60;
 				const scrollPosition = y0 - scrollTopDifference + dy;
 				let scrollPercentage = scrollPosition / SCROLL_BAR_HEIGHT;
-				scrollPercentage = scrollPercentage > 0 ? (scrollPercentage < 1 ? scrollPercentage : 1) : 0;
+				scrollPercentage =
+					scrollPercentage > 0
+						? scrollPercentage < 1
+							? scrollPercentage
+							: 1
+						: 0;
 
-				const { sections, SECTION_LIST_HEIGHT } = compileSections(this.props.timeline);
+				const { sections, SECTION_LIST_HEIGHT } = compileSections(
+					this.props.timeline
+				);
 				this.yOffset.setValue(scrollPercentage * SECTION_LIST_HEIGHT);
 				// this.Timeline.getNode().scrollTo({
 				// 	y: scrollPercentage * SECTION_LIST_HEIGHT,
@@ -159,7 +186,9 @@ class Timeline extends Component {
 
 	render() {
 		const { uid } = this.props;
-		const { sections, SECTION_LIST_HEIGHT } = compileSections(this.props.timeline);
+		const { sections, SECTION_LIST_HEIGHT } = compileSections(
+			this.props.timeline
+		);
 
 		const animatedScrollIndicator = {
 			transform: [
@@ -194,10 +223,14 @@ class Timeline extends Component {
 								imageUrl={item.imageUrl}
 								startTime={formatAMPM(startDate)}
 								endTime={formatAMPM(endDate)}
-								date={["Past", "Later"].includes(section.title) ? formatDay(startDate) : null}
+								date={
+									["Past", "Later"].includes(section.title)
+										? formatDay(startDate)
+										: null
+								}
 								momentStartDate={item.startTime}
 								momentEndDate={item.endTime}
-								action={section.title != "Past" ? item.action : null}
+								action={section.title != "Past" ? true : false}
 								onAction={() => {
 									// Alert.alert(`action for ${item.id}`);
 								}}
@@ -215,7 +248,18 @@ class Timeline extends Component {
 						</View>
 					)}
 					sections={sections}
-					keyExtractor={(item, index) => item + index}
+					keyExtractor={(item, index) => {
+						return item.id;
+					}}
+					getItemLayout={(data, index) => ({
+						length: 150,
+						offset: 150 * index,
+						index
+					})}
+					onScrollToIndexFailed={e => {
+						console.log(e);
+					}}
+					ListFooterComponent={<View style={{ height: IS_X ? 80 : 60 }} />}
 				/>
 				{SECTION_LIST_HEIGHT != 0 && (
 					<View style={styles.scrollContainer}>

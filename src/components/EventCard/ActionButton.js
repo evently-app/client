@@ -1,5 +1,11 @@
 import React from "react";
-import { Animated, StyleSheet, View, TouchableOpacity, Linking } from "react-native";
+import {
+	Animated,
+	StyleSheet,
+	View,
+	TouchableOpacity,
+	Linking
+} from "react-native";
 
 import { BlurView } from "react-native-blur";
 

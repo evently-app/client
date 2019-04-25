@@ -6,7 +6,7 @@ import moment from "moment";
 
 import ActionButton from "./ActionButton";
 import Description from "./Description";
-import { Header, SubHeader, Paragraph } from "../universal/Text";
+import { Hero, SubHeader, Paragraph } from "../universal/Text";
 
 import { SCREEN_WIDTH, SB_HEIGHT, SCREEN_HEIGHT } from "../../lib/constants";
 import { colors } from "../../lib/styles";
@@ -25,13 +25,20 @@ function formatDay(date) {
 class EventCard extends Component {
 	yOffset = new Animated.Value(0);
 
-	onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: this.yOffset } } }], {
-		useNativeDriver: true
-	});
+	onScroll = Animated.event(
+		[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+		{
+			useNativeDriver: true
+		}
+	);
 
 	fitMapBounds = () => {
 		const { latitude, longitude, userLocation } = this.props;
-		this.map.fitBounds([+longitude, +latitude], [userLocation.longitude, userLocation.latitude], 5);
+		this.map.fitBounds(
+			[+longitude, +latitude],
+			[userLocation.longitude, userLocation.latitude],
+			5
+		);
 	};
 
 	render() {
@@ -82,7 +89,7 @@ class EventCard extends Component {
 						colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0.1)"]}
 					/>
 					<View style={styles.textContainer}>
-						<Header>{eventName}</Header>
+						<Hero>{eventName}</Hero>
 						<SubHeader>{formatDay(startTime)}</SubHeader>
 					</View>
 					{!!tags && (
@@ -106,13 +113,22 @@ class EventCard extends Component {
 						style={styles.map}
 						styleURL={MapboxGL.StyleURL.Dark}
 					>
-						<MapboxGL.PointAnnotation id={"coord"} coordinate={[+longitude, +latitude]} />
+						<MapboxGL.PointAnnotation
+							id={"coord"}
+							coordinate={[+longitude, +latitude]}
+						/>
 					</MapboxGL.MapView>
 					<Description description={description} />
 				</Animated.ScrollView>
-				<ActionButton yOffset={this.yOffset} title="Get Tickets" url={ticketUrl} />
+				<ActionButton
+					yOffset={this.yOffset}
+					title="Get Tickets"
+					url={ticketUrl}
+				/>
 				<View style={styles.scrollContainer}>
-					<Animated.View style={[styles.scrollIndicator, animatedScrollIndicator]} />
+					<Animated.View
+						style={[styles.scrollIndicator, animatedScrollIndicator]}
+					/>
 				</View>
 			</View>
 		);
