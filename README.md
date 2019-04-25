@@ -23,7 +23,7 @@ We used DeepScan to enforce style, as well as JSPrettier, which formats code upo
 
 ## Deployment
 
-CI set up via TestFlight. 
+CI set up via Codepush/TestFlight. 
 
 ## Built With
 
@@ -35,7 +35,7 @@ CI set up via TestFlight.
 
 ## Architecture Overview 
 
-### /src
+### /src/components 
 
 This where most of the code related specifically to our app lives. Directories are split up by the three main views of our app: 
 
@@ -60,3 +60,17 @@ Components:
 
 #### Universal 
 These are components used throughout the app, most related to text and styles. 
+
+### /src/lib
+
+Houses images, icons, etc. used in our app 
+
+### /src/redux
+Redux modules for each of our main components. Corresponding tests for these actions can be found in our tests folder, under Redux. 
+
+### /ios and /andriod
+ios-specific modules, stored as "pods," and andriod modules, respectively, that we needed to control our app. Some pods include calendar addition and location services. 
+
+
+
+
